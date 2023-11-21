@@ -1,0 +1,65 @@
+name: pre-merge-checks
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: chartboost/ruff-action@v1
+
+
+  check_doc_strings:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: run Interrogate locally
+        run: |
+          pip install interrogate
+          if [ $(interrogate -c pyproject.toml -v . -f 100 | grep "FAILED" | wc -l) = 1 ]; then
+             echo "necessary docstrings missing:"
+             interrogate -vv . -f 100 
+             exit 1
+          fi
+
+
+  standard_tests:
+    runs-on: ubuntu-latest
+    needs: [code_format, ruff, check_doc_strings]
+    steps:
+      - uses: actions/checkout@v3      
+
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9.15
+
+
+      - name: run unit tests
+        run: |
+          pip install -e .
+          pip install pytest coverage 
+          make test 
+
+
+  code_format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+          version: "~= 22.6"
+
+
+  
+

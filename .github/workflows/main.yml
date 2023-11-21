@@ -43,12 +43,18 @@ jobs:
         with:
           python-version: 3.9.15
 
+      - run: 'echo "$IDEAS_PAT" > .ideas-github-token'
+        shell: bash
+        env:
+          IDEAS_PAT: ${{secrets.IDEAS_PAT}}
 
       - name: run unit tests
         run: |
           pip install -e .
           pip install pytest coverage 
-          make test 
+          echo ${{ secrets.IDEAS_PAT }}
+          pip install git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git
+          pytest -s
 
 
   code_format:

@@ -33,7 +33,13 @@ jobs:
 
 
   standard_tests:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [3.9, "3.10", 3.11]
+        os: [ubuntu-latest]
+        
     needs: [code_format, ruff, check_doc_strings]
     steps:
       - uses: actions/checkout@v3      
@@ -47,11 +53,6 @@ jobs:
         shell: bash
         env:
           IDEAS_PAT: ${{secrets.IDEAS_PAT}}
-
-      - name: Install poetry
-        uses: abatilo/actions-poetry@v2
-        with:
-          poetry-version: 1.3.1
 
       - name: run unit tests
         run: |

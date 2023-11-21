@@ -55,9 +55,10 @@ jobs:
 
       - name: run unit tests
         run: |
-          poetry install --without ideas
-          poetry add git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git#main
-          make test 
+          pip install -e .
+          pip install pytest coverage 
+          pip install git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git
+          make test-pip
 
 
   code_format:

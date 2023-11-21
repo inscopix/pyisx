@@ -19,6 +19,10 @@ endif
 test: verify-github-token
 	poetry run coverage run -m pytest -sx --failed-first
 
+test-pip:
+	@echo "Testing code installed on base env using pip..."
+	pytest -s 
+
 coverage-report: .coverage
 	poetry run coverage html --omit="*/test*"
 	open htmlcov/index.html

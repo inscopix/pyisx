@@ -26,3 +26,12 @@ poetry add https://github.com/inscopix/py_isx
 ```bash
 pip install https://github.com/inscopix/py_isx
 ```
+
+## Testing
+
+This code is tested using GitHub Actions on the following python
+versions:
+
+- 3.9
+- 3.10
+- 3.11

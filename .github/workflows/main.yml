@@ -48,13 +48,15 @@ jobs:
         env:
           IDEAS_PAT: ${{secrets.IDEAS_PAT}}
 
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: 1.3.1
+
       - name: run unit tests
         run: |
-          pip install -e .
-          pip install pytest coverage 
-          echo ${{ secrets.IDEAS_PAT }}
-          pip install git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git
-          pytest -s
+          poetry install --with test
+          make test 
 
 
   code_format:

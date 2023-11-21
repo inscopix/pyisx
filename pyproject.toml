@@ -8,7 +8,7 @@ authors = ["Srinivas Gorur-Shandilya <code@srinivas.gs>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">= 3.9"
+python = ">=3.9,<4.0"
 beartype = ">=0.15.0"
 numpy = ">=1.26.2"
 
@@ -16,7 +16,7 @@ numpy = ">=1.26.2"
 [tool.poetry.group.test.dependencies]
 pytest = ">=7.2.0"
 coverage = ">=7.3.2"
-ideas-data = { git = "https://github.com/inscopix/ideas-data", rev = "1.3.0" }
+ideas-data = { git = "https://github.com/inscopix/ideas-data", rev = "2.0.0" }
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = ">=6.20.1"

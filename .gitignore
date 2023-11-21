@@ -1,5 +1,8 @@
 # data
 
+# secrets
+.ideas-github-token
+
 
 # IDE
 *.sublime-workspace

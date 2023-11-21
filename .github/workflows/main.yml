@@ -55,7 +55,8 @@ jobs:
 
       - name: run unit tests
         run: |
-          poetry install --with test
+          poetry install --without ideas
+          poetry add git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git#main
           make test 
 
 

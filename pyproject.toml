@@ -16,6 +16,8 @@ numpy = ">=1.26.2"
 [tool.poetry.group.test.dependencies]
 pytest = ">=7.2.0"
 coverage = ">=7.3.2"
+
+[tool.poetry.group.ideas.dependencies]
 ideas-data = { git = "https://github.com/inscopix/ideas-data", rev = "2.0.0" }
 
 [tool.poetry.group.dev.dependencies]

@@ -49,11 +49,11 @@ class CellSet:
 
     def get_cell_name(self, cell_id: int) -> str:
         """return name of cell"""
-        return _read_cell_name(self.file_path, cell_id)
+        return _read_name(self.file_path, cell_id, "Cell")
 
     def get_cell_status(self, cell_id: int) -> str:
         """return status of cell"""
-        return _read_status(self.file_path, cell_id)
+        return _read_status(self.file_path, cell_id, "Cell")
 
     @classmethod
     def read(cls, file_path: str):
@@ -85,21 +85,21 @@ class VesselSet:
         self.timing = Timing()
         self.file_path = None
 
-    def get_cell_image_data(self, cell_id: int) -> np.array:
+    def get_vessel_image_data(self, vessel_id: int) -> np.array:
         """return footprint of a single cell"""
-        return _read_footprint(self.file_path, cell_id)
+        return _read_footprint(self.file_path, vessel_id)
 
-    def get_cell_trace_data(self, cell_id: int) -> np.array:
+    def get_vessel_trace_data(self, vessel_id: int) -> np.array:
         """return trace for a single cell"""
-        return _read_trace(self.file_path, cell_id)
+        return _read_trace(self.file_path, vessel_id)
 
-    def get_cell_name(self, cell_id: int) -> str:
+    def get_vessel_name(self, vessel_id: int) -> str:
         """return name of cell"""
-        return _read_cell_name(self.file_path, cell_id)
+        return _read_name(self.file_path, vessel_id, "Vessel")
 
-    def get_cell_status(self, cell_id: int) -> str:
+    def get_vessel_status(self, vessel_id: int) -> str:
         """return status of cell"""
-        return _read_status(self.file_path, cell_id)
+        return _read_status(self.file_path, vessel_id, "Vessel")
 
     @classmethod
     def read(cls, file_path: str):
@@ -112,7 +112,7 @@ class VesselSet:
 
         footer = _extract_footer(file_path)
 
-        self.num_cells = len(footer["CellNames"])
+        self.num_vessels = len(footer["VesselNames"])
 
         self.timing.num_samples = footer["timingInfo"]["numTimes"]
 
@@ -145,19 +145,19 @@ def isxd_type(file_path: str) -> str:
 
 
 @beartype
-def _read_cell_name(cell_set_file: str, cell_id: int) -> str:
+def _read_name(file: str, id: int, file_type: str) -> str:
     """return the name of a cell"""
-    footer = _extract_footer(cell_set_file)
-    return footer["CellNames"][cell_id]
+    footer = _extract_footer(file)
+    return footer[f"{file_type}Names"][id]
 
 
 @beartype
-def _read_trace(cell_set_file: str, cell_id: int):
+def _read_trace(file: str, id: int):
     """stand-alone function to read a single cell's trace
     from a cellset file
     """
 
-    footer = _extract_footer(cell_set_file)
+    footer = _extract_footer(file)
     n_frames = footer["timingInfo"]["numTimes"]
 
     # get frame dimensions
@@ -167,8 +167,8 @@ def _read_trace(cell_set_file: str, cell_id: int):
 
     n_bytes_per_cell = 4 * (n_pixels + n_frames)
 
-    with open(cell_set_file, mode="rb") as file:
-        file.seek(cell_id * n_bytes_per_cell + (4 * n_pixels))
+    with open(file, mode="rb") as file:
+        file.seek(id * n_bytes_per_cell + (4 * n_pixels))
 
         # read cell trace
         data = file.read(4 * n_frames)
@@ -179,13 +179,13 @@ def _read_trace(cell_set_file: str, cell_id: int):
 
 
 @beartype
-def _read_footprint(cell_set_file: str, cell_id):
+def _read_footprint(file: str, id: int):
     """standalone function to read a footprint of a single
     cell from a cellset file
 
     """
 
-    footer = _extract_footer(cell_set_file)
+    footer = _extract_footer(file)
     n_frames = footer["timingInfo"]["numTimes"]
 
     # get frame dimensions
@@ -195,8 +195,8 @@ def _read_footprint(cell_set_file: str, cell_id):
 
     n_bytes_per_cell = 4 * (n_pixels + n_frames)
 
-    with open(cell_set_file, mode="rb") as file:
-        file.seek(cell_id * n_bytes_per_cell)
+    with open(file, mode="rb") as file:
+        file.seek(id * n_bytes_per_cell)
         data = file.read(4 * n_pixels)
 
     footprint = struct.unpack("f" * n_pixels, data)
@@ -206,20 +206,21 @@ def _read_footprint(cell_set_file: str, cell_id):
 
 
 @beartype
-def _read_status(cell_set_file: str, cell_id: int) -> str:
+def _read_status(file: str, id: int, file_type: str) -> str:
     """standalone function to read the status of a given cell
     from a cellset file, without needing the IDPS API
 
     """
 
-    footer = _extract_footer(cell_set_file)
+    footer = _extract_footer(file)
 
-    if footer["CellStatuses"][cell_id] == 0:
+    if footer[f"{file_type}Statuses"][id] == 0:
         return "accepted"
-    elif footer["CellStatuses"][cell_id] == 1:
+    elif footer[f"{file_type}Statuses"][id] == 1:
         return "undecided"
     else:
         return "rejected"
+
 
 
 @beartype

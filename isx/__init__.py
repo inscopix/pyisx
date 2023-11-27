@@ -77,6 +77,52 @@ class CellSet:
 
         return self
 
+class VesselSet:
+    """class to maintain partial compatibility with isx.core.CellSet"""
+
+    def __init__(self):
+        self.num_cells: int = 0
+        self.timing = Timing()
+        self.file_path = None
+
+    def get_cell_image_data(self, cell_id: int) -> np.array:
+        """return footprint of a single cell"""
+        return _read_footprint(self.file_path, cell_id)
+
+    def get_cell_trace_data(self, cell_id: int) -> np.array:
+        """return trace for a single cell"""
+        return _read_trace(self.file_path, cell_id)
+
+    def get_cell_name(self, cell_id: int) -> str:
+        """return name of cell"""
+        return _read_cell_name(self.file_path, cell_id)
+
+    def get_cell_status(self, cell_id: int) -> str:
+        """return status of cell"""
+        return _read_status(self.file_path, cell_id)
+
+    @classmethod
+    def read(cls, file_path: str):
+        """method to maintain compatibility with IDPS API. This doesn't
+        actually do anything very interesting other than set the timing
+        and num_cells property"""
+
+        self = cls()
+        self.file_path = file_path
+
+        footer = _extract_footer(file_path)
+
+        self.num_cells = len(footer["CellNames"])
+
+        self.timing.num_samples = footer["timingInfo"]["numTimes"]
+
+        self.timing.period = Duration(
+            footer["timingInfo"]["period"]["num"]
+            / footer["timingInfo"]["period"]["den"]
+        )
+
+        return self
+
 
 @beartype
 def isxd_type(file_path: str) -> str:

@@ -77,6 +77,7 @@ class CellSet:
 
         return self
 
+
 class VesselSet:
     """class to maintain partial compatibility with isx.core.CellSet"""
 
@@ -100,6 +101,11 @@ class VesselSet:
     def get_vessel_status(self, vessel_id: int) -> str:
         """return status of cell"""
         return _read_status(self.file_path, vessel_id, "Vessel")
+
+    def show_footer(self):
+        """print the footer of a given ISXD file"""
+
+        _show_footer(self.file_path)
 
     @classmethod
     def read(cls, file_path: str):
@@ -205,6 +211,14 @@ def _read_footprint(file: str, id: int):
     return footprint
 
 
+def _show_footer(file: str):
+    """print the footer of a given ISXD file"""
+
+    footer = _extract_footer(file)
+    # just show top level keys
+    print(json.dumps(footer))
+
+
 @beartype
 def _read_status(file: str, id: int, file_type: str) -> str:
     """standalone function to read the status of a given cell
@@ -220,7 +234,6 @@ def _read_status(file: str, id: int, file_type: str) -> str:
         return "undecided"
     else:
         return "rejected"
-
 
 
 @beartype

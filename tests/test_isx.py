@@ -18,9 +18,7 @@ cell_set_files = [
     "sample_pca_ica_cellset.isxd",
 ]
 
-vessel_set_files = [
-    "vessel_set_diameters.isxd"
-]
+vessel_set_files = ["vessel_set_diameters.isxd"]
 
 cell_set_files = [fetch(file, token=token) for file in cell_set_files]
 
@@ -31,10 +29,12 @@ def test_isxd_type(file):
         isx.isxd_type(file) == "cell_set"
     ), f"Expected {file} to be of type cell_set"
 
+
 def test_vessel_set():
     vessel_set_file = fetch("vessel_set_diameters.isxd", token=token)
     vessel_obj = isx.VesselSet.read(vessel_set_file)
 
+    vessel_obj.show_footer()
     im = vessel_obj.get_vessel_image_data(0)
     assert im.shape[0] > 0 and im.shape[1] > 0, "Expected image to have data"
 

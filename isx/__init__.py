@@ -81,17 +81,18 @@ class CellSet:
 
 class VesselSet:
     """class to maintain partial compatibility with isx.core.CellSet"""
+
     class VesselSetType(Enum):
         VESSEL_DIAMETER = 0
         RBC_VELOCITY = 1
 
         @classmethod
         def from_str(cls, type_str):
-            if type_str == 'rbc velocity':
+            if type_str == "rbc velocity":
                 return cls.RBC_VELOCITY
             else:
                 return cls.VESSEL_DIAMETER
-            
+
     def __init__(self):
         self.num_vessels: int = 0
         self.timing = Timing()
@@ -104,9 +105,11 @@ class VesselSet:
     def get_vessel_line_data(self, cell_id: int) -> np.array:
         """return contour for a single cell"""
         return _read_vessel_contour(self.file_path, cell_id)
+
     def get_vessel_trace_data(self, cell_id: int) -> np.array:
         """return trace for a single cell"""
         return _read_vessel_trace(self.file_path, cell_id)
+
     def get_vessel_set_type(self) -> str:
         """return type of vessel set"""
         # TODO, here is isx implementation
@@ -143,7 +146,7 @@ class VesselSet:
 
         footer = _extract_footer(file_path)
 
-        self.num_cells = len(footer["VesselNames"])
+        self.num_vessels = len(footer["VesselNames"])
 
         self.timing.num_samples = footer["timingInfo"]["numTimes"]
 
@@ -182,7 +185,6 @@ def _read_name(file: str, id: int, file_type: str) -> str:
     return footer[f"{file_type}Names"][id]
 
 
-
 @beartype
 def _read_cell_trace(cell_set_file: str, cell_id: int):
     """stand-alone function to read a single cell's trace
@@ -209,6 +211,7 @@ def _read_cell_trace(cell_set_file: str, cell_id: int):
 
     return trace
 
+
 def _read_vessel_trace(vessel_set_file: str, vessel_id: int):
     """
     Structure of vessel set file:
@@ -227,15 +230,19 @@ def _read_vessel_trace(vessel_set_file: str, vessel_id: int):
     size_y = footer["spacingInfo"]["numPixels"]["y"]
     n_pixels = size_y * size_x
 
-    # Project image 
-    n_bytes_per_vessel = 4 * (n_pixels + n_frames) 
+    # Project image
+    n_bytes_per_vessel = 4 * (n_pixels + n_frames)
     # Contour TODO: When we support velocity, this will need to be changed
     contour_len = 4 * 8
     # Trace
     trace_len = 4 * n_frames
 
     # Projection image + previous vessels + current contour
-    data_loc = n_bytes_per_vessel + (vessel_id * (contour_len + trace_len)) + contour_len
+    data_loc = (
+        n_bytes_per_vessel
+        + (vessel_id * (contour_len + trace_len))
+        + contour_len
+    )
 
     with open(vessel_set_file, mode="rb") as file:
         file.seek(data_loc)
@@ -246,6 +253,7 @@ def _read_vessel_trace(vessel_set_file: str, vessel_id: int):
         trace = np.array(trace)
 
     return trace
+
 
 def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
     """
@@ -265,8 +273,8 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
     size_y = footer["spacingInfo"]["numPixels"]["y"]
     n_pixels = size_y * size_x
 
-    # Project image 
-    n_bytes_per_vessel = 4 * (n_pixels + n_frames) 
+    # Project image
+    n_bytes_per_vessel = 4 * (n_pixels + n_frames)
     # Contour TODO: When we support velocity, this will need to be changed
     contour_len = 4 * 8
     # Trace

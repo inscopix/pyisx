@@ -98,9 +98,9 @@ class VesselSet:
         self.timing = Timing()
         self.file_path = None
 
-    def get_vessel_image_data(self, cell_id: int) -> np.array:
+    def get_vessel_image_data(self) -> np.array:
         """return footprint of a single vessel"""
-        return _read_footprint(self.file_path, cell_id)
+        return _read_footprint(self.file_path, 0)
 
     def get_vessel_line_data(self, cell_id: int) -> np.array:
         """return contour for a single cell"""
@@ -122,6 +122,11 @@ class VesselSet:
 
         pass
 
+    def test(self):
+        """test"""
+        print("test")
+        return "test"
+
     def get_vessel_name(self, cell_id: int) -> str:
         """return name of cell"""
         return _read_name(self.file_path, cell_id, "Vessel")
@@ -132,8 +137,8 @@ class VesselSet:
 
     def show_footer(self):
         """print the footer of a given ISXD file"""
-
-        _show_footer(self.file_path)
+        footer = _extract_footer(self.file_path)
+        return footer
 
     @classmethod
     def read(cls, file_path: str):
@@ -233,16 +238,25 @@ def _read_vessel_trace(vessel_set_file: str, vessel_id: int):
     # Project image
     n_bytes_per_vessel = 4 * (n_pixels + n_frames)
     # Contour TODO: When we support velocity, this will need to be changed
-    contour_len = 4 * 8
+    contour_len = 8 * 4  # double precision
     # Trace
     trace_len = 4 * n_frames
 
     # Projection image + previous vessels + current contour
-    data_loc = (
-        n_bytes_per_vessel
-        + (vessel_id * (contour_len + trace_len))
-        + contour_len
-    )
+    if footer["VesselCenterSaved"]:
+        print("Vessel center saved")
+        data_loc = (
+            n_bytes_per_vessel
+            + (vessel_id * (contour_len + (2 * trace_len)))
+            + contour_len
+        )
+    else:
+        # Projection image + previous vessels
+        data_loc = (
+            n_bytes_per_vessel
+            + (vessel_id * (contour_len + trace_len))
+            + contour_len
+        )
 
     with open(vessel_set_file, mode="rb") as file:
         file.seek(data_loc)
@@ -279,16 +293,21 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
     contour_len = 4 * 8
     # Trace
     trace_len = 4 * n_frames
-
-    # Projection image + previous vessels
-    data_loc = n_bytes_per_vessel + (vessel_id * (contour_len + trace_len))
+    if footer["VesselCenterSaved"]:
+        print("Vessel center saved")
+        data_loc = n_bytes_per_vessel + (
+            vessel_id * (contour_len + (2 * trace_len))
+        )
+    else:
+        # Projection image + previous vessels
+        data_loc = n_bytes_per_vessel + (vessel_id * (contour_len + trace_len))
 
     with open(vessel_set_file, mode="rb") as file:
         file.seek(data_loc)
 
         # read cell trace
         data = file.read(contour_len)
-        contour = struct.unpack("f" * 8, data)
+        contour = struct.unpack("d" * 4, data)
         contour = np.array(contour)
 
     return contour

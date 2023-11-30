@@ -11,6 +11,7 @@ https://inscopix.atlassian.net/wiki/spaces/MOS/pages/64133259/Mosaic+2.0+File+Fo
 import json
 import os
 import struct
+from enum import Enum
 
 import numpy as np
 from beartype import beartype
@@ -45,15 +46,15 @@ class CellSet:
 
     def get_cell_trace_data(self, cell_id: int) -> np.array:
         """return trace for a single cell"""
-        return _read_trace(self.file_path, cell_id)
+        return _read_cell_trace(self.file_path, cell_id)
 
     def get_cell_name(self, cell_id: int) -> str:
         """return name of cell"""
-        return _read_cell_name(self.file_path, cell_id)
+        return _read_name(self.file_path, cell_id, "Cell")
 
     def get_cell_status(self, cell_id: int) -> str:
         """return status of cell"""
-        return _read_status(self.file_path, cell_id)
+        return _read_status(self.file_path, cell_id, "Cell")
 
     @classmethod
     def read(cls, file_path: str):
@@ -80,27 +81,51 @@ class CellSet:
 
 class VesselSet:
     """class to maintain partial compatibility with isx.core.CellSet"""
+    class VesselSetType(Enum):
+        VESSEL_DIAMETER = 0
+        RBC_VELOCITY = 1
 
+        @classmethod
+        def from_str(cls, type_str):
+            if type_str == 'rbc velocity':
+                return cls.RBC_VELOCITY
+            else:
+                return cls.VESSEL_DIAMETER
+            
     def __init__(self):
-        self.num_cells: int = 0
+        self.num_vessels: int = 0
         self.timing = Timing()
         self.file_path = None
 
-    def get_cell_image_data(self, cell_id: int) -> np.array:
-        """return footprint of a single cell"""
+    def get_vessel_image_data(self, cell_id: int) -> np.array:
+        """return footprint of a single vessel"""
         return _read_footprint(self.file_path, cell_id)
 
-    def get_cell_trace_data(self, cell_id: int) -> np.array:
+    def get_vessel_line_data(self, cell_id: int) -> np.array:
+        """return contour for a single cell"""
+        return _read_vessel_contour(self.file_path, cell_id)
+    def get_vessel_trace_data(self, cell_id: int) -> np.array:
         """return trace for a single cell"""
-        return _read_trace(self.file_path, cell_id)
+        return _read_vessel_trace(self.file_path, cell_id)
+    def get_vessel_set_type(self) -> str:
+        """return type of vessel set"""
+        # TODO, here is isx implementation
+        """
+        isx._internal.validate_ptr(self._ptr)
+        type_int = ctypes.c_int(-1)
+        isx._internal.c_api.isx_vessel_set_get_type(self._ptr, ctypes.byref(type_int))
+        return self.VesselSetType(type_int.value)
+        """
 
-    def get_cell_name(self, cell_id: int) -> str:
+        pass
+
+    def get_vessel_name(self, cell_id: int) -> str:
         """return name of cell"""
-        return _read_cell_name(self.file_path, cell_id)
+        return _read_name(self.file_path, cell_id, "Vessel")
 
-    def get_cell_status(self, cell_id: int) -> str:
+    def get_vessel_status(self, cell_id: int) -> str:
         """return status of cell"""
-        return _read_status(self.file_path, cell_id)
+        return _read_status(self.file_path, cell_id, "Vessel")
 
     def show_footer(self):
         """print the footer of a given ISXD file"""
@@ -118,7 +143,7 @@ class VesselSet:
 
         footer = _extract_footer(file_path)
 
-        self.num_cells = len(footer["CellNames"])
+        self.num_cells = len(footer["VesselNames"])
 
         self.timing.num_samples = footer["timingInfo"]["numTimes"]
 
@@ -151,14 +176,15 @@ def isxd_type(file_path: str) -> str:
 
 
 @beartype
-def _read_cell_name(cell_set_file: str, cell_id: int) -> str:
+def _read_name(file: str, id: int, file_type: str) -> str:
     """return the name of a cell"""
-    footer = _extract_footer(cell_set_file)
-    return footer["CellNames"][cell_id]
+    footer = _extract_footer(file)
+    return footer[f"{file_type}Names"][id]
+
 
 
 @beartype
-def _read_trace(cell_set_file: str, cell_id: int):
+def _read_cell_trace(cell_set_file: str, cell_id: int):
     """stand-alone function to read a single cell's trace
     from a cellset file
     """
@@ -182,6 +208,82 @@ def _read_trace(cell_set_file: str, cell_id: int):
         trace = np.array(trace)
 
     return trace
+
+def _read_vessel_trace(vessel_set_file: str, vessel_id: int):
+    """
+    Structure of vessel set file:
+    - Projection image [spacingInfo.numPixels.x * spacingInfo.numPixels.y * 4 bytes]
+    - Vessels
+        - Contour [4*8] if diameter, [8*8] if velocity
+        - Trace [4 * timingInfo.numTimes]
+        (repeated for each vessel)
+    - Footer
+    """
+    footer = _extract_footer(vessel_set_file)
+    n_frames = footer["timingInfo"]["numTimes"]
+
+    # get frame dimensions
+    size_x = footer["spacingInfo"]["numPixels"]["x"]
+    size_y = footer["spacingInfo"]["numPixels"]["y"]
+    n_pixels = size_y * size_x
+
+    # Project image 
+    n_bytes_per_vessel = 4 * (n_pixels + n_frames) 
+    # Contour TODO: When we support velocity, this will need to be changed
+    contour_len = 4 * 8
+    # Trace
+    trace_len = 4 * n_frames
+
+    # Projection image + previous vessels + current contour
+    data_loc = n_bytes_per_vessel + (vessel_id * (contour_len + trace_len)) + contour_len
+
+    with open(vessel_set_file, mode="rb") as file:
+        file.seek(data_loc)
+
+        # read cell trace
+        data = file.read(trace_len)
+        trace = struct.unpack("f" * n_frames, data)
+        trace = np.array(trace)
+
+    return trace
+
+def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
+    """
+    Structure of vessel set file:
+    - Projection image [spacingInfo.numPixels.x * spacingInfo.numPixels.y * 4 bytes]
+    - Vessels
+        - Contour [4*8] if diameter, [8*8] if velocity
+        - Trace [4 * timingInfo.numTimes]
+        (repeated for each vessel)
+    - Footer
+    """
+    footer = _extract_footer(vessel_set_file)
+    n_frames = footer["timingInfo"]["numTimes"]
+
+    # get frame dimensions
+    size_x = footer["spacingInfo"]["numPixels"]["x"]
+    size_y = footer["spacingInfo"]["numPixels"]["y"]
+    n_pixels = size_y * size_x
+
+    # Project image 
+    n_bytes_per_vessel = 4 * (n_pixels + n_frames) 
+    # Contour TODO: When we support velocity, this will need to be changed
+    contour_len = 4 * 8
+    # Trace
+    trace_len = 4 * n_frames
+
+    # Projection image + previous vessels
+    data_loc = n_bytes_per_vessel + (vessel_id * (contour_len + trace_len))
+
+    with open(vessel_set_file, mode="rb") as file:
+        file.seek(data_loc)
+
+        # read cell trace
+        data = file.read(contour_len)
+        contour = struct.unpack("f" * 8, data)
+        contour = np.array(contour)
+
+    return contour
 
 
 @beartype
@@ -220,17 +322,17 @@ def _show_footer(file: str):
 
 
 @beartype
-def _read_status(cell_set_file: str, cell_id: int) -> str:
+def _read_status(file: str, id: int, file_type: str) -> str:
     """standalone function to read the status of a given cell
     from a cellset file, without needing the IDPS API
 
     """
 
-    footer = _extract_footer(cell_set_file)
+    footer = _extract_footer(file)
 
-    if footer["CellStatuses"][cell_id] == 0:
+    if footer[f"{file_type}Statuses"][id] == 0:
         return "accepted"
-    elif footer["CellStatuses"][cell_id] == 1:
+    elif footer[f"{file_type}Statuses"][id] == 1:
         return "undecided"
     else:
         return "rejected"

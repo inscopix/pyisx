@@ -80,7 +80,7 @@ class CellSet:
 
 
 class VesselSet:
-    """class to maintain partial compatibility with isx.core.CellSet"""
+    """class to maintain partial compatibility with isx.core.VesselSet"""
 
     class VesselSetType(Enum):
         VESSEL_DIAMETER = 0
@@ -102,30 +102,18 @@ class VesselSet:
         """return footprint of a single vessel"""
         return _read_footprint(self.file_path, 0)
 
-    def get_vessel_line_data(self, cell_id: int) -> np.array:
-        """return contour for a single cell"""
-        return _read_vessel_contour(self.file_path, cell_id)
+    def get_vessel_line_data(self, vessel_id: int) -> np.array:
+        """return contour for a single vessel"""
+        return _read_vessel_contour(self.file_path, vessel_id)
 
-    def get_vessel_trace_data(self, cell_id: int) -> np.array:
+    def get_vessel_trace_data(self, vessel_id: int) -> np.array:
         """return trace for a single cell"""
-        return _read_vessel_trace(self.file_path, cell_id)
+        return _read_vessel_trace(self.file_path, vessel_id)
 
     def get_vessel_set_type(self) -> str:
         """return type of vessel set"""
-        # TODO, here is isx implementation
-        """
-        isx._internal.validate_ptr(self._ptr)
-        type_int = ctypes.c_int(-1)
-        isx._internal.c_api.isx_vessel_set_get_type(self._ptr, ctypes.byref(type_int))
-        return self.VesselSetType(type_int.value)
-        """
-
-        pass
-
-    def test(self):
-        """test"""
-        print("test")
-        return "test"
+        metadata = _extract_footer(self.file_path)
+        return metadata["extraProperties"]["idps"]["vesselset"]["type"]
 
     def get_vessel_name(self, cell_id: int) -> str:
         """return name of cell"""
@@ -134,11 +122,6 @@ class VesselSet:
     def get_vessel_status(self, cell_id: int) -> str:
         """return status of cell"""
         return _read_status(self.file_path, cell_id, "Vessel")
-
-    def show_footer(self):
-        """print the footer of a given ISXD file"""
-        footer = _extract_footer(self.file_path)
-        return footer
 
     @classmethod
     def read(cls, file_path: str):
@@ -237,9 +220,16 @@ def _read_vessel_trace(vessel_set_file: str, vessel_id: int):
 
     # Project image
     n_bytes_per_vessel = 4 * (n_pixels + n_frames)
-    # Contour TODO: When we support velocity, this will need to be changed
-    contour_len = 8 * 4  # double precision
-    # Trace
+    # Contour TODO:
+    vessel_set_type = footer["extraProperties"]["idps"]["vesselset"]["type"]
+    if vessel_set_type == "red blood cell velocity":
+        num_to_unpack = 8
+    elif vessel_set_type == "vessel diameter":
+        num_to_unpack = 4
+    else:
+        raise ValueError(f"Unknown vessel set type: {vessel_set_type}")
+
+    contour_len = 4 * num_to_unpack
     trace_len = 4 * n_frames
 
     # Projection image + previous vessels + current contour
@@ -289,8 +279,17 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
 
     # Project image
     n_bytes_per_vessel = 4 * (n_pixels + n_frames)
-    # Contour TODO: When we support velocity, this will need to be changed
-    contour_len = 4 * 8
+
+    vessel_set_type = footer["extraProperties"]["idps"]["vesselset"]["type"]
+
+    if vessel_set_type == "red blood cell velocity":
+        num_to_unpack = 8
+    elif vessel_set_type == "vessel diameter":
+        num_to_unpack = 4
+    else:
+        raise ValueError(f"Unknown vessel set type: {vessel_set_type}")
+
+    contour_len = 4 * num_to_unpack
     # Trace
     trace_len = 4 * n_frames
     if footer["VesselCenterSaved"]:
@@ -307,8 +306,12 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
 
         # read cell trace
         data = file.read(contour_len)
-        contour = struct.unpack("d" * 4, data)
+        contour = struct.unpack("q" * 4, data)
+        contour2 = struct.unpack("Q" * 4, data)  # fix prefix to be int
         contour = np.array(contour)
+        contour2 = np.array(contour2)
+    print(f"q {contour}")
+    print(f"Q {contour2}")
 
     return contour
 

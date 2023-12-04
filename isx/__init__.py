@@ -82,17 +82,6 @@ class CellSet:
 class VesselSet:
     """class to maintain partial compatibility with isx.core.VesselSet"""
 
-    class VesselSetType(Enum):
-        VESSEL_DIAMETER = 0
-        RBC_VELOCITY = 1
-
-        @classmethod
-        def from_str(cls, type_str):
-            if type_str == "rbc velocity":
-                return cls.RBC_VELOCITY
-            else:
-                return cls.VESSEL_DIAMETER
-
     def __init__(self):
         self.num_vessels: int = 0
         self.timing = Timing()
@@ -229,7 +218,7 @@ def _read_vessel_trace(vessel_set_file: str, vessel_id: int):
     else:
         raise ValueError(f"Unknown vessel set type: {vessel_set_type}")
 
-    contour_len = 4 * num_to_unpack
+    contour_len = 8 * num_to_unpack
     trace_len = 4 * n_frames
 
     # Projection image + previous vessels + current contour
@@ -305,13 +294,13 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
         file.seek(data_loc)
 
         # read cell trace
-        data = file.read(contour_len)
-        contour = struct.unpack("q" * 4, data)
-        contour2 = struct.unpack("Q" * 4, data)  # fix prefix to be int
+        data = file.read(16)
+        contour = struct.unpack("i" * 4, data)
+        contour2 = struct.unpack("I" * 4, data)  # fix prefix to be int
         contour = np.array(contour)
         contour2 = np.array(contour2)
-    print(f"q {contour}")
-    print(f"Q {contour2}")
+    print(f"i: {contour}")
+    print(f"I: {contour2}")
 
     return contour
 

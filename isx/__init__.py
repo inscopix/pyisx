@@ -294,13 +294,13 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
         file.seek(data_loc)
 
         # read cell trace
-        data = file.read(16)
-        contour = struct.unpack("i" * 4, data)
-        contour2 = struct.unpack("I" * 4, data)  # fix prefix to be int
+        data = file.read(contour_len)
+        contour = struct.unpack("q" * 4, data) # signed long 64 bit
+        contour2 = struct.unpack("Q" * 4, data)  # unsigned long 64 bit
         contour = np.array(contour)
         contour2 = np.array(contour2)
-    print(f"i: {contour}")
-    print(f"I: {contour2}")
+    print(f"q: {contour}")
+    print(f"Q: {contour2}")
 
     return contour
 

@@ -11,7 +11,6 @@ https://inscopix.atlassian.net/wiki/spaces/MOS/pages/64133259/Mosaic+2.0+File+Fo
 import json
 import os
 import struct
-from enum import Enum
 
 import numpy as np
 from beartype import beartype
@@ -272,13 +271,13 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
     vessel_set_type = footer["extraProperties"]["idps"]["vesselset"]["type"]
 
     if vessel_set_type == "red blood cell velocity":
-        num_to_unpack = 8
+        num_points = 8
     elif vessel_set_type == "vessel diameter":
-        num_to_unpack = 4
+        num_points = 4
     else:
         raise ValueError(f"Unknown vessel set type: {vessel_set_type}")
 
-    contour_len = 4 * num_to_unpack
+    contour_len = 8 * num_points
     # Trace
     trace_len = 4 * n_frames
     if footer["VesselCenterSaved"]:
@@ -295,12 +294,9 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
 
         # read cell trace
         data = file.read(contour_len)
-        contour = struct.unpack("q" * 4, data) # signed long 64 bit
-        contour2 = struct.unpack("Q" * 4, data)  # unsigned long 64 bit
+        contour = struct.unpack("q" * 4, data)  # signed long 64 bit
         contour = np.array(contour)
-        contour2 = np.array(contour2)
     print(f"q: {contour}")
-    print(f"Q: {contour2}")
 
     return contour
 

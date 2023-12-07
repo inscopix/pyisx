@@ -257,6 +257,7 @@ def _read_vessel_contour(vessel_set_file: str, vessel_id: int):
         (repeated for each vessel)
     - Footer
     """
+    # MAKE AN ERROR DON"T MERGE
     footer = _extract_footer(vessel_set_file)
     n_frames = footer["timingInfo"]["numTimes"]
 

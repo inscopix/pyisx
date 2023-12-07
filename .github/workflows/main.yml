@@ -8,21 +8,16 @@ on:
 
 
 jobs:
-
-  ruff:
+  initial_checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: chartboost/ruff-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Check code using ruff
+        uses: chartboost/ruff-action@v1
 
-  check_doc_strings:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: run Interrogate locally
+      - name: Check docstrings using interrogate
         run: |
           pip install interrogate
           if [ $(interrogate -c pyproject.toml -v . -f 100 | grep "FAILED" | wc -l) = 1 ]; then
@@ -31,6 +26,11 @@ jobs:
              exit 1
           fi
 
+      - name: Check code formatting using black
+        uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+          version: "~= 22.6"
 
   standard_tests:
     runs-on: ubuntu-latest
@@ -40,7 +40,7 @@ jobs:
         python-version: [3.9, "3.10", 3.11]
        
 
-    needs: [code_format, ruff, check_doc_strings]
+    needs: [initial_checks]
     steps:
       - uses: actions/checkout@v3      
 
@@ -61,15 +61,6 @@ jobs:
           pip install git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git
           make test-pip
 
-
-  code_format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: psf/black@stable
-        with:
-          options: "--check --verbose"
-          version: "~= 22.6"
 
 
   

@@ -11,18 +11,17 @@ readme = "README.md"
 python = ">=3.9,<4.0"
 beartype = ">=0.15.0"
 numpy = ">=1.26.2"
+pytest = { version = ">=7.2.0", optional = true }
+coverage = { version = ">=7.3.2", optional = true }
+ipykernel = { version = ">=6.20.1", optional = true }
+debugpy = { version = "1.6", optional = true }
 
+ideas-data = { git = "https://github.com/inscopix/ideas-data", rev = "2.0.0", optional = true }
 
-[tool.poetry.group.test.dependencies]
-pytest = ">=7.2.0"
-coverage = ">=7.3.2"
-
-[tool.poetry.group.ideas.dependencies]
-ideas-data = { git = "https://github.com/inscopix/ideas-data", rev = "2.0.0" }
-
-[tool.poetry.group.dev.dependencies]
-ipykernel = ">=6.20.1"
-debugpy = "1.6"
+[tool.poetry.extras]
+test = ["pytest", "coverage"]
+dev = ["ipykernel", "debugpy"]
+ideas = ["ideas-data"]
 
 
 [build-system]

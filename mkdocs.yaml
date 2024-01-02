@@ -22,10 +22,11 @@ theme:
  
 nav:
   - Home: INDEX.md
-  - Tutorials:
-    - Getting Started: getting_started.md
+  - Getting Started:
+    - Installing: installing.md
+    - IDEAS Objects: ideas_objects.md
   - How To:
-    - placeholder: INDEX.md
+    - Get trace from CellSet: how_to/cellset_trace.md 
 
 
 

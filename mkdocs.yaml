@@ -26,7 +26,7 @@ nav:
     - Installing: installing.md
     - IDEAS Objects: ideas_objects.md
   - How To:
-    - Get trace from CellSet: how_to/cellset_trace.md 
+    - Read Cellsets: how_to/read_cellset.md 
 
 
 

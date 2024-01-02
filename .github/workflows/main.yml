@@ -55,7 +55,7 @@ jobs:
 
       - name: run unit tests
         run: |
-          pip install --no-use-pep517 -e .
+          pip install -e .
           pip install pytest coverage 
           pip install git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git
           make test-pip

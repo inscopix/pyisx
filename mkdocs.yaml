@@ -4,7 +4,7 @@ site_author: Srinivas Gorur-Shandilya,  Zachary Ip
 docs_dir: 'docs'
 theme:
   name: material
-  logo: 'logo.png'
+  logo: 'images/logo.png'
   palette:
     primary: '#87C440'
     accent: '#3D97CD'

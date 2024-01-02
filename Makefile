@@ -16,6 +16,9 @@ ifneq ($(shell test -f ${IDEAS_GITHUB_TOKEN_FILE} && echo yes),yes)
 	$(error The GitHub token file ${IDEAS_GITHUB_TOKEN_FILE} does not exist)
 endif
 
+install-poetry:
+	@bash install-poetry.sh
+
 test: verify-github-token
 	poetry run coverage run -m pytest -sx --failed-first
 
@@ -26,4 +29,8 @@ test-pip:
 coverage-report: .coverage
 	poetry run coverage html --omit="*/test*"
 	open htmlcov/index.html
+
+serve: install-poetry
+	@echo "Serving docs locally..."
+	poetry run mkdocs serve
 

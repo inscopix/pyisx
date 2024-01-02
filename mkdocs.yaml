@@ -1,0 +1,72 @@
+site_name: Python API documentation
+site_author: Srinivas Gorur-Shandilya,  Zachary Ip
+
+docs_dir: 'docs'
+theme:
+  name: material
+  logo: 'logo.png'
+  palette:
+    primary: '#87C440'
+    accent: '#3D97CD'
+  features:
+    - navigation.indexes
+    - navigation.tracking
+    - toc.follow
+    - navigation.tabs
+    - navigation.tabs.sticky
+  favicon: favicon.png
+  icon:
+    admonition:
+      quote: fontawesome/solid/gears
+
+ 
+nav:
+  - Home: INDEX.md
+  - Tutorials:
+    - Getting Started: getting_started.md
+  - How To:
+    - placeholder: INDEX.md
+
+
+
+use_directory_urls: false
+
+markdown_extensions:
+  - footnotes
+  - attr_list
+  - md_in_html
+  - admonition
+  - toc:
+      permalink: true
+  - codehilite
+  - mkautodoc
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+  - abbr
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      # make exceptions to highlighting of code:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid
+
+
+
+extra:
+  homepage: https://github.com/inscopix/py_isx
+  generator: false
+  social:
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:<support@inscopix.com>
+      name: Inscopix Support
+    - icon: fontawesome/brands/github
+      link: https://github.com/inscopix/
+
+
+plugins:
+  - search
+
+

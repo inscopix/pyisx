@@ -15,7 +15,9 @@ setup(
     ],
     extras_require={
         "test": ["pytest>=7.2.0", "coverage>=7.3.2"],
-        "ideas": ["ideas-data @ git+https://github.com/inscopix/ideas-data@2.0.0"],
+        "ideas": [
+            "ideas-data @ git+https://github.com/inscopix/ideas-data@2.0.0"
+        ],
         "dev": ["ipykernel>=6.20.1", "debugpy==1.6"],
     },
     python_requires=">=3.9,<4.0",

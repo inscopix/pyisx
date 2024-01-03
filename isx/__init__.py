@@ -15,12 +15,158 @@ import struct
 import numpy as np
 from beartype import beartype
 
+NOT_IMPLEMENTED_MESSAGE = """
+This functionality has not been implemented in the pure python
+API yet. If you need this, please use the IDPS Python API"""
+
+
+class Movie:
+    """Movie"""
+
+    def __init__(self):
+        self.file_path = None
+        self.footer = None
+        self.timing = Timing()
+        self.spacing = Spacing()
+
+    @property
+    def data_type(self):
+        raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
+
+    @classmethod
+    def read(cls, file_path):
+        """
+        Open an existing movie from a file for reading.
+
+        This is a light weight operation that simply reads the meta-data from the movie,
+        and does not read any frame data.
+
+        Arguments
+        ---------
+        file_path : str
+            The path of the file to read.
+
+        Returns
+        -------
+        :class:`isx.Movie`
+            The movie that was read. Meta-data is immediately available.
+            Frames must be read using :func:`isx.Movie.get_frame`.
+        """
+        self = cls()
+        self.file_path = file_path
+
+        footer = _extract_footer(file_path)
+
+        self.spacing.num_pixels = (
+            footer["spacingInfo"]["numPixels"]["y"],
+            footer["spacingInfo"]["numPixels"]["x"],
+        )
+
+        self.timing.num_samples = footer["timingInfo"]["numTimes"]
+
+        self.timing.period = Duration(
+            footer["timingInfo"]["period"]["num"]
+            / footer["timingInfo"]["period"]["den"]
+        )
+
+        # save the footer too
+        self.footer = footer
+
+        return self
+
+    @classmethod
+    def write(cls, file_path, timing, spacing, data_type):
+        raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
+
+    @beartype
+    def get_frame_data(self, index: int):
+        """
+        Get a frame from the movie by index.
+
+        Arguments
+        ---------
+        index : int >= 0
+            The index of the frame. If this is out of range, this should error.
+
+        Returns
+        -------
+        :class:`numpy.ndarray`
+            The retrieved frame data.
+        """
+
+        if self.footer["dataType"] == 0:
+            bytes_per_pixel = 2
+            format_string = "H"
+        elif self.footer["dataType"] == 1:
+            bytes_per_pixel = 4
+            format_string = "f"
+        elif self.footer["dataType"] == 3:
+            bytes_per_pixel = 1
+            format_string = "b"
+        else:
+            raise NotImplementedError(
+                "Unknown number of bytes per pixel. Cannot decode this frame."
+            )
+
+        if self.footer["hasFrameHeaderFooter"]:
+            raise NotImplementedError(
+                """[UNIMPLEMENTED] Cannot extract frame from this
+        movie because frames have footers and headers."""
+            )
+
+        n_frames = self.footer["timingInfo"]["numTimes"]
+
+        if index >= n_frames:
+            raise IndexError(
+                f"""[INVALID FRAME NUMBER] This movie has
+        {n_frames}, so accessing frame number {index} 
+        is impossible."""
+            )
+
+        n_pixels = self.spacing.num_pixels[0] * self.spacing.num_pixels[1]
+
+        n_bytes_per_frame = n_pixels * bytes_per_pixel
+
+        with open(self.file_path, mode="rb") as file:
+            file.seek(index * n_bytes_per_frame)
+
+            data = file.read(bytes_per_pixel * n_pixels)
+
+            frame = struct.unpack(format_string * n_pixels, data)
+            frame = np.reshape(frame, self.spacing.num_pixels)
+
+        return frame
+
+    def get_frame_timestamp(self, index):
+        raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
+
+    def set_frame_data(self, index, frame):
+        raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
+
+    def flush(self):
+        """this method exists for drop-in compatibility
+        with the IDPS API, but doesn't do anything"""
+        pass
+
+    def get_acquisition_info(self):
+        return None
+
+    def __del__(self):
+        pass
+
 
 class Duration:
     """dummy class to mimic what IDPS isx.core.Duration does"""
 
     def __init__(self, secs_float: float):
         self.secs_float = secs_float
+
+
+class Spacing:
+    """stores spacing information for compatibility with IDPS"""
+
+    def __int__(self):
+        self.num_pixels = None
 
 
 class Timing:
@@ -200,49 +346,6 @@ def _extract_footer(isxd_file: str) -> dict:
 
     footer = data.decode("utf-8")
     return json.loads(footer)
-
-
-def _read_frame(movie_file: str, frame_num: int) -> np.array:
-    """read a single frame from a ISXD movie file"""
-    # read footer
-    footer = _extract_footer(movie_file)
-
-    if footer["dataType"] != 1:
-        raise RuntimeError(
-            "[UNIMPLEMENTED] dataType is not float32. Unable to read frames. "
-        )
-
-    if footer["hasFrameHeaderFooter"]:
-        raise RuntimeError(
-            """[UNIMPLEMENTED] Cannot extract frame from this
-    movie because frames have footers and headers."""
-        )
-
-    n_frames = footer["timingInfo"]["numTimes"]
-
-    if frame_num >= n_frames:
-        raise RuntimeError(
-            f"""[INVALID FRAME NUMBER] This movie has
-    {n_frames}, so accessing frame number {frame_num} 
-    is impossible."""
-        )
-
-    size_x = footer["spacingInfo"]["numPixels"]["x"]
-    size_y = footer["spacingInfo"]["numPixels"]["y"]
-
-    frame = np.zeros((size_x, size_y))
-    n_pixels = size_y * size_x
-
-    n_bytes_per_frame = size_y * size_x * 4
-
-    with open(movie_file, mode="rb") as file:
-        file.seek(frame_num * n_bytes_per_frame)
-        for i in np.arange(n_pixels):
-            data = file.read(4)  # read 4 bytes at a time, float 32
-            x, y = np.unravel_index(i, frame.shape)
-            frame[x, y] = struct.unpack("f", data)[0]
-
-    return frame
 
 
 def _get_isxd_times(input_filename):

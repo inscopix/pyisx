@@ -84,15 +84,39 @@ class CellSet:
 
     def get_cell_trace_data(self, cell_id: int) -> np.array:
         """return trace for a single cell"""
-        return _read_trace(self.file_path, cell_id)
+
+        n_frames = self.footer["timingInfo"]["numTimes"]
+
+        # get frame dimensions
+        size_x = self.footer["spacingInfo"]["numPixels"]["x"]
+        size_y = self.footer["spacingInfo"]["numPixels"]["y"]
+        n_pixels = size_y * size_x
+
+        n_bytes_per_cell = 4 * (n_pixels + n_frames)
+
+        with open(self.file_path, mode="rb") as file:
+            file.seek(cell_id * n_bytes_per_cell + (4 * n_pixels))
+
+            # read cell trace
+            data = file.read(4 * n_frames)
+            trace = struct.unpack("f" * n_frames, data)
+            trace = np.array(trace)
+
+        return trace
 
     def get_cell_name(self, cell_id: int) -> str:
         """return name of cell"""
-        return _read_cell_name(self.file_path, cell_id)
+
+        return self.footer["CellNames"][cell_id]
 
     def get_cell_status(self, cell_id: int) -> str:
         """return status of cell"""
-        return _read_status(self.file_path, cell_id)
+        if self.footer["CellStatuses"][cell_id] == 0:
+            return "accepted"
+        elif self.footer["CellStatuses"][cell_id] == 1:
+            return "undecided"
+        else:
+            return "rejected"
 
     @classmethod
     def read(cls, file_path: str):
@@ -140,62 +164,6 @@ def isxd_type(file_path: str) -> str:
         8: "vessel_set",
     }
     return isx_datatype_mapping[metadata["type"]]
-
-
-@beartype
-def _read_cell_name(cell_set_file: str, cell_id: int) -> str:
-    """return the name of a cell
-
-    Parameters:
-        cell_set_file: celdsfsdl_set_file
-        cell_id: sspme cell id
-    """
-    footer = _extract_footer(cell_set_file)
-    return footer["CellNames"][cell_id]
-
-
-@beartype
-def _read_trace(cell_set_file: str, cell_id: int):
-    """stand-alone function to read a single cell's trace
-    from a cellset file
-    """
-
-    footer = _extract_footer(cell_set_file)
-    n_frames = footer["timingInfo"]["numTimes"]
-
-    # get frame dimensions
-    size_x = footer["spacingInfo"]["numPixels"]["x"]
-    size_y = footer["spacingInfo"]["numPixels"]["y"]
-    n_pixels = size_y * size_x
-
-    n_bytes_per_cell = 4 * (n_pixels + n_frames)
-
-    with open(cell_set_file, mode="rb") as file:
-        file.seek(cell_id * n_bytes_per_cell + (4 * n_pixels))
-
-        # read cell trace
-        data = file.read(4 * n_frames)
-        trace = struct.unpack("f" * n_frames, data)
-        trace = np.array(trace)
-
-    return trace
-
-
-@beartype
-def _read_status(cell_set_file: str, cell_id: int) -> str:
-    """standalone function to read the status of a given cell
-    from a cellset file, without needing the IDPS API
-
-    """
-
-    footer = _extract_footer(cell_set_file)
-
-    if footer["CellStatuses"][cell_id] == 0:
-        return "accepted"
-    elif footer["CellStatuses"][cell_id] == 1:
-        return "undecided"
-    else:
-        return "rejected"
 
 
 @beartype

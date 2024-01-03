@@ -26,9 +26,9 @@ ideas-data = { git = "https://github.com/inscopix/ideas-data", rev = "2.0.0", op
 
 
 [tool.poetry.extras]
-test = ["pytest", "coverage"]
+test = ["pytest", "coverage","ideas-data"]
 dev = ["ipykernel", "debugpy"]
-ideas = ["ideas-data"]
+
 
 
 [build-system]

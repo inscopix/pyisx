@@ -100,10 +100,12 @@ class Movie:
         elif self.footer["dataType"] == 1:
             bytes_per_pixel = 4
             format_string = "f"
-        elif self.footer["dataType"] == 3:
+        elif self.footer["dataType"] == 2:
             bytes_per_pixel = 1
             format_string = "b"
         else:
+            print
+
             raise NotImplementedError(
                 "Unknown number of bytes per pixel. Cannot decode this frame."
             )

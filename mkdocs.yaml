@@ -1,4 +1,4 @@
-site_name: Python API documentation
+site_name: Python API for Inscopix Data
 site_author: Srinivas Gorur-Shandilya,  Zachary Ip
 
 docs_dir: 'docs'
@@ -12,8 +12,7 @@ theme:
     - navigation.indexes
     - navigation.tracking
     - toc.follow
-    - navigation.tabs
-    - navigation.tabs.sticky
+    - content.code.copy
   favicon: favicon.png
   icon:
     admonition:
@@ -21,26 +20,31 @@ theme:
 
  
 nav:
-  - Home: INDEX.md
+  - Home: 
+    - INDEX.md
   - Getting Started:
     - Installing: installing.md
     - IDEAS Objects: ideas_objects.md
   - How To:
-    - Read Cellsets: how_to/read_cellset.md 
+    - Read Cellsets: how-to/read-cellset.md 
+    - Read Movies: how-to/read-movie.md
+  - API reference: api.md
+  - Contributing: contributing.md
+  - Support: support.md
+  - License: LICENSE.md
 
 
 
 use_directory_urls: false
 
 markdown_extensions:
+  - admonition
+  - codehilite
   - footnotes
   - attr_list
   - md_in_html
-  - admonition
   - toc:
       permalink: true
-  - codehilite
-  - mkautodoc
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.arithmatex:
@@ -60,14 +64,40 @@ extra:
   homepage: https://github.com/inscopix/py_isx
   generator: false
   social:
-    - icon: fontawesome/solid/paper-plane
-      link: mailto:<support@inscopix.com>
-      name: Inscopix Support
     - icon: fontawesome/brands/github
       link: https://github.com/inscopix/
 
 
 plugins:
   - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            annotations_path: brief
+            show_source: true
+            docstring_options:
+              ignore_init_summary: true
+            docstring_section_style: table
+            filters: ["!^_"]
+            heading_level: 4
+            inherited_members: true
+            merge_init_into_class: true
+            separate_signature: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_signature_annotations: true
+            show_symbol_type_heading: false
+            show_symbol_type_toc: false
+            signature_crossrefs: true
+            summary: false
+
+
+
+extra_css:
+- css/style.css
+- css/material.css
+- css/mkdocstrings.css
 
 

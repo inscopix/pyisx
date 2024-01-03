@@ -11,6 +11,7 @@ https://inscopix.atlassian.net/wiki/spaces/MOS/pages/64133259/Mosaic+2.0+File+Fo
 import json
 import os
 import struct
+from typing import Self
 
 import numpy as np
 from beartype import beartype
@@ -32,16 +33,54 @@ class Timing:
 
 
 class CellSet:
-    """class to maintain partial compatibility with isx.core.CellSet"""
+    """
+
+    The CellSet class allows you to read ISXD CellSets.
+
+    !!! info "How to use the CellSet class"
+        To see how to use this class to read data from
+        ISXD Cellsets, click [here](../how-to/read-cellset.md).
+        This reference page describes each member of this
+        class and what each function does."""
+
+    num_cells: int = 0
+    timing = None
+    file_path = None
+    footer = None
 
     def __init__(self):
         self.num_cells: int = 0
         self.timing = Timing()
         self.file_path = None
 
-    def get_cell_image_data(self, cell_id: int) -> np.array:
-        """return footprint of a single cell"""
-        return _read_footprint(self.file_path, cell_id)
+    def get_cell_image_data(self: Self, cell_id: int) -> np.array:
+        """This method reads the spatial footprint of a single
+        cell and returns that as a Numpy array.
+
+        Parameters:
+            cell_id: index of cell of interest
+
+        Returns:
+            A MxN Numpy array containing frame data where M and N are the pixel dimensions
+        """
+
+        n_frames = self.footer["timingInfo"]["numTimes"]
+
+        # get frame dimensions
+        size_x = self.footer["spacingInfo"]["numPixels"]["x"]
+        size_y = self.footer["spacingInfo"]["numPixels"]["y"]
+        n_pixels = size_y * size_x
+
+        n_bytes_per_cell = 4 * (n_pixels + n_frames)
+
+        with open(self.file_path, mode="rb") as file:
+            file.seek(cell_id * n_bytes_per_cell)
+            data = file.read(4 * n_pixels)
+
+        footprint = struct.unpack("f" * n_pixels, data)
+        footprint = np.array(footprint).reshape((size_y, size_x))
+
+        return footprint
 
     def get_cell_trace_data(self, cell_id: int) -> np.array:
         """return trace for a single cell"""
@@ -80,7 +119,12 @@ class CellSet:
 
 @beartype
 def isxd_type(file_path: str) -> str:
-    """infer ISXD file type"""
+    """infer ISXD file type
+
+    Parameters:
+        file_path: path to ISXD file
+
+    """
 
     metadata = _extract_footer(file_path)
 
@@ -100,7 +144,12 @@ def isxd_type(file_path: str) -> str:
 
 @beartype
 def _read_cell_name(cell_set_file: str, cell_id: int) -> str:
-    """return the name of a cell"""
+    """return the name of a cell
+
+    Parameters:
+        cell_set_file: celdsfsdl_set_file
+        cell_id: sspme cell id
+    """
     footer = _extract_footer(cell_set_file)
     return footer["CellNames"][cell_id]
 
@@ -130,33 +179,6 @@ def _read_trace(cell_set_file: str, cell_id: int):
         trace = np.array(trace)
 
     return trace
-
-
-@beartype
-def _read_footprint(cell_set_file: str, cell_id):
-    """standalone function to read a footprint of a single
-    cell from a cellset file
-
-    """
-
-    footer = _extract_footer(cell_set_file)
-    n_frames = footer["timingInfo"]["numTimes"]
-
-    # get frame dimensions
-    size_x = footer["spacingInfo"]["numPixels"]["x"]
-    size_y = footer["spacingInfo"]["numPixels"]["y"]
-    n_pixels = size_y * size_x
-
-    n_bytes_per_cell = 4 * (n_pixels + n_frames)
-
-    with open(cell_set_file, mode="rb") as file:
-        file.seek(cell_id * n_bytes_per_cell)
-        data = file.read(4 * n_pixels)
-
-    footprint = struct.unpack("f" * n_pixels, data)
-    footprint = np.array(footprint).reshape((size_y, size_x))
-
-    return footprint
 
 
 @beartype

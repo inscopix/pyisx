@@ -20,17 +20,15 @@ theme:
 
  
 nav:
-  - Home: 
-    - INDEX.md
-  - Getting Started:
-    - Installing: installing.md
-    - IDEAS Objects: ideas_objects.md
+  - Home: INDEX.md
+  - Install: installing.md
   - How To:
     - Read Cellsets: how-to/read-cellset.md 
     - Read Movies: how-to/read-movie.md
   - API reference: api.md
   - Contributing: contributing.md
   - Support: support.md
+  - FAQ: faq.md
   - License: LICENSE.md
 
 

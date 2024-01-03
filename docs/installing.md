@@ -1,8 +1,15 @@
-# Getting started
 
-## Installation
+# Installation
+
+## For Users
+
+If you plan to use this in your own project
+
+
+## For Developers
 
 ### Get the code
+
 ```bash
 git clone git@github.com:inscopix/py_isx.git
 ```

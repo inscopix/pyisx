@@ -1,9 +1,9 @@
-"""this module contains an experimental API to read ISXD files,
-without using the isx API
+"""this module contains a pure-python implementation
+of the I/O code found in the IDPS API to read ISXD files
+of the Movie and CellSet variety. 
 
-this uses the filespec found here:
-
-https://inscopix.atlassian.net/wiki/spaces/MOS/pages/64133259/Mosaic+2.0+File+Formats#Mosaic2.0FileFormats-DataFiles-.ISXD
+This module is not at feature parity with the IDPS C++ API
+yet, and some features may not be supported. 
 
 """
 

@@ -11,7 +11,6 @@ https://inscopix.atlassian.net/wiki/spaces/MOS/pages/64133259/Mosaic+2.0+File+Fo
 import json
 import os
 import struct
-from typing import Self
 
 import numpy as np
 from beartype import beartype
@@ -53,7 +52,7 @@ class CellSet:
         self.timing = Timing()
         self.file_path = None
 
-    def get_cell_image_data(self: Self, cell_id: int) -> np.array:
+    def get_cell_image_data(self, cell_id: int) -> np.array:
         """This method reads the spatial footprint of a single
         cell and returns that as a Numpy array.
 

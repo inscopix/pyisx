@@ -25,7 +25,9 @@ nav:
   - How To:
     - Read Cellsets: how-to/read-cellset.md 
     - Read Movies: how-to/read-movie.md
-  - API reference: api.md
+  - API reference: 
+    - Classes: reference/classes.md
+    - Functions: reference/functions.md
   - Contributing: contributing.md
   - Support: support.md
   - FAQ: faq.md
@@ -79,17 +81,15 @@ plugins:
               ignore_init_summary: true
             docstring_section_style: table
             filters: ["!^_"]
-            heading_level: 4
+            heading_level: 3
             inherited_members: true
             merge_init_into_class: true
             separate_signature: true
             show_root_heading: true
             show_root_full_path: false
             show_signature_annotations: true
-            show_symbol_type_heading: false
-            show_symbol_type_toc: false
             signature_crossrefs: true
-            summary: false
+
 
 
 

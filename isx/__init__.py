@@ -20,37 +20,71 @@ This functionality has not been implemented in the pure python
 API yet. If you need this, please use the IDPS Python API"""
 
 
-class Movie:
-    """Movie"""
+class Duration:
+    """dummy class to mimic what IDPS isx.core.Duration does"""
+
+    def __init__(self, secs_float: float):
+        self.secs_float = secs_float
+
+
+class Spacing:
+    """stores spacing information for compatibility with IDPS"""
+
+    def __int__(self):
+        self.num_pixels = None
+
+
+class Timing:
+    """dummy class to mimic what IDPS isx.core.Timing does"""
 
     def __init__(self):
-        self.file_path = None
-        self.footer = None
-        self.timing = Timing()
-        self.spacing = Spacing()
+        self.period = None
+        self.num_samples = None
+
+
+class Movie:
+    """
+    !!! info "IDPS Equivalent"
+        This class is designed to be equivalent of the `isx.Movie`class in the IDPS Python API
+
+    The Movie class allows you to create objects
+    that represent ISXD movies. Every Movie object
+    is bound to a ISXD movie file that exists on disk.
+
+    Attributes:
+        file_path: path to ISXD file
+        footer: A dictioanry containing data in the JSON    footer of ISXD Movies
+        timing: a isx.Timing object containing timing information for this movie
+        spacing: a isx.Spacing object containing spacing information for this movie
+
+
+    """
+
+    file_path: str = None
+    footer: dict = None
+    timing: Timing = Timing()
+    spacing: Timing = Spacing()
+
+    def __init__(self):
+        pass
 
     @property
     def data_type(self):
         raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
 
     @classmethod
-    def read(cls, file_path):
+    def read(cls, file_path: str):
         """
         Open an existing movie from a file for reading.
 
         This is a light weight operation that simply reads the meta-data from the movie,
         and does not read any frame data.
 
-        Arguments
-        ---------
-        file_path : str
-            The path of the file to read.
+        Parameters:
+            file_path: The path of the file to read.
 
-        Returns
-        -------
-        :class:`isx.Movie`
-            The movie that was read. Meta-data is immediately available.
-            Frames must be read using :func:`isx.Movie.get_frame`.
+        Returns:
+            A `isx.Movie` object. The movie that was read. Meta-data is immediately available. Frames must be read using `isx.Movie.get_frame`.
         """
         self = cls()
         self.file_path = file_path
@@ -82,16 +116,12 @@ class Movie:
     @beartype
     def get_frame_data(self, index: int):
         """
-        Get a frame from the movie by index.
+        Read the contents of a single frame in a movie
 
-        Arguments
-        ---------
-        index : int >= 0
-            The index of the frame. If this is out of range, this should error.
+        Parameters:
+            index : The numeric index of the frame.
 
-        Returns
-        -------
-        :class:`numpy.ndarray`
+        Returns:
             The retrieved frame data.
         """
 
@@ -154,28 +184,6 @@ class Movie:
 
     def __del__(self):
         pass
-
-
-class Duration:
-    """dummy class to mimic what IDPS isx.core.Duration does"""
-
-    def __init__(self, secs_float: float):
-        self.secs_float = secs_float
-
-
-class Spacing:
-    """stores spacing information for compatibility with IDPS"""
-
-    def __int__(self):
-        self.num_pixels = None
-
-
-class Timing:
-    """dummy class to mimic what IDPS isx.core.Timing does"""
-
-    def __init__(self):
-        self.period = None
-        self.num_samples = None
 
 
 class CellSet:

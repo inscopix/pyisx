@@ -57,6 +57,7 @@ class Movie:
 
         footer = _extract_footer(file_path)
 
+        # y maps to rows, x maps to columns
         self.spacing.num_pixels = (
             footer["spacingInfo"]["numPixels"]["y"],
             footer["spacingInfo"]["numPixels"]["x"],
@@ -104,8 +105,6 @@ class Movie:
             bytes_per_pixel = 1
             format_string = "b"
         else:
-            print
-
             raise NotImplementedError(
                 "Unknown number of bytes per pixel. Cannot decode this frame."
             )

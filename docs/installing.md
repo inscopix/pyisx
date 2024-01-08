@@ -8,24 +8,28 @@
 If you plan to use this in your own project, use your 
 favorite package manager to install this in your project.
 
-#### using [pip](https://pypi.org/project/pip/)
-
-```bash
-pip install git+https://github.com/inscopix/py_isx.git@main
-```
-
-#### using [poetry](https://python-poetry.org/):
 
 
-```bash
-poetry add git+ssh://git@github.com/inscopix/py_isx.git
-```
+=== "pip"
 
-Please refer to [Poetry's documentation](https://python-poetry.org/docs/cli/#add) for installing from
-git repositories for further details. 
+    ```bash
+    # you are strongly encouraged to install in a virtual envrionment
+    pip install git+https://github.com/inscopix/py_isx.git@main
+    ```
+
+=== "poetry"
+
+
+    ```bash
+    poetry add git+ssh://git@github.com/inscopix/py_isx.git
+    ```
+
 
 
 ## For Developers
+
+!!! danger "Developers only"
+    The instructions below are only if you intend to develop `py_isx`. If you merely want to use this API to read data, you do not have to do this.
 
 ### Get the code
 
@@ -41,18 +45,10 @@ Verify that both are installed:
 
 ```bash
 make --version
-GNU Make 3.81
-Copyright (C) 2006  Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.
-There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.
+# GNU Make 3.81
 
-This program built for i386-apple-darwin11.3.0
-```
-
-```bash
 poetry --version
-Poetry (version 1.7.1)
+# Poetry (version 1.7.1)
 ```
 
 ### Install locally

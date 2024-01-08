@@ -3,8 +3,8 @@
 [tool.poetry]
 name = "isx"
 version = "1.0.0"
-description = " Python-based ISXD file reader "
-authors = ["Srinivas Gorur-Shandilya <code@srinivas.gs>"]
+description = " Python-based ISXD file reader"
+authors = ["Srinivas Gorur-Shandilya", "Zachary Ip"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

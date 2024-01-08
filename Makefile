@@ -29,5 +29,5 @@ setup.py: pyproject.toml
 
 deploy: install-poetry 
 	@echo "Deploying documentation to GitHub pages..."
-	poerry run mkdocs build
+	poetry run mkdocs build
 	poetry run mkdocs gh-deploy

@@ -27,7 +27,7 @@ poetry add https://github.com/inscopix/py_isx
 
 
 ```bash
-pip install https://github.com/inscopix/py_isx
+pip install git+https://github.com/inscopix/py_isx.git@main
 ```
 
 ## Testing

@@ -3,11 +3,19 @@
 
 ## For Users
 
-### Installing from source
+### Install latest version of code 
 
 If you plan to use this in your own project, use your 
 favorite package manager to install this in your project.
-For example if you wanted to install using [poetry](https://python-poetry.org/):
+
+#### using [pip](https://pypi.org/project/pip/)
+
+```bash
+pip install git+https://github.com/inscopix/py_isx.git@main
+```
+
+#### using [poetry](https://python-poetry.org/):
+
 
 ```bash
 poetry add git+ssh://git@github.com/inscopix/py_isx.git

@@ -48,16 +48,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - run: 'echo "$IDEAS_PAT" > .ideas-github-token'
-        shell: bash
-        env:
-          IDEAS_PAT: ${{secrets.IDEAS_PAT}}
 
       - name: run unit tests
         run: |
-          pip install -e .
-          pip install pytest coverage 
-          pip install git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git
+          pip install -e .[test]
           make test-pip
 
 

@@ -24,9 +24,6 @@ poetry add git+ssh://git@github.com/inscopix/py_isx.git
 Please refer to [Poetry's documentation](https://python-poetry.org/docs/cli/#add) for installing from
 git repositories for further details. 
 
-### Installing from a wheel
-
-We also provide wheel files for installation locally. 
 
 ## For Developers
 

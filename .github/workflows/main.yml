@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
        
 
     needs: [initial_checks]
@@ -48,16 +48,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - run: 'echo "$IDEAS_PAT" > .ideas-github-token'
-        shell: bash
-        env:
-          IDEAS_PAT: ${{secrets.IDEAS_PAT}}
 
       - name: run unit tests
         run: |
-          pip install --no-use-pep517 -e .
-          pip install pytest coverage 
-          pip install git+https://${{ secrets.IDEAS_PAT }}@github.com/inscopix/ideas-data.git
+          pip install -e .[test]
           make test-pip
 
 

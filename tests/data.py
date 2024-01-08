@@ -1,10 +1,11 @@
+"""this module contains helper code that downloads test
+data from a github releases page"""
+
 import os
 from pathlib import Path
-from typing import Optional
 
 import requests
 from beartype import beartype
-from beartype.typing import List, Union
 
 if os.path.exists("/ideas/data/") and os.access("/ideas/data/", os.W_OK):
     data_root = "/ideas/data/"
@@ -28,8 +29,20 @@ else:
 
 
 @beartype
-download(file_name:str)->None:
-    response = requests.get("https://github.com/inscopix/py_isx/releases/download/1.0.0/movie_128x128x100_part1.isxd")
-    file_name = "/Users/srinivas/Desktop/test.isxd"
-    with open(file_name, "wb") as file:
-            file.write(response.content)
+def download(file_name: str) -> str:
+    """helper function that downloads test data (if needed)
+    and returns a path to the file on the local filesystem"""
+
+    file_path = os.path.join(data_root, file_name)
+
+    if os.path.exists(file_path):
+        return file_path
+
+    response = requests.get(
+        f"https://github.com/inscopix/py_isx/releases/download/test-data/{file_name}"
+    )
+
+    with open(file_path, "wb") as file:
+        file.write(response.content)
+
+    return file_path

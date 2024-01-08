@@ -7,7 +7,6 @@ yet, and some features may not be supported.
 
 """
 
-
 import json
 import os
 import struct
@@ -73,7 +72,14 @@ class Movie:
 
     @property
     def data_type(self):
-        raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
+        if self.footer["dataType"] == 0:
+            return np.uint16
+        elif self.footer["dataType"] == 1:
+            return np.float32
+        elif self.footer["dataType"] == 2:
+            return np.uint8
+        else:
+            raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
 
     @classmethod
     def read(cls, file_path: str):

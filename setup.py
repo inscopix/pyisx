@@ -11,17 +11,16 @@ install_requires = \
 ['beartype>=0.15.0', 'importlib-metadata>=7.0.1,<8.0.0', 'numpy>=1.26.2']
 
 extras_require = \
-{':extra == "docs"': ['mkdocs>=1.4.2,<2.0.0'],
- 'dev': ['ipykernel>=6.20.1',
+{'dev': ['ipykernel>=6.20.1',
          'debugpy==1.6',
          'matplotlib>=3.8.2',
          'poetry2setup>=1.1.0,<2.0.0'],
- 'docs': ['mkdocs-material-extensions>=1.1.1,<2.0.0',
+ 'docs': ['mkdocs>=1.4.2,<2.0.0',
+          'mkdocs-material-extensions>=1.1.1,<2.0.0',
           'mkdocs-material>=9.0.9,<10.0.0',
           'mkdocstrings>=0.24.0,<0.25.0',
           'mkdocstrings-python>=1.7.5,<2.0.0'],
  'test': ['pytest>=7.2.0',
-          'coverage>=7.3.2',
           'poetry2setup>=1.1.0,<2.0.0',
           'requests>=2.31.0,<3.0.0']}
 

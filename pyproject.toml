@@ -36,8 +36,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 79
-
-
+exclude = "setup.py"
 
 [tool.interrogate]
 fail-under = 100

@@ -1,16 +1,19 @@
 # py_isx
 
-Experimental pure-python API to read ISXD files
+Experimental pure-python API to read ISXD files. Please note 
+that this is a work in progress and not feature complete. 
+Use at your own risk. 
 
 ## Support
 
 |  File type | Support |
 |  --------- | ------- |
 | CellSet   | ✅ |
-| Movie   | ❌ |
+| Movie   | ✅ |
 | Events   | ❌ |
-| VesselSet   | ❌ |
-
+| VesselSet   | 🚧 |
+| GPIO files   | ❌ |
+| IMU files   | ❌ |
 
 ## Installation
 

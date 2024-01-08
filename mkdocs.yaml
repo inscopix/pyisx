@@ -13,6 +13,7 @@ theme:
     - navigation.tracking
     - toc.follow
     - content.code.copy
+    - navigation.footer
   favicon: favicon.png
   icon:
     admonition:
@@ -23,8 +24,17 @@ nav:
   - Home: INDEX.md
   - Install: installing.md
   - How To:
-    - Read Cellsets: how-to/read-cellset.md 
-    - Read Movies: how-to/read-movie.md
+    - Read Cellsets:
+      - Read the number of cells: how-to/read-cellsets-num-cells.md
+      - Read a cell trace: how-to/read-cellsets-trace.md
+      - Read the name of a cell: how-to/read-cellsets-name.md
+      - Read the status of a cell: how-to/read-cellsets-status.md
+      
+    - Read Movies: 
+      - Read a frame from a movie: how-to/read-movie-frame.md
+      - Read movie timing information: how-to/read-movie-timing.md
+      - Read movie spacing information: how-to/read-movie-spacing.md
+      - Read movie data type: how-to/read-movie-data-type.md
   - API reference: 
     - Classes: reference/classes.md
     - Functions: reference/functions.md

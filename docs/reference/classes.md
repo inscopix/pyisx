@@ -23,6 +23,12 @@
       show_root_heading: false
       show_source: false
       show_root_toc_entry: false
+      members:
+        - read
+        - get_cell_trace_data
+        - get_cell_image_data
+        - get_cell_name
+        - get_cell_status
 
 
 ## `isx.Duration` 

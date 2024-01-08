@@ -21,7 +21,7 @@ theme:
 
  
 nav:
-  - Home: INDEX.md
+  - Home: index.md
   - Install: installing.md
   - How To:
     - Read Cellsets:

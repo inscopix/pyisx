@@ -3,8 +3,22 @@
 
 ## For Users
 
-If you plan to use this in your own project
+### Installing from source
 
+If you plan to use this in your own project, use your 
+favorite package manager to install this in your project.
+For example if you wanted to install using [poetry](https://python-poetry.org/):
+
+```bash
+poetry add git+ssh://git@github.com/inscopix/py_isx.git
+```
+
+Please refer to [Poetry's documentation](https://python-poetry.org/docs/cli/#add) for installing from
+git repositories for further details. 
+
+### Installing from a wheel
+
+We also provide wheel files for installation locally. 
 
 ## For Developers
 
@@ -39,9 +53,13 @@ Poetry (version 1.7.1)
 ### Install locally
 
 You can then install the API locally by navigating to the directory you downloaded the code in, and running:
+
 ```bash
-poetry install
+poetry lock
+poetry install --all-extras
 ```
+
+Poetry installs using a "editable" install, so changes you make will be reflected in the code executed. 
 
 
 

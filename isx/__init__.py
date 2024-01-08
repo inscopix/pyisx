@@ -12,12 +12,15 @@ import json
 import os
 import struct
 
+import importlib_metadata
 import numpy as np
 from beartype import beartype
 
 NOT_IMPLEMENTED_MESSAGE = """
 This functionality has not been implemented in the pure python
 API yet. If you need this, please use the IDPS Python API"""
+
+__version__ = importlib_metadata.version("isx")
 
 
 class Duration:

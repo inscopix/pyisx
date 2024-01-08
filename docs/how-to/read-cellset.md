@@ -1,8 +1,15 @@
-## Make sure `py_isx` is installed
+# How to read ISXD Cellset files
+
+
+We first import `py_isx` using:
+
+
 ```python
-import py_isx
+import isx
 ```
+
 ## Read a CellSet
+
 CellSets can be easily opened in Python using the `isx.CellSet.read` method.
 ```python
 cell_set = isx.CellSet.read('cellset.isxd')

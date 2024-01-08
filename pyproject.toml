@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "isx"
-version = "2023.11.21 "
+version = "1.0.0"
 description = " Python-based ISXD file reader "
 authors = ["Srinivas Gorur-Shandilya <code@srinivas.gs>"]
 readme = "README.md"
@@ -12,25 +12,24 @@ python = ">=3.9,<4.0"
 beartype = ">=0.15.0"
 numpy = ">=1.26.2"
 mkdocs = "^1.4.2"
-mkdocs-material-extensions = "^1.1.1"
-mkdocs-mermaid2-plugin = "^0.6.0"
-mkdocs-material = "^9.0.9"
-mkdocstrings = "^0.24.0"
-mkdocstrings-python = "^1.7.5"
+mkdocs-material-extensions = { version = "^1.1.1", optional =true }
+mkdocs-material = { version = "^9.0.9", optional = true }
+mkdocstrings = { version = "^0.24.0", optional = true }
+mkdocstrings-python = { version = "^1.7.5", optional = true }
 pytest = { version = ">=7.2.0", optional = true }
 coverage = { version = ">=7.3.2", optional = true }
 ipykernel = { version = ">=6.20.1", optional = true }
 debugpy = { version = "1.6", optional = true }
 ideas-data = { git = "https://github.com/inscopix/ideas-data", rev = "2.0.0", optional = true }
 matplotlib =  { version = ">=3.8.2", optional = true }
-
+importlib-metadata = "^7.0.1"
 
 
 
 [tool.poetry.extras]
 test = ["pytest", "coverage","ideas-data"]
 dev = ["ipykernel", "debugpy","matplotlib"]
-
+docs = ["mkdocs", "mkdocs-material-extensions", "mkdocs-material", "mkdocstrings" ,"mkdocstrings-python"]
 
 [build-system]
 requires = ["poetry-core"]

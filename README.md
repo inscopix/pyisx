@@ -4,6 +4,8 @@ Experimental pure-python API to read ISXD files. Please note
 that this is a work in progress and not feature complete. 
 Use at your own risk. 
 
+
+
 ## Support
 
 |  File type | Support |
@@ -20,7 +22,7 @@ Use at your own risk.
 ### Poetry
 
 ```bash
-poetry add https://github.com/inscopix/py_isx
+poetry add git+ssh://git@github.com/inscopix/py_isx.git
 ```
 
 ### pip
@@ -38,3 +40,4 @@ versions:
 - 3.9
 - 3.10
 - 3.11
+- 3.12

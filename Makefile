@@ -26,3 +26,5 @@ serve: install-poetry
 	@echo "Serving docs locally..."
 	poetry run mkdocs serve
 
+setup.py: pyproject.toml
+	poetry run poetry2setup > setup.py

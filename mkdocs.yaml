@@ -1,0 +1,96 @@
+site_name: Python API for Inscopix Data
+site_author: Srinivas Gorur-Shandilya,  Zachary Ip
+
+docs_dir: 'docs'
+theme:
+  name: material
+  logo: 'images/logo.png'
+  palette:
+    primary: '#87C440'
+    accent: '#3D97CD'
+  features:
+    - navigation.indexes
+    - navigation.tracking
+    - toc.follow
+    - content.code.copy
+  favicon: favicon.png
+  icon:
+    admonition:
+      quote: fontawesome/solid/gears
+
+ 
+nav:
+  - Home: INDEX.md
+  - Install: installing.md
+  - How To:
+    - Read Cellsets: how-to/read-cellset.md 
+    - Read Movies: how-to/read-movie.md
+  - API reference: 
+    - Classes: reference/classes.md
+    - Functions: reference/functions.md
+  - Contributing: contributing.md
+  - Support: support.md
+  - FAQ: faq.md
+  - License: LICENSE.md
+
+
+
+use_directory_urls: false
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+  - abbr
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+
+
+extra:
+  homepage: https://github.com/inscopix/py_isx
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/inscopix/
+
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            annotations_path: brief
+            show_source: true
+            docstring_options:
+              ignore_init_summary: true
+            docstring_section_style: table
+            filters: ["!^_"]
+            heading_level: 3
+            inherited_members: true
+            merge_init_into_class: true
+            separate_signature: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_signature_annotations: true
+            signature_crossrefs: true
+
+
+
+
+extra_css:
+- css/style.css
+- css/material.css
+- css/mkdocstrings.css
+
+

@@ -7,9 +7,9 @@ Experimental pure-python API to read ISXD files
 |  File type | Support |
 |  --------- | ------- |
 | CellSet   | ✅ |
-| Movie   | ✅ |
-| VesselSet   | ✅ |
+| Movie   | ❌ |
 | Events   | ❌ |
+| VesselSet   | ❌ |
 
 
 ## Installation

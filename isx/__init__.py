@@ -7,7 +7,6 @@ yet, and some features may not be supported.
 
 """
 
-
 import json
 import os
 import struct
@@ -24,21 +23,53 @@ __version__ = importlib_metadata.version("isx")
 
 
 class Duration:
-    """dummy class to mimic what IDPS isx.core.Duration does"""
+    """
+    !!! info "IDPS Equivalent"
+        This class is designed to be equivalent of the `isx.Duration`class in the IDPS Python API`. Not all
+        features of the IDPS Python API are mirrored here.
+
+    Attributes:
+        secs_float: A period of time, expressed in seconds.
+
+    """
+
+    secs_float: float = None
 
     def __init__(self, secs_float: float):
         self.secs_float = secs_float
 
 
 class Spacing:
-    """stores spacing information for compatibility with IDPS"""
+    """
+    !!! info "IDPS Equivalent"
+        This class is designed to be equivalent of the `isx.Spacing`class in the IDPS Python API`. Not all
+        features of the IDPS Python API are mirrored here.
+
+    Attributes:
+        num_pixels: A 2-tuple containing the dimensions of the frame.
+
+    """
+
+    num_pixels: tuple[int, int] = None
 
     def __int__(self):
         self.num_pixels = None
 
 
 class Timing:
-    """dummy class to mimic what IDPS isx.core.Timing does"""
+    """
+    !!! info "IDPS Equivalent"
+        This class is designed to be equivalent of the `isx.Timing`class in the IDPS Python API`. Not all
+        features of the IDPS Python API are mirrored here.
+
+    Attributes:
+        period: An instance of isx.Duration with information about the period
+        num_samples: The number of time samples in this object.
+
+    """
+
+    period: Duration = None
+    num_samples: int = None
 
     def __init__(self):
         self.period = None
@@ -73,7 +104,14 @@ class Movie:
 
     @property
     def data_type(self):
-        raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
+        if self.footer["dataType"] == 0:
+            return np.uint16
+        elif self.footer["dataType"] == 1:
+            return np.float32
+        elif self.footer["dataType"] == 2:
+            return np.uint8
+        else:
+            raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)
 
     @classmethod
     def read(cls, file_path: str):

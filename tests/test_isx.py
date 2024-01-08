@@ -13,18 +13,27 @@ movie_info = [
         dtype=np.float32,
         num_pixels=(128, 128),
         num_samples=100,
+        frame_max=1146.0001,
+        frame_min=703.0001,
+        frame_sum=15429191.0,
     ),
     dict(
         name="movie_longer_than_3_min.isxd",
         dtype=np.uint16,
         num_pixels=(33, 29),
         num_samples=1248,
+        frame_max=2658,
+        frame_min=492,
+        frame_sum=1400150,
     ),
     dict(
         name="movie_u8.isxd",
         dtype=np.uint8,
         num_pixels=(3, 4),
         num_samples=5,
+        frame_max=11,
+        frame_min=0,
+        frame_sum=66,
     ),
 ]
 
@@ -78,3 +87,24 @@ def test_movie_num_samples(item):
     assert (
         movie.timing.num_samples == item["num_samples"]
     ), f"Could not correctly read num_samples of movie {movie_name}"
+
+
+@pytest.mark.parametrize("item", movie_info)
+def test_movie_read_frame(item):
+    """check that we can correctly read the first frame of the movie by checking that frame's min, sum and max"""
+
+    movie_name = item["name"]
+    movie = isx.Movie.read(movie_name)
+    frame = movie.get_frame_data(0)
+
+    assert np.isclose(
+        frame.max(), item["frame_max"]
+    ), f"Could not correctly the first frame of {movie_name}"
+
+    assert np.isclose(
+        frame.min(), item["frame_min"]
+    ), f"Could not correctly the first frame of {movie_name}"
+
+    assert np.isclose(
+        frame.sum(), item["frame_sum"]
+    ), f"Could not correctly the first frame of {movie_name}"

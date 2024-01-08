@@ -1,6 +1,3 @@
-
-# credentials
-IDEAS_GITHUB_TOKEN_FILE=.ideas-github-token
 repo=$(shell basename $(CURDIR))
 
 .PHONY: test coverage-report jupyter 
@@ -28,3 +25,9 @@ serve: install-poetry
 
 setup.py: pyproject.toml
 	poetry run poetry2setup > setup.py
+
+
+deploy: install-poetry 
+	@echo "Deploying documentation to GitHub pages..."
+	poerry run mkdocs build
+	poetry run mkdocs gh-deploy

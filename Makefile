@@ -15,7 +15,7 @@ install-poetry:
 	@bash install-poetry.sh
 
 test: 
-	poetry run -m pytest -sx --failed-first
+	poetry run pytest -sx --failed-first
 
 test-pip:
 	@echo "Testing code installed on base env using pip..."

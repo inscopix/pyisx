@@ -18,8 +18,9 @@ movie = isx.Movie.read("movie.isxd")
 Then, read the frame of interest by index:
 
 ```python
-frame = movie.get_frame_data(0) # reads the first frame
+frame = movie.get_frame_data(n) # reads the first frame
 ```
+where `n` is <= the [number of frames](read-movie-timing.html) in the movie.
 
 `frame` now contains a [numpy array](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) with the frame data for the first frame. 
 

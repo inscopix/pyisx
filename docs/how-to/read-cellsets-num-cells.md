@@ -1,4 +1,4 @@
-# Read status of a cell in a CellSet
+# Read number of cells in a CellSet
 
 !!! note "Assumptions"
     This section assumes you: 
@@ -19,11 +19,5 @@ cell_set = isx.CellSet.read("cellset.isxd")
 we can read the status of any cell using:
 
 ```python
-cell_status = cell_set.get_cell_status(n)
+num_cells = cell_set.num_cells()
 ```
-
-
-where `n` is <= the [number of cells](read-cellsets-num-cells.html) in the cell set. 
-
-!!! warning "Indexing"
-    Note that python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on. 

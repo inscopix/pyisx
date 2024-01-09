@@ -31,10 +31,10 @@ nav:
       - Read the status of a cell: how-to/read-cellsets-status.md
       
     - Read Movies: 
-      - Read a frame from a movie: how-to/read-movie-frame.md
       - Read movie timing information: how-to/read-movie-timing.md
       - Read movie spacing information: how-to/read-movie-spacing.md
       - Read movie data type: how-to/read-movie-data-type.md
+      - Read a frame from a movie: how-to/read-movie-frame.md
   - API reference: 
     - Classes: reference/classes.md
     - Functions: reference/functions.md

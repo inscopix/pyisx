@@ -4,7 +4,7 @@
 name = "isx"
 version = "1.0.0"
 description = " Python-based ISXD file reader"
-authors = ["Srinivas Gorur-Shandilya", "Zachary Ip"]
+authors = ["Srinivas Gorur-Shandilya <s.gorur_shandilya@bruker.com>", "Zachary Ip <Zachary.Ip@bruker.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

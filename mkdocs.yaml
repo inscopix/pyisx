@@ -1,5 +1,8 @@
 site_name: Python API for Inscopix Data
 site_author: Srinivas Gorur-Shandilya,  Zachary Ip
+repo_url: https://github.com/inscopix/py_isx
+repo_name: inscopix/py_isx
+site_url: https://inscopix.github.io/py_isx/
 
 docs_dir: 'docs'
 theme:
@@ -14,14 +17,11 @@ theme:
     - toc.follow
     - content.code.copy
     - navigation.footer
+    - content.tooltips
   favicon: favicon.png
-  icon:
-    admonition:
-      quote: fontawesome/solid/gears
-
  
 nav:
-  - Home: INDEX.md
+  - Home: index.md
   - Install: installing.md
   - How To:
     - Read Cellsets:
@@ -66,17 +66,11 @@ markdown_extensions:
       alternate_style: true
 
 
-
-extra:
-  homepage: https://github.com/inscopix/py_isx
-  generator: false
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/inscopix/
-
-
 plugins:
   - search
+  - git-authors
+  - git-revision-date-localized:
+      enable_creation_date: true
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -99,10 +93,5 @@ plugins:
 
 
 
-
-extra_css:
-- css/style.css
-- css/material.css
-- css/mkdocstrings.css
 
 

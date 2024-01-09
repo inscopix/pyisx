@@ -1,5 +1,7 @@
 # py_isx
 
+![](https://github.com/inscopix/py_isx/actions/workflows/main.yml/badge.svg)
+
 Experimental pure-python API to read ISXD files. Please note 
 that this is a work in progress and not feature complete. 
 Use at your own risk. 

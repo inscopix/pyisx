@@ -19,7 +19,9 @@ extras_require = \
           'mkdocs-material-extensions>=1.1.1,<2.0.0',
           'mkdocs-material>=9.0.9,<10.0.0',
           'mkdocstrings>=0.24.0,<0.25.0',
-          'mkdocstrings-python>=1.7.5,<2.0.0'],
+          'mkdocstrings-python>=1.7.5,<2.0.0',
+          'mkdocs-git-revision-date-localized-plugin>=1.2.2,<2.0.0',
+          'mkdocs-git-authors-plugin>=0.7.2,<0.8.0'],
  'test': ['pytest>=7.2.0',
           'poetry2setup>=1.1.0,<2.0.0',
           'requests>=2.31.0,<3.0.0']}
@@ -27,13 +29,13 @@ extras_require = \
 setup_kwargs = {
     'name': 'isx',
     'version': '1.0.0',
-    'description': ' Python-based ISXD file reader',
-    'long_description': '# py_isx\n\nExperimental pure-python API to read ISXD files. Please note \nthat this is a work in progress and not feature complete. \nUse at your own risk. \n\n## Support\n\n|  File type | Support |\n|  --------- | ------- |\n| CellSet   | ✅ |\n| Movie   | ✅ |\n| Events   | ❌ |\n| VesselSet   | 🚧 |\n| GPIO files   | ❌ |\n| IMU files   | ❌ |\n\n## Installation\n\n### Poetry\n\n```bash\npoetry add https://github.com/inscopix/py_isx\n```\n\n### pip\n\n\n```bash\npip install git+https://github.com/inscopix/py_isx.git@main\n```\n\n## Testing\n\nThis code is tested using GitHub Actions on the following python\nversions:\n\n- 3.9\n- 3.10\n- 3.11\n',
+    'description': 'Python-based ISXD file reader',
+    'long_description': '# py_isx\n\n![](https://github.com/inscopix/py_isx/actions/workflows/main.yml/badge.svg)\n\nExperimental pure-python API to read ISXD files. Please note \nthat this is a work in progress and not feature complete. \nUse at your own risk. \n\n\n\n## Support\n\n|  File type | Support |\n|  --------- | ------- |\n| CellSet   | ✅ |\n| Movie   | ✅ |\n| Events   | ❌ |\n| VesselSet   | 🚧 |\n| GPIO files   | ❌ |\n| IMU files   | ❌ |\n\n## Installation\n\n### Poetry\n\n```bash\npoetry add git+ssh://git@github.com/inscopix/py_isx.git\n```\n\n### pip\n\n\n```bash\npip install git+https://github.com/inscopix/py_isx.git@main\n```\n\n## Testing\n\nThis code is tested using GitHub Actions on the following python\nversions:\n\n- 3.9\n- 3.10\n- 3.11\n- 3.12\n',
     'author': 'Srinivas Gorur-Shandilya',
-    'author_email': 'None',
-    'maintainer': 'None',
-    'maintainer_email': 'None',
-    'url': 'None',
+    'author_email': 's.gorur_shandilya@bruker.com',
+    'maintainer': 'Zachary Ip',
+    'maintainer_email': 'Zachary.Ip@bruker.com',
+    'url': 'https://github.com/inscopix/py_isx',
     'packages': packages,
     'package_data': package_data,
     'install_requires': install_requires,
@@ -43,3 +45,4 @@ setup_kwargs = {
 
 
 setup(**setup_kwargs)
+

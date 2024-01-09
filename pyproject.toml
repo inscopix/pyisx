@@ -3,9 +3,13 @@
 [tool.poetry]
 name = "isx"
 version = "1.0.0"
-description = " Python-based ISXD file reader"
+description = "Python-based ISXD file reader"
 authors = ["Srinivas Gorur-Shandilya <s.gorur_shandilya@bruker.com>", "Zachary Ip <Zachary.Ip@bruker.com>"]
 readme = "README.md"
+license = "CC-BY-NC-4.0"
+homepage = "https://github.com/inscopix/py_isx"
+repository = "https://github.com/inscopix/py_isx"
+documentation = "https://inscopix.github.io/py_isx/"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"

@@ -1,7 +1,7 @@
 # API Reference: Classes
 
 !!! tip "How to use this reference"
-    This page contains information about every Class and function in this package. This is meant as a detailed reference for this code. If you're looking to do something specific, the [How To](how-to.md) section may be more useful. 
+    This page contains information about every Class and function in this package. This is meant as a detailed reference for this code. If you're looking to do something specific, the **How-To** section may be more useful. 
 
 ## `isx.Movie` 
 

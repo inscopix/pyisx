@@ -2,7 +2,8 @@ name: publish-to-pypi
 
 on:
   push:
-    branches: [ main ]
+    tags:
+     - '*'
 
 jobs:
   pypi-publish:
@@ -23,6 +24,14 @@ jobs:
       - name: Install pypa/setuptools
         run: 
           python -m pip install wheel
+
+      - name: Extract tag name
+        id: tag
+        run: echo ::set-output name=TAG_NAME::$(echo $GITHUB_REF | cut -d / -f 3)
+      - name: Update version in setup.py
+        run: >-
+          sed -i "s/0.0.0.dev0/${{ steps.tag.outputs.TAG_NAME }}/g" setup.py
+          sed -i "s/'name': 'isx'/'name': 'isx','long_description_content_type':'text/markdown'/g" setup.py
 
       - name: Build a binary wheel
         run: 

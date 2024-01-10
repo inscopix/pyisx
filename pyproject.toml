@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "isx"
-version = "1.0.0"
+version = "0.0.0.dev"
 description = "Python-based ISXD file reader"
 authors = ["Srinivas Gorur-Shandilya <s.gorur_shandilya@bruker.com>", "Zachary Ip <Zachary.Ip@bruker.com>"]
 maintainers = ["Zachary Ip <Zachary.Ip@bruker.com>"]
@@ -11,6 +11,7 @@ license = "CC-BY-NC-4.0"
 homepage = "https://github.com/inscopix/py_isx"
 repository = "https://github.com/inscopix/py_isx"
 documentation = "https://inscopix.github.io/py_isx/"
+
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"

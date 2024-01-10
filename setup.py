@@ -28,7 +28,7 @@ extras_require = \
 
 setup_kwargs = {
     'name': 'isx',
-    'version': '1.0.0',
+    'version': '0.0.0.dev0',
     'description': 'Python-based ISXD file reader',
     'long_description': '# py_isx\n\n![](https://github.com/inscopix/py_isx/actions/workflows/main.yml/badge.svg)\n\nExperimental pure-python API to read ISXD files. Please note \nthat this is a work in progress and not feature complete. \nUse at your own risk. \n\n\n\n## Support\n\n|  File type | Support |\n|  --------- | ------- |\n| CellSet   | ✅ |\n| Movie   | ✅ |\n| Events   | ❌ |\n| VesselSet   | 🚧 |\n| GPIO files   | ❌ |\n| IMU files   | ❌ |\n\n## Installation\n\n### Poetry\n\n```bash\npoetry add git+ssh://git@github.com/inscopix/py_isx.git\n```\n\n### pip\n\n\n```bash\npip install git+https://github.com/inscopix/py_isx.git@main\n```\n\n## Testing\n\nThis code is tested using GitHub Actions on the following python\nversions:\n\n- 3.9\n- 3.10\n- 3.11\n- 3.12\n',
     'author': 'Srinivas Gorur-Shandilya',

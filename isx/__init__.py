@@ -22,6 +22,18 @@ API yet. If you need this, please use the IDPS Python API"""
 __version__ = importlib_metadata.version("isx")
 
 
+@beartype
+def _check_cell_index(cell_id: int, num_cells: int) -> None:
+    """helper function to make sure that cell index is OK"""
+    if cell_id < 0:
+        raise IndexError("Cell ID must be >=0")
+
+    if cell_id >= num_cells:
+        raise IndexError(
+            f"Cannot access cell {cell_id} because this cell set has {num_cells} cells"
+        )
+
+
 class Duration:
     """
     !!! info "IDPS Equivalent"
@@ -259,6 +271,8 @@ class CellSet:
             A MxN Numpy array containing frame data where M and N are the pixel dimensions
         """
 
+        _check_cell_index(cell_id, self.num_cells)
+
         n_frames = self.footer["timingInfo"]["numTimes"]
 
         # get frame dimensions
@@ -280,12 +294,7 @@ class CellSet:
     def get_cell_trace_data(self, cell_id: int) -> np.array:
         """return trace for a single cell"""
 
-        if cell_id >= self.num_cells:
-            raise IndexError(
-                f"Cannot access cell {cell_id} because this cell set has {self.num_cells} cells"
-            )
-        if cell_id < 0:
-            raise IndexError("Cell ID must be >=0")
+        _check_cell_index(cell_id, self.num_cells)
 
         n_frames = self.footer["timingInfo"]["numTimes"]
 
@@ -309,27 +318,15 @@ class CellSet:
     def get_cell_name(self, cell_id: int) -> str:
         """return name of cell"""
 
-        if cell_id >= self.num_cells:
-            raise IndexError(
-                f"Cannot access cell {cell_id} because this cell set has {self.num_cells} cells"
-            )
-        if cell_id < 0:
-            raise IndexError("Cell ID must be >=0")
+        _check_cell_index(cell_id, self.num_cells)
 
         return self.footer["CellNames"][cell_id]
 
     def get_cell_status(self, cell_id: int) -> str:
         """return status of a cell"""
 
-        if cell_id < 0:
-            raise IndexError("Cell ID must be >=0")
+        _check_cell_index(cell_id, self.num_cells)
 
-        if cell_id >= self.num_cells:
-            raise IndexError(
-                f"Cannot access cell {cell_id} because this cell set has {self.num_cells} cells"
-            )
-
-        """return status of cell"""
         if self.footer["CellStatuses"][cell_id] == 0:
             return "accepted"
         elif self.footer["CellStatuses"][cell_id] == 1:

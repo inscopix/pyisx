@@ -71,6 +71,14 @@ for item in cellset_info:
     item["name"] = download(item["name"])
 
 
+cell_set_methods = [
+    "get_cell_name",
+    "get_cell_image_data",
+    "get_cell_trace_data",
+    "get_cell_status",
+]
+
+
 def _read_all_status(cell_set: isx.CellSet) -> list[str]:
     """helper function to read all status in cellset"""
     cell_status = []
@@ -130,17 +138,18 @@ def test_read_num_cells(item):
     ), f"Could not read the number of cells correctly for {item['name']}"
 
 
+@pytest.mark.parametrize("method", cell_set_methods)
 @pytest.mark.parametrize("item", cellset_info)
-def test_error_on_bad_cell_index(item):
+def test_error_on_bad_cell_index(item, method):
     """check that we get the correct error message when we try to read info from a cell that doesn't exist"""
 
     cell_set = isx.CellSet.read(item["name"])
 
     with pytest.raises(IndexError, match="Cell ID must be >=0"):
-        cell_set.get_cell_trace_data(-1)
+        getattr(cell_set, method)(-1)
 
     with pytest.raises(IndexError, match="Cannot access cell"):
-        cell_set.get_cell_trace_data(cell_set.num_cells + 1)
+        getattr(cell_set, method)(cell_set.num_cells + 1)
 
 
 @pytest.mark.parametrize("item", movie_info)

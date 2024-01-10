@@ -28,7 +28,7 @@ where `cell_status` is a string that is one of the following:
 | Status| |
 |---- | -- |
 | `accepted` | This cell has been explicitly marked as accepted |
-| `rejected` | This cell has been explicitly marked as rejeected |
+| `rejected` | This cell has been explicitly marked as rejected |
 | `undecided` | Default status of cells |
 
 !!! warning "Indexing"

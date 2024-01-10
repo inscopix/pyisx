@@ -242,11 +242,11 @@ class CellSet:
     timing = None
     file_path = None
     footer = None
+    spacing: Spacing = Spacing()
+    timing: Timing = Timing()
 
     def __init__(self):
-        self.num_cells: int = 0
-        self.timing = Timing()
-        self.file_path = None
+        pass
 
     def get_cell_image_data(self, cell_id: int) -> np.array:
         """This method reads the spatial footprint of a single
@@ -280,6 +280,13 @@ class CellSet:
     def get_cell_trace_data(self, cell_id: int) -> np.array:
         """return trace for a single cell"""
 
+        if cell_id >= self.num_cells:
+            raise IndexError(
+                f"Cannot access cell {cell_id} because this cell set has {self.num_cells} cells"
+            )
+        if cell_id < 0:
+            raise IndexError("Cell ID must be >=0")
+
         n_frames = self.footer["timingInfo"]["numTimes"]
 
         # get frame dimensions
@@ -302,9 +309,26 @@ class CellSet:
     def get_cell_name(self, cell_id: int) -> str:
         """return name of cell"""
 
+        if cell_id >= self.num_cells:
+            raise IndexError(
+                f"Cannot access cell {cell_id} because this cell set has {self.num_cells} cells"
+            )
+        if cell_id < 0:
+            raise IndexError("Cell ID must be >=0")
+
         return self.footer["CellNames"][cell_id]
 
     def get_cell_status(self, cell_id: int) -> str:
+        """return status of a cell"""
+
+        if cell_id < 0:
+            raise IndexError("Cell ID must be >=0")
+
+        if cell_id >= self.num_cells:
+            raise IndexError(
+                f"Cannot access cell {cell_id} because this cell set has {self.num_cells} cells"
+            )
+
         """return status of cell"""
         if self.footer["CellStatuses"][cell_id] == 0:
             return "accepted"
@@ -315,9 +339,7 @@ class CellSet:
 
     @classmethod
     def read(cls, file_path: str):
-        """method to maintain compatibility with IDPS API. This doesn't
-        actually do anything very interesting other than set the timing
-        and num_cells property"""
+        """class method to open a CellSet file for reading"""
 
         self = cls()
         self.file_path = file_path
@@ -331,6 +353,12 @@ class CellSet:
         self.timing.period = Duration(
             self.footer["timingInfo"]["period"]["num"]
             / self.footer["timingInfo"]["period"]["den"]
+        )
+
+        # y maps to rows, x maps to columns
+        self.spacing.num_pixels = (
+            self.footer["spacingInfo"]["numPixels"]["y"],
+            self.footer["spacingInfo"]["numPixels"]["x"],
         )
 
         return self

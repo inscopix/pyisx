@@ -37,9 +37,78 @@ movie_info = [
     ),
 ]
 
+cellset_info = [
+    dict(
+        name="empty_cellset.isxd",
+        num_cells=0,
+        num_pixels=(4, 5),
+        num_samples=7,
+    ),
+    dict(
+        name="cellset.isxd",
+        num_cells=4,
+        num_pixels=(366, 398),
+        num_samples=5444,
+    ),
+    dict(
+        name="cellset_series_part1.isxd",
+        num_cells=6,
+        num_pixels=(21, 21),
+        num_samples=100,
+    ),
+]
+
 # download files if needed and resolve to local File system
-for movie in movie_info:
-    movie["name"] = download(movie["name"])
+for item in movie_info:
+    item["name"] = download(item["name"])
+for item in cellset_info:
+    item["name"] = download(item["name"])
+
+
+@pytest.mark.parametrize("item", cellset_info)
+def test_cellset_num_samples(item):
+    """check that we can read the number of samples correctly"""
+
+    cell_set = isx.CellSet.read(item["name"])
+
+    assert (
+        cell_set.timing.num_samples == item["num_samples"]
+    ), f"Could not read the number of pixels correctly for {item['name']}"
+
+
+@pytest.mark.parametrize("item", cellset_info)
+def test_cellset_num_pixels(item):
+    """check that we can read the number of pixels correctly"""
+
+    cell_set = isx.CellSet.read(item["name"])
+
+    assert (
+        cell_set.spacing.num_pixels == item["num_pixels"]
+    ), f"Could not read the number of pixels correctly for {item['name']}"
+
+
+@pytest.mark.parametrize("item", cellset_info)
+def test_read_num_cells(item):
+    """check that we can read the number of cells in a cellset correctly"""
+
+    cell_set = isx.CellSet.read(item["name"])
+
+    assert (
+        cell_set.num_cells == item["num_cells"]
+    ), f"Could not read the number of cells correctly for {item['name']}"
+
+
+@pytest.mark.parametrize("item", cellset_info)
+def test_error_on_bad_cell_index(item):
+    """check that we get the correct error message when we try to read info from a cell that doesn't exist"""
+
+    cell_set = isx.CellSet.read(item["name"])
+
+    with pytest.raises(IndexError, match="Cell ID must be >=0"):
+        cell_set.get_cell_trace_data(-1)
+
+    with pytest.raises(IndexError, match="Cannot access cell"):
+        cell_set.get_cell_trace_data(cell_set.num_cells + 1)
 
 
 @pytest.mark.parametrize("item", movie_info)

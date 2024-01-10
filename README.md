@@ -1,4 +1,4 @@
-# py_isx
+# isx: pure-python API to read Inscopix data
 
 ![](https://github.com/inscopix/py_isx/actions/workflows/main.yml/badge.svg) 
 ![](https://img.shields.io/pypi/v/isx)

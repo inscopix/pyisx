@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "isx"
-version = "1.0.0"
+version = "0.0.0.dev"
 description = "Python-based ISXD file reader"
 authors = ["Srinivas Gorur-Shandilya <s.gorur_shandilya@bruker.com>", "Zachary Ip <Zachary.Ip@bruker.com>"]
 maintainers = ["Zachary Ip <Zachary.Ip@bruker.com>"]

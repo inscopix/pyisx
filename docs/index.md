@@ -42,6 +42,8 @@ Currently, `isx` supports only a subset of Inscopix data types.
 |  --------- | ------- |
 | ISXD CellSet   | ✅ |
 | ISXD Movie   | ✅ |
+| ISXD Movie (multi-plane)   | ❌ |
+| ISXD Movie (dual-color)   | ❌ |
 | GPIO data   | ❌ |
 | ISXD Events   | ❌ |
 | ISXD VesselSet   | ❌ |

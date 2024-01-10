@@ -1,9 +1,10 @@
 # py_isx
 
-![](https://github.com/inscopix/py_isx/actions/workflows/main.yml/badge.svg)
+![](https://github.com/inscopix/py_isx/actions/workflows/main.yml/badge.svg) 
+![](https://img.shields.io/pypi/v/isx)
 
-Experimental pure-python API to read ISXD files. Please note 
-that this is a work in progress and not feature complete. 
+Experimental pure-python API to read Inscopix ISXD files. 
+Please note that this is a work in progress and not feature complete. 
 Use at your own risk. 
 
 
@@ -12,26 +13,28 @@ Use at your own risk.
 
 |  File type | Support |
 |  --------- | ------- |
-| CellSet   | ✅ |
-| Movie   | ✅ |
-| Events   | ❌ |
-| VesselSet   | 🚧 |
-| GPIO files   | ❌ |
-| IMU files   | ❌ |
+| ISXD CellSet   | ✅ |
+| ISXD Movie   | ✅ |
+| ISXD Movie (multi-plane)   | ❌ |
+| ISXD Movie (dual-color)   | ❌ |
+| GPIO data   | ❌ |
+| ISXD Events   | ❌ |
+| ISXD VesselSet   | ❌ |
 
-## Installation
+
+## Install
 
 ### Poetry
 
 ```bash
-poetry add git+ssh://git@github.com/inscopix/py_isx.git
+poetry add isx
 ```
 
 ### pip
 
 
 ```bash
-pip install git+https://github.com/inscopix/py_isx.git@main
+pip install isx
 ```
 
 ## Testing

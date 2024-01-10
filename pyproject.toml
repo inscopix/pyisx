@@ -30,13 +30,13 @@ matplotlib =  { version = ">=3.8.2", optional = true }
 poetry2setup = { version = "^1.1.0", optional = true }
 requests = { version = "^2.31.0", optional = true }
 mkdocs-git-revision-date-localized-plugin = { version = "^1.2.2", optional = true }
-mkdocs-git-authors-plugin = { version = "^0.7.2", optional = true }
+mkdocs-git-committers-plugin-2 = { version = "^2.2.3", optional = true }
 
 
 [tool.poetry.extras]
 test = ["pytest","requests","poetry2setup"]
 dev = ["ipykernel", "debugpy","matplotlib","poetry2setup"]
-docs = ["mkdocs", "mkdocs-material-extensions", "mkdocs-material", "mkdocstrings" ,"mkdocstrings-python","mkdocs-git-revision-date-localized-plugin","mkdocs-git-authors-plugin"]
+docs = ["mkdocs", "mkdocs-material-extensions", "mkdocs-material", "mkdocstrings" ,"mkdocstrings-python","mkdocs-git-revision-date-localized-plugin","mkdocs-git-committers-plugin-2"]
 
 [build-system]
 requires = ["poetry-core"]

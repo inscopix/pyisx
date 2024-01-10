@@ -322,15 +322,15 @@ class CellSet:
         self = cls()
         self.file_path = file_path
 
-        footer = _extract_footer(file_path)
+        self.footer = _extract_footer(file_path)
 
-        self.num_cells = len(footer["CellNames"])
+        self.num_cells = len(self.footer["CellNames"])
 
-        self.timing.num_samples = footer["timingInfo"]["numTimes"]
+        self.timing.num_samples = self.footer["timingInfo"]["numTimes"]
 
         self.timing.period = Duration(
-            footer["timingInfo"]["period"]["num"]
-            / footer["timingInfo"]["period"]["den"]
+            self.footer["timingInfo"]["period"]["num"]
+            / self.footer["timingInfo"]["period"]["den"]
         )
 
         return self

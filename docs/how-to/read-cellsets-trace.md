@@ -16,13 +16,11 @@ Once a cell set is opened using:
 ```python
 cell_set = isx.CellSet.read("cellset.isxd")
 ```
-we can read the trace of any cell using:
+we can read the trace of the first cell using:
 
 ```python
-cell_trace = cell_set.get_cell_trace(n)
+cell_trace = cell_set.get_cell_trace(0)
 ```
-
-where `n` is <= the [number of cells](read-cellsets-num-cells.html) in the cell set. 
 
 `cell_trace` now contains a [numpy array](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) with the trace data for the first frame. 
 

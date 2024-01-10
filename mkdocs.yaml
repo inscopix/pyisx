@@ -24,6 +24,7 @@ nav:
   - Home: index.md
   - Install: installing.md
   - How To:
+    - Determine version number: how-to/version-number.md
     - Read Cellsets:
       - Read the number of cells: how-to/read-cellsets-num-cells.md
       - Read a cell trace: how-to/read-cellsets-trace.md
@@ -49,6 +50,9 @@ use_directory_urls: false
 
 markdown_extensions:
   - admonition
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji 
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - codehilite
   - footnotes
   - attr_list
@@ -68,7 +72,9 @@ markdown_extensions:
 
 plugins:
   - search
-  - git-authors
+  - git-committers:
+      repository: inscopix/py_isx
+      branch: main
   - git-revision-date-localized:
       enable_creation_date: true
   - mkdocstrings:

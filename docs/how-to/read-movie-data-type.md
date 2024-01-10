@@ -17,7 +17,7 @@ movie = isx.Movie.read("movie.isxd")
 Type information can be accessed using:
 
 ```python
-movie.data_type()
+movie.data_type
 ```
 
 The dimensions of the frame can be accessed using:

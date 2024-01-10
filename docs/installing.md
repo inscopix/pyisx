@@ -14,14 +14,14 @@ favorite package manager to install this in your project.
 
     ```bash
     # you are strongly encouraged to install in a virtual envrionment
-    pip install git+https://github.com/inscopix/py_isx.git@main
+    pip install isx
     ```
 
 === "poetry"
 
 
     ```bash
-    poetry add git+ssh://git@github.com/inscopix/py_isx.git
+    poetry add isx
     ```
 
 

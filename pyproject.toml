@@ -12,6 +12,7 @@ homepage = "https://github.com/inscopix/py_isx"
 repository = "https://github.com/inscopix/py_isx"
 documentation = "https://inscopix.github.io/py_isx/"
 
+
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 beartype = ">=0.15.0"

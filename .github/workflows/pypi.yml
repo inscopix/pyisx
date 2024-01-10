@@ -18,7 +18,7 @@ jobs:
 
       - name: Insert long_description_content_type
         run: >-
-        sed -i "s|'name': 'isx'|'name': 'isx','long_description_content_type':'text/markdown'|g" setup.py
+          sed -i "s|'name': 'isx'|'name': 'isx','long_description_content_type':'text/markdown'|g" setup.py
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v3

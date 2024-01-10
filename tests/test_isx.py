@@ -43,18 +43,24 @@ cellset_info = [
         num_cells=0,
         num_pixels=(4, 5),
         num_samples=7,
+        n_accepted=0,
+        n_rejected=0,
     ),
     dict(
         name="cellset.isxd",
         num_cells=4,
         num_pixels=(366, 398),
         num_samples=5444,
+        n_accepted=3,
+        n_rejected=1,
     ),
     dict(
         name="cellset_series_part1.isxd",
         num_cells=6,
         num_pixels=(21, 21),
         num_samples=100,
+        n_accepted=0,
+        n_rejected=0,
     ),
 ]
 
@@ -63,6 +69,32 @@ for item in movie_info:
     item["name"] = download(item["name"])
 for item in cellset_info:
     item["name"] = download(item["name"])
+
+
+def _read_all_status(cell_set: isx.CellSet) -> list[str]:
+    """helper function to read all status in cellset"""
+    cell_status = []
+
+    for i in range(cell_set.num_cells):
+        cell_status.append(cell_set.get_cell_status(i))
+
+    return cell_status
+
+
+@pytest.mark.parametrize("item", cellset_info)
+def test_cellset_status(item):
+    """check that we can read the number of samples correctly"""
+
+    cell_set = isx.CellSet.read(item["name"])
+    cell_status = _read_all_status(cell_set)
+
+    assert (
+        cell_status.count("accepted") == item["n_accepted"]
+    ), f"Could not read the number of accepted cells correctly for {item['name']}"
+
+    assert (
+        cell_status.count("rejected") == item["n_rejected"]
+    ), f"Could not read the number of accepted cells correctly for {item['name']}"
 
 
 @pytest.mark.parametrize("item", cellset_info)

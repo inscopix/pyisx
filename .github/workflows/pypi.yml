@@ -31,7 +31,8 @@ jobs:
       - name: Update version in setup.py
         run: >-
           sed -i "s/0.0.0.dev0/${{ steps.tag.outputs.TAG_NAME }}/g" setup.py
-          sed -i "s/'name': 'isx'/'name': 'isx','long_description_content_type':'text/markdown'/g" setup.py
+          sed -i "s|'name': 'isx'|'name': 'isx','long_description_content_type':'text/markdown'|g" setup.py
+
 
       - name: Build a binary wheel
         run: 

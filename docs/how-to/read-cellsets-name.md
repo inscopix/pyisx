@@ -14,14 +14,13 @@ Once a cell set is opened using:
 ```python
 cell_set = isx.CellSet.read("cellset.isxd")
 ```
-we can read the name of any cell using:
+we can read the name of the first cell using:
 
 ```python
-cell_name = cell_set.get_cell_name(n)
+cell_name = cell_set.get_cell_name(0)
+# returns "C000" or similar
 ```
 
-
-where `n` is <= the [number of cells](read-cellsets-num-cells.html) in the cell set. 
 
 !!! warning "Indexing"
     Note that python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on. 

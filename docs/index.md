@@ -3,20 +3,20 @@
 `isx` is a lightweight pure-python API for reading 
 Inscopix data files. 
 
-## Nomenclature and Description
 
-This repository is distinct from the Python API for [IDPS](https://inscopix.com/software-analysis-miniscope-imaging/), which is also called `isx`. 
+<div class="grid cards" markdown>
 
-| This repository | The IDPS  API |
-| --------------- | ------------------- |
-| Freely available to the public (under a NC-BY license, see [License](LICENSE.md) for details) | Requires access to IDPS |
-| Only Python support | Python and MATLAB support |
-| Pure python implementation. Should work on any system that can run Python | Implemented in C++ with Python (or MATLAB) bindings |
-| No user support | Support via standard Inscopix channels for Inscopix customers | 
+- :fontawesome-brands-python: **Pure python**       
+Lightweight implementation, written in pure Python with no C++ code. Works on any system that can run Python.
+- :fontawesome-solid-handshake-simple: **Mirrors IDPS API**  
+Acts as a drop-in replacement to the IDPS API, meaning that you don't have to rewrite existing code that reads ISXD data.
+- :octicons-unlock-24: **Freely available**         
+Freely available for non-commerical use.
+- :material-download: **Easy install**     
+Just `pip install isx`.
 
+</div>
 
-!!! info "Drop in replacement for the IDPS API"
-    The goal of this repository is to act as a drop-in replacement for the IDPS Python API (for reading ISXD files). Therefore, code here is structured to mirror classes and functions in the IDPS Python API.  
 
 
 !!! tip "`isx` or `py_isx`?"
@@ -42,6 +42,8 @@ Currently, `isx` supports only a subset of Inscopix data types.
 |  --------- | ------- |
 | ISXD CellSet   | ✅ |
 | ISXD Movie   | ✅ |
+| ISXD Movie (multi-plane)   | ❌ |
+| ISXD Movie (dual-color)   | ❌ |
 | GPIO data   | ❌ |
 | ISXD Events   | ❌ |
 | ISXD VesselSet   | ❌ |

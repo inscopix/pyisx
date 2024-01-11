@@ -19,5 +19,5 @@ cell_set = isx.CellSet.read("cellset.isxd")
 we can read the status of any cell using:
 
 ```python
-num_cells = cell_set.num_cells()
+num_cells = cell_set.num_cells
 ```

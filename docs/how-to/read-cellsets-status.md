@@ -16,14 +16,20 @@ Once a cell set is opened using:
 ```python
 cell_set = isx.CellSet.read("cellset.isxd")
 ```
-we can read the status of any cell using:
+we can read the status of the first cell using:
 
 ```python
-cell_status = cell_set.get_cell_status(n)
+cell_status = cell_set.get_cell_status(0)
 ```
 
+where `cell_status` is a string that is one of the following:
 
-where `n` is <= the [number of cells](read-cellsets-num-cells.html) in the cell set. 
+
+| Status| |
+|---- | -- |
+| `accepted` | This cell has been explicitly marked as accepted |
+| `rejected` | This cell has been explicitly marked as rejected |
+| `undecided` | Default status of cells |
 
 !!! warning "Indexing"
     Note that python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on. 

@@ -32,6 +32,12 @@ jobs:
           options: "--check --verbose"
           version: "~= 22.6"
 
+      - name: Check pyproject.toml matches setup.py
+        run: |
+          pip install poetry2setup
+          poetry2setup > setup.py
+          bash scripts/check-git-clean.sh
+
   standard_tests:
     runs-on: ubuntu-latest
     strategy:

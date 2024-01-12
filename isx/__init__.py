@@ -22,6 +22,18 @@ API yet. If you need this, please use the IDPS Python API"""
 __version__ = importlib_metadata.version("isx")
 
 
+@beartype
+def _check_cell_index(cell_id: int, num_cells: int) -> None:
+    """helper function to make sure that cell index is OK"""
+    if cell_id < 0:
+        raise IndexError("Cell ID must be >=0")
+
+    if cell_id >= num_cells:
+        raise IndexError(
+            f"Cannot access cell {cell_id} because this cell set has {num_cells} cells"
+        )
+
+
 class Duration:
     """
     !!! info "IDPS Equivalent"
@@ -242,11 +254,11 @@ class CellSet:
     timing = None
     file_path = None
     footer = None
+    spacing: Spacing = Spacing()
+    timing: Timing = Timing()
 
     def __init__(self):
-        self.num_cells: int = 0
-        self.timing = Timing()
-        self.file_path = None
+        pass
 
     def get_cell_image_data(self, cell_id: int) -> np.array:
         """This method reads the spatial footprint of a single
@@ -258,6 +270,8 @@ class CellSet:
         Returns:
             A MxN Numpy array containing frame data where M and N are the pixel dimensions
         """
+
+        _check_cell_index(cell_id, self.num_cells)
 
         n_frames = self.footer["timingInfo"]["numTimes"]
 
@@ -279,6 +293,8 @@ class CellSet:
 
     def get_cell_trace_data(self, cell_id: int) -> np.array:
         """return trace for a single cell"""
+
+        _check_cell_index(cell_id, self.num_cells)
 
         n_frames = self.footer["timingInfo"]["numTimes"]
 
@@ -302,10 +318,15 @@ class CellSet:
     def get_cell_name(self, cell_id: int) -> str:
         """return name of cell"""
 
+        _check_cell_index(cell_id, self.num_cells)
+
         return self.footer["CellNames"][cell_id]
 
     def get_cell_status(self, cell_id: int) -> str:
-        """return status of cell"""
+        """return status of a cell"""
+
+        _check_cell_index(cell_id, self.num_cells)
+
         if self.footer["CellStatuses"][cell_id] == 0:
             return "accepted"
         elif self.footer["CellStatuses"][cell_id] == 1:
@@ -315,22 +336,26 @@ class CellSet:
 
     @classmethod
     def read(cls, file_path: str):
-        """method to maintain compatibility with IDPS API. This doesn't
-        actually do anything very interesting other than set the timing
-        and num_cells property"""
+        """class method to open a CellSet file for reading"""
 
         self = cls()
         self.file_path = file_path
 
-        footer = _extract_footer(file_path)
+        self.footer = _extract_footer(file_path)
 
-        self.num_cells = len(footer["CellNames"])
+        self.num_cells = len(self.footer["CellNames"])
 
-        self.timing.num_samples = footer["timingInfo"]["numTimes"]
+        self.timing.num_samples = self.footer["timingInfo"]["numTimes"]
 
         self.timing.period = Duration(
-            footer["timingInfo"]["period"]["num"]
-            / footer["timingInfo"]["period"]["den"]
+            self.footer["timingInfo"]["period"]["num"]
+            / self.footer["timingInfo"]["period"]["den"]
+        )
+
+        # y maps to rows, x maps to columns
+        self.spacing.num_pixels = (
+            self.footer["spacingInfo"]["numPixels"]["y"],
+            self.footer["spacingInfo"]["numPixels"]["x"],
         )
 
         return self

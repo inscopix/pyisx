@@ -15,13 +15,13 @@ movie = isx.Movie.read("movie.isxd")
 
 ```
 
-Then, read the frame of interest by index:
+To read the first frame:
 
 ```python
-frame = movie.get_frame_data(0) # reads the first frame
+frame = movie.get_frame_data(0) 
 ```
 
-`frame` now contains a [numpy array](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) with the frame data for the first frame. 
+`frame` contains a [numpy array](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) with the frame data for the first frame. 
 
 !!! warning "Indexing"
     Note that python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on. 

@@ -1,5 +1,8 @@
 site_name: Python API for Inscopix Data
 site_author: Srinivas Gorur-Shandilya,  Zachary Ip
+repo_url: https://github.com/inscopix/py_isx
+repo_name: inscopix/py_isx
+site_url: https://inscopix.github.io/py_isx/
 
 docs_dir: 'docs'
 theme:
@@ -14,16 +17,14 @@ theme:
     - toc.follow
     - content.code.copy
     - navigation.footer
+    - content.tooltips
   favicon: favicon.png
-  icon:
-    admonition:
-      quote: fontawesome/solid/gears
-
  
 nav:
-  - Home: INDEX.md
+  - Home: index.md
   - Install: installing.md
   - How To:
+    - Determine version number: how-to/version-number.md
     - Read Cellsets:
       - Read the number of cells: how-to/read-cellsets-num-cells.md
       - Read a cell trace: how-to/read-cellsets-trace.md
@@ -31,10 +32,10 @@ nav:
       - Read the status of a cell: how-to/read-cellsets-status.md
       
     - Read Movies: 
-      - Read a frame from a movie: how-to/read-movie-frame.md
       - Read movie timing information: how-to/read-movie-timing.md
       - Read movie spacing information: how-to/read-movie-spacing.md
       - Read movie data type: how-to/read-movie-data-type.md
+      - Read a frame from a movie: how-to/read-movie-frame.md
   - API reference: 
     - Classes: reference/classes.md
     - Functions: reference/functions.md
@@ -49,6 +50,9 @@ use_directory_urls: false
 
 markdown_extensions:
   - admonition
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji 
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - codehilite
   - footnotes
   - attr_list
@@ -66,17 +70,13 @@ markdown_extensions:
       alternate_style: true
 
 
-
-extra:
-  homepage: https://github.com/inscopix/py_isx
-  generator: false
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/inscopix/
-
-
 plugins:
   - search
+  - git-committers:
+      repository: inscopix/py_isx
+      branch: main
+  - git-revision-date-localized:
+      enable_creation_date: true
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -97,12 +97,5 @@ plugins:
             show_signature_annotations: true
             signature_crossrefs: true
 
-
-
-
-extra_css:
-- css/style.css
-- css/material.css
-- css/mkdocstrings.css
 
 

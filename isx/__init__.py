@@ -192,11 +192,12 @@ class Movie:
                 "Unknown number of bytes per pixel. Cannot decode this frame."
             )
 
+        header_offset = 0
+        footer_offset = 0
         if self.footer["hasFrameHeaderFooter"]:
-            raise NotImplementedError(
-                """[UNIMPLEMENTED] Cannot extract frame from this
-        movie because frames have footers and headers."""
-            )
+            header_offset = (index + 1) * bytes_per_pixel * 1280 * 2
+
+            footer_offset = index * bytes_per_pixel * 1280 * 2
 
         n_frames = self.footer["timingInfo"]["numTimes"]
 
@@ -212,14 +213,15 @@ class Movie:
         n_bytes_per_frame = n_pixels * bytes_per_pixel
 
         with open(self.file_path, mode="rb") as file:
-            file.seek(index * n_bytes_per_frame)
+            offset = index * n_bytes_per_frame
+            file.seek(offset + footer_offset + header_offset)
 
             data = file.read(bytes_per_pixel * n_pixels)
 
             frame = struct.unpack(format_string * n_pixels, data)
             frame = np.reshape(frame, self.spacing.num_pixels)
 
-        return frame
+        return frame.astype(self.data_type)
 
     def get_frame_timestamp(self, index):
         raise NotImplementedError(NOT_IMPLEMENTED_MESSAGE)

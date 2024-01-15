@@ -9,6 +9,24 @@ from data import download
 # information about each movie that we will check
 movie_info = [
     dict(
+        name="multiplane_movie.isxd",
+        dtype=np.uint16,
+        num_pixels=(100, 160),
+        num_samples=30,
+        frame_max=3678,
+        frame_min=573,
+        frame_sum=38607353,
+    ),
+    dict(
+        name="dual_color_movie_with_dropped_frames.isxd",
+        dtype=np.uint16,
+        num_pixels=(288, 480),
+        num_samples=25,
+        frame_max=4091,
+        frame_min=828,
+        frame_sum=264539918,
+    ),
+    dict(
         name="movie_128x128x100_part1.isxd",
         dtype=np.float32,
         num_pixels=(128, 128),

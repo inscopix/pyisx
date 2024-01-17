@@ -30,6 +30,8 @@ nav:
       - Read a cell trace: how-to/read-cellsets-trace.md
       - Read the name of a cell: how-to/read-cellsets-name.md
       - Read the status of a cell: how-to/read-cellsets-status.md
+      - Read the footprint of a cell: how-to/read-cellsets-footprint.md
+      
       
     - Read Movies: 
       - Read movie timing information: how-to/read-movie-timing.md

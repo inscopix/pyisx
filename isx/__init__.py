@@ -195,7 +195,9 @@ class Movie:
         header_offset = 0
         footer_offset = 0
         if self.footer["hasFrameHeaderFooter"]:
-            header_offset = (index + 1) * bytes_per_pixel * 1280 * 2
+            header_footer_size_in_bytes = 1280 * 2 * 2 # The size of the frame header in bytes. The same for the footer.
+            header_offset = (index + 1) * header_footer_size_in_bytes
+            footer_offset = (index + 1) * header_footer_size_in_bytes            
 
             footer_offset = index * bytes_per_pixel * 1280 * 2
 

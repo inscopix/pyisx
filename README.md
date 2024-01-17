@@ -3,11 +3,12 @@
 ![](https://github.com/inscopix/py_isx/actions/workflows/main.yml/badge.svg) 
 ![](https://img.shields.io/pypi/v/isx)
 
-Experimental pure-python API to read Inscopix ISXD files. 
-Please note that this is a work in progress and not feature complete. 
-Use at your own risk. 
+This is a pure-python API to read Inscopix ISXD files. 
 
 
+## Documentation
+
+[Read the documentation](https://inscopix.github.io/py_isx/)
 
 ## Support
 
@@ -36,6 +37,11 @@ poetry add isx
 ```bash
 pip install isx
 ```
+
+## Caution
+
+This is a work in progress, and all reading functions in the IDPS Python API are not supported yet. 
+
 
 ## Testing
 

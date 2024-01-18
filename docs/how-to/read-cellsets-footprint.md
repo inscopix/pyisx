@@ -20,9 +20,9 @@ we can read the footprint of the first cell using:
 footprint = cell_set.get_cell_image_data(0)
 ```
 
-`footprint` now contains a 2D [numpy array](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) with the image data for the first frame. 
+`footprint` now contains a 2D [numpy array](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) with the image data for the first cell. 
 
 
 
 !!! warning "Indexing"
-    Note that python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on. 
+    Note that python indexes by 0, so the first cell is at index 0, and the the second cell is at index 1, and so on. 

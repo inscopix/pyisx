@@ -109,7 +109,7 @@ class Movie:
     file_path: str = None
     footer: dict = None
     timing: Timing = Timing()
-    spacing: Timing = Spacing()
+    spacing: Spacing = Spacing()
 
     def __init__(self):
         pass
@@ -255,7 +255,6 @@ class CellSet:
         class and what each function does."""
 
     num_cells: int = 0
-    timing = None
     file_path = None
     footer = None
     spacing: Spacing = Spacing()

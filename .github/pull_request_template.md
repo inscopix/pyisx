@@ -8,8 +8,10 @@
 - [ ] Documentation Update
 
 ## Description
+_Please provide a brief description of the changes introduced by this pull
+request._
 
-## Related Tickets & Documents
+## Related Issues & Documents
 
 - Related Issue #
 - Closes #
@@ -21,7 +23,7 @@ on the OS and python versions this has been tested on, as well as any relevant
 images/screenshots._
 
 ## Added/updated tests?
-_We encourage you to write unit tests when possible._
+<!-- We encourage you to write unit tests when possible. -->
 
 - [ ] Yes
 - [ ] No, and this is why: _please replace this line with details on why tests

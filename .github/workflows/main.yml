@@ -39,28 +39,23 @@ jobs:
           bash scripts/check-git-clean.sh
 
   standard_tests:
-    runs-on: ubuntu-latest
+    needs: [initial_checks]
     strategy:
       fail-fast: true
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
-       
-
-    needs: [initial_checks]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3      
 
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-
-      - name: run unit tests
+      - name: Install dependencies and run tests
         run: |
           pip install -e .[test]
           make test-pip
-
-
-
-  
-
+        shell: bash  # Ensure using bash for cross-platform compatibility, especially on Windows

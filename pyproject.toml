@@ -4,8 +4,7 @@
 name = "isx"
 version = "0.0.0.dev"
 description = "Python-based ISXD file reader"
-authors = ["Srinivas Gorur-Shandilya <s.gorur_shandilya@bruker.com>", "Zachary Ip <Zachary.Ip@bruker.com>"]
-maintainers = ["Zachary Ip <Zachary.Ip@bruker.com>"]
+authors = ["Inscopix, Inc. <support@inscopix.com>"]
 readme = "README.md"
 license = "CC-BY-NC-4.0"
 homepage = "https://github.com/inscopix/py_isx"

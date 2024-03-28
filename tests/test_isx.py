@@ -174,6 +174,8 @@ def test_movie_data_type(item):
         movie.data_type == item["dtype"]
     ), f"Could not correctly read data type of movie {movie_name}"
 
+    assert movie.data_type == movie.get_frame_data(0).dtype
+
 
 @pytest.mark.parametrize("item", movie_info)
 def test_movie_num_pixels(item):

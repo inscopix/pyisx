@@ -180,13 +180,10 @@ class Movie:
 
         if self.footer["dataType"] == 0:
             bytes_per_pixel = 2
-            format_string = "H"
         elif self.footer["dataType"] == 1:
             bytes_per_pixel = 4
-            format_string = "f"
         elif self.footer["dataType"] == 2:
             bytes_per_pixel = 1
-            format_string = "b"
         else:
             raise NotImplementedError(
                 "Unknown number of bytes per pixel. Cannot decode this frame."
@@ -213,10 +210,8 @@ class Movie:
 
         with open(self.file_path, mode="rb") as file:
             file.seek(index * n_bytes_per_frame)
-
             data = file.read(bytes_per_pixel * n_pixels)
-
-            frame = struct.unpack(format_string * n_pixels, data)
+            frame = np.frombuffer(data, dtype=self.data_type)
             frame = np.reshape(frame, self.spacing.num_pixels)
 
         return frame
@@ -374,11 +369,11 @@ def isxd_type(file_path: str) -> str:
     isx_datatype_mapping = {
         0: "miniscope_movie",
         1: "cell_set",
-        2: "isxd_behavioral_movie",  # not currently supported on IDEAS
+        2: "isxd_behavioral_movie",
         3: "gpio_data",
         4: "miniscope_image",
         5: "neural_events",
-        6: "isxd_metrics",  # not currently supported on IDEAS
+        6: "isxd_metrics",
         7: "imu_data",
         8: "vessel_set",
     }

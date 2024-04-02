@@ -11,7 +11,17 @@ jupyter:
 install-poetry:
 	@bash install-poetry.sh
 
-test: 
+install: install-poetry
+	@echo "Installing py_isx..."
+	poetry check --lock || poetry lock
+	poetry install --verbose
+
+install-test: install-poetry
+	@echo "Installing py_isx & dependencies for testing..."
+	poetry check --lock || poetry lock
+	poetry install --extras "test" --verbose
+
+test: install-test
 	poetry run pytest -sx --failed-first
 
 test-pip:

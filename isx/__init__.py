@@ -99,7 +99,7 @@ class Movie:
 
     Attributes:
         file_path: path to ISXD file
-        footer: A dictioanry containing data in the JSON    footer of ISXD Movies
+        footer: A dictionary containing data in the JSON    footer of ISXD Movies
         timing: a isx.Timing object containing timing information for this movie
         spacing: a isx.Spacing object containing spacing information for this movie
 

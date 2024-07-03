@@ -1,5 +1,6 @@
 # secrets
 .ideas-github-token
+apiTestResults.xml
 
 # IDE
 *.sublime-workspace

@@ -14,10 +14,8 @@ ifndef THIRD_PARTY_DIR
 	THIRD_PARTY_DIR=third_party
 endif
 
-BIN_DIR=bin
-MOSTEST_EXE=mostest
-MOSTEST_BIN_DIR=$(BUILD_DIR_ROOT)/$(BUILD_TYPE)/$(BIN_DIR)
-MOSTEST_COMMAND=$(MOSTEST_BIN_DIR)/$(MOSTEST_EXE) -p $(TEST_DATA_DIR) $*
+API_TEST_RESULTS_PATH=$(PWD)/apiTestResults.xml
+PYTHON_TEST_DIR=$(BUILD_DIR_ROOT)/$(BUILD_TYPE)/bin/isx
 
 ifeq ($(OS), Windows_NT)
 	DETECTED_OS = windows
@@ -87,10 +85,5 @@ endif
 rebuild: clean build
  
 test: build
-ifeq ($(DETECTED_OS), windows)
-	$(MOSTEST_COMMAND)
-else ifeq ($(DETECTED_OS), mac)
-	DYLD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(MOSTEST_BIN_DIR) $(MOSTEST_COMMAND)
-else ifeq ($(DETECTED_OS), linux)
-	LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(MOSTEST_BIN_DIR) ${MOSTEST_COMMAND}
-endif
+	cd ${PYTHON_TEST_DIR} && \
+	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) .

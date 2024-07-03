@@ -15,7 +15,7 @@ import numpy as np
 # For Windows we must temporarily change directory to load the
 # C library. We change back afterwards.
 _this_dir = os.path.dirname(os.path.realpath(__file__))
-_lib_dir = os.path.join(_this_dir, '..')
+_lib_dir = os.path.join(_this_dir, 'lib')
 _is_windows = os.name == 'nt'
 if _is_windows:
     _cwd = os.getcwd()

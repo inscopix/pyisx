@@ -89,6 +89,6 @@ endif
 rebuild: clean build
  
 test: build
-	cd $(BUILD_PATH_BIN)/dist && pip install --force-reinstall --no-deps isx-*.whl
+	cd $(BUILD_PATH_BIN)/dist && pip install --force-reinstall isx-*.whl
 	cd build/Release && \
 	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test

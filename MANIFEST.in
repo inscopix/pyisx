@@ -1,1 +1,1 @@
-recursive-include isx/lib/ *
+recursive-include isx/lib *

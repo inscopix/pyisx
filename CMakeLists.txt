@@ -39,6 +39,11 @@ elseif (${ISX_OS_LINUX})
         ${QT_DIR}/lib/libicudata.so.56
     )
     installFiles(${TARGET_NAME_PUBLIC_API} ${APP_LIB_DIR} "${QT_CORE_SHARED_LIB_FILES}")
+elseif (${ISX_OS_WIN32})
+    set(QT_CORE_SHARED_LIB_FILES 
+        ${QT_DIR}/bin/Qt5Core.dll
+    )
+    installFiles(${TARGET_NAME_PUBLIC_API} ${APP_LIB_DIR} "${QT_CORE_SHARED_LIB_FILES}")
 endif()
 
 installFfmpegSharedLibs(${TARGET_NAME_PUBLIC_API} ${APP_LIB_DIR})

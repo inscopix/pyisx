@@ -1,5 +1,7 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
+import sys
 
+# sys.argv.extend(['--plat-name', 'x86_64'])
 setup(
     name='isx',
     version='1.9.2',
@@ -18,5 +20,11 @@ setup(
     description="Inscopix Data Processing Software Python API",
     url="https://www.inscopix.com/support",
     author="Inscopix, Inc.",
-    author_email="support@inscopix.com"
+    author_email="support@inscopix.com",
+    ext_modules=[
+        Extension(
+            name='isxcore',
+            sources=[]
+        )
+    ]
 )

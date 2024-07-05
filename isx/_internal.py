@@ -11,6 +11,8 @@ import warnings
 
 import numpy as np
 
+print(f"ISX FILE: {__file__}")
+
 # Load the C library.
 # For Windows we must temporarily change directory to load the
 # C library. We change back afterwards.

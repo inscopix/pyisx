@@ -4,7 +4,9 @@ BUILD_DIR_ROOT=build
 BUILD_DIR_MODULES=modules
 BUILD_TYPE=Release
 BUILD_DIR_CMAKE=cmake
+BUILD_DIR_BIN=bin
 BUILD_PATH=$(BUILD_DIR_ROOT)/$(BUILD_TYPE)/$(BUILD_DIR_CMAKE)
+BUILD_PATH_BIN=$(BUILD_DIR_ROOT)/$(BUILD_TYPE)/$(BUILD_DIR_BIN)
 
 ifndef TEST_DATA_DIR
 	TEST_DATA_DIR=test_data
@@ -81,9 +83,13 @@ else ifeq ($(DETECTED_OS), mac)
 	cd $(BUILD_PATH) && \
 	xcodebuild -alltargets -configuration $(BUILD_TYPE) -project Project.xcodeproj CODE_SIGN_IDENTITY=""
 endif
+	cd $(BUILD_PATH_BIN) && \
+	python -m build
 
 rebuild: clean build
  
 test: build
-	cd ${PYTHON_TEST_DIR} && \
-	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) .
+	cd $(BUILD_PATH_BIN)/dist && pip install --force-reinstall --no-deps isx-1.9.2-py3-none-any.whl
+	cd build/Release && \
+	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test
+5

@@ -28,6 +28,8 @@ Each system has been built and tested with the following versions of python:
 
 ## Development Guide
 
+This guide documents how to build the python package wheel locally.
+
 1. Setup `isxcore`
 Follow the setup instructions for the C++ `isxcore` repo: https://github.com/inscopix/isxcore
 

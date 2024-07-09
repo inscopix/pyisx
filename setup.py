@@ -1,12 +1,10 @@
-from setuptools import setup, find_packages, Extension
-import sys
+from setuptools import setup, find_namespace_packages
 
-# sys.argv.extend(['--plat-name', 'x86_64'])
 setup(
     name='isx',
     version='1.9.2',
-    packages=find_packages(include=['isx','isx.*']),
-    python_requires='>= 3.7,< 3.11',
+    packages=find_namespace_packages(),
+    python_requires='>=3.9,<3.13',
     install_requires=[
         'h5py>=2.8.0',
         'numpy>=1.14',
@@ -21,10 +19,5 @@ setup(
     url="https://www.inscopix.com/support",
     author="Inscopix, Inc.",
     author_email="support@inscopix.com",
-    ext_modules=[
-        Extension(
-            name='isxcore',
-            sources=[]
-        )
-    ]
+    has_ext_modules=lambda: True
 )

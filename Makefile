@@ -8,6 +8,9 @@ BUILD_DIR_BIN=bin
 BUILD_PATH=$(BUILD_DIR_ROOT)/$(BUILD_TYPE)/$(BUILD_DIR_CMAKE)
 BUILD_PATH_BIN=$(BUILD_DIR_ROOT)/$(BUILD_TYPE)/$(BUILD_DIR_BIN)
 
+API_TEST_RESULTS_PATH=$(PWD)/apiTestResults.xml
+PYTHON_TEST_DIR=$(BUILD_DIR_ROOT)/$(BUILD_TYPE)/bin/isx
+
 ifndef TEST_DATA_DIR
 	TEST_DATA_DIR=test_data
 endif
@@ -16,8 +19,7 @@ ifndef THIRD_PARTY_DIR
 	THIRD_PARTY_DIR=third_party
 endif
 
-API_TEST_RESULTS_PATH=$(PWD)/apiTestResults.xml
-PYTHON_TEST_DIR=$(BUILD_DIR_ROOT)/$(BUILD_TYPE)/bin/isx
+PYTHON_VERSION=$(shell python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 
 ifeq ($(OS), Windows_NT)
 	DETECTED_OS = windows
@@ -27,6 +29,16 @@ else
 		DETECTED_OS = linux
 	else ifeq ($(UNAME_S), Darwin)
 		DETECTED_OS = mac
+		
+		ifeq ($(PYTHON_VERSION), 3.9)
+			_MACOSX_DEPLOYMENT_TARGET=10.11
+		else ifeq ($(PYTHON_VERSION), 3.10)
+			_MACOSX_DEPLOYMENT_TARGET=10.11
+		else ifeq ($(PYTHON_VERSION), 3.11)
+			_MACOSX_DEPLOYMENT_TARGET=10.11
+		else ifeq ($(PYTHON_VERSION), 3.12)
+			_MACOSX_DEPLOYMENT_TARGET=10.15
+		endif
 	endif
 endif
 
@@ -64,10 +76,16 @@ ifndef DETECTED_OS
 else
 	@echo "Detected OS: ${DETECTED_OS}"
 endif
+ifeq ($(DETECTED_OS), mac)
+	@echo "Detected python version: ${PYTHON_VERSION}, using mac osx deployment target: ${MACOSX_DEPLOYMENT_TARGET}"
+endif
 
 clean:
 	@rm -rf build
 
+ifeq ($(DETECTED_OS), mac)
+build: export MACOSX_DEPLOYMENT_TARGET=${_MACOSX_DEPLOYMENT_TARGET}
+endif 
 build: check_os
 	@echo ${CMAKE_GENERATOR} $(BUILD_PATH) $(CMAKE_OPTIONS) $(THIRD_PARTY_DIR)
 	mkdir -p $(BUILD_PATH) && \
@@ -91,4 +109,4 @@ rebuild: clean build
 test: build
 	cd $(BUILD_PATH_BIN)/dist && pip install --force-reinstall isx-*.whl
 	cd build/Release && \
-	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test
+	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)

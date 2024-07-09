@@ -1286,7 +1286,7 @@ class TestFileIO:
         event = isx.EventSet.read(input_file)
         with pytest.raises(Exception) as error:
             getattr(event, method)(cell_index)
-        assert "argument 2:" in str(error.value) and "wrong type" in str(error.value)
+        assert ("argument 2:" in str(error.value) and "wrong type" in str(error.value)) or "cannot be interpreted as an integer" in str(error.value)
 
     @pytest.mark.isxd_events
     def test_GetEventCellNames(self):
@@ -1586,7 +1586,7 @@ class TestFileIO:
         event = isx.GpioSet.read(input_file)
         with pytest.raises(Exception) as error:
             getattr(event, method)(channel_index)
-        assert "argument 2:" in str(error.value) and "wrong type" in str(error.value)
+        assert ("argument 2:" in str(error.value) and "wrong type" in str(error.value)) or "cannot be interpreted as an integer" in str(error.value)
 
     def test_GpioSetStrValid(self):
         gpio_set = isx.GpioSet.read(test_data_path + '/unit_test/gpio/2020-05-20-10-33-22_video_gpio.isxd')

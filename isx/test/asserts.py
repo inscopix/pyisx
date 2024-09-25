@@ -127,6 +127,23 @@ def assert_isxd_cellsets_are_close_by_path(exp_cellset_path, act_cellset_path, r
             np.testing.assert_allclose(exp_cellset.get_cell_image_data(c), act_cellset.get_cell_image_data(c), rtol=relative_tolerance)
             np.testing.assert_allclose(exp_cellset.get_cell_trace_data(c), act_cellset.get_cell_trace_data(c), rtol=relative_tolerance)
 
+def assert_isxd_cellsets_trace_sums(output_cell_set_files, expected_trace_sums):
+    cell_sets = [isx.CellSet.read(f) for f in output_cell_set_files]
+    num_cells = cell_sets[0].num_cells
+    for i in range(num_cells):
+        trace_sum = 0
+        for cell_set in cell_sets:
+            trace = cell_set.get_cell_trace_data(i)
+            trace_sum += np.sum(trace)
+        
+        assert round(trace_sum) == expected_trace_sums[i]
+
+def assert_isxd_cellsets_cell_names(output_cell_set_files, cell_names):
+    cell_sets = [isx.CellSet.read(f) for f in output_cell_set_files]
+    num_cells = cell_sets[0].num_cells
+    for i in range(num_cells):
+        for cell_set in cell_sets:
+            assert cell_set.get_cell_name(i) == cell_names[i]
 
 def assert_isxd_vesselsets_are_close_by_path(exp_vesselset_path, act_vesselset_path, relative_tolerance=1e-05, assert_spacing=True, assert_status=True):
     exp_vesselset = isx.VesselSet.read(exp_vesselset_path)

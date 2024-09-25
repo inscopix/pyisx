@@ -984,13 +984,13 @@ class TestFileIO:
         with open(csv_file_path, 'r') as f:
             lines = f.read().splitlines()
         
-        expected_columns = "Global Frame Number,Movie Number,Local Frame Number,Frame Timestamp (s),Bounding Box Left,Bounding Box Top,Bounding Box Right,Bounding Box Bottom,Bounding Box Center X,Bounding Box Center Y,Confidence,Zone ID,Zone Name"
+        expected_columns = "Global Frame Number,Movie Number,Local Frame Number,Frame Timestamp (s),Bounding Box Left,Bounding Box Top,Bounding Box Right,Bounding Box Bottom,Bounding Box Center X,Bounding Box Center Y,Confidence,Zone ID,Zone Name,Zone Event,Zone Trigger"
         assert lines[0] == expected_columns
 
-        expected_first_line = "0,0,0,0.000000,526.136230,682.003479,650.984802,908.188293,588.560547,795.095886,67.986031,,"
+        expected_first_line = "0,0,0,0.000000,526.136230,682.003479,650.984802,908.188293,588.560547,795.095886,67.986031,,,,"
         assert lines[1] == expected_first_line
 
-        expected_last_line = "19,1,9,0.631984,528.115173,776.796631,699.851135,912.584290,613.983154,844.690430,98.499191,4270701760,ZONE#1 rectangle"
+        expected_last_line = "19,1,9,0.631984,528.115173,776.796631,699.851135,912.584290,613.983154,844.690430,98.499191,4270701760,ZONE#1 rectangle,,"
         assert lines[-1] == expected_last_line
 
         delete_files_silently([csv_file_path])
@@ -1014,13 +1014,13 @@ class TestFileIO:
         with open(csv_file_path, 'r') as f:
             lines = f.read().splitlines()
         
-        expected_columns = "Global Frame Number,Movie Number,Local Frame Number,Frame Timestamp (us),Bounding Box Left,Bounding Box Top,Bounding Box Right,Bounding Box Bottom,Bounding Box Center X,Bounding Box Center Y,Confidence,Zone ID,Zone Name"
+        expected_columns = "Global Frame Number,Movie Number,Local Frame Number,Frame Timestamp (us),Bounding Box Left,Bounding Box Top,Bounding Box Right,Bounding Box Bottom,Bounding Box Center X,Bounding Box Center Y,Confidence,Zone ID,Zone Name,Zone Event,Zone Trigger"
         assert lines[0] == expected_columns
 
-        expected_first_line = "0,0,0,163957519943,526.136,682.003,650.985,908.188,588.561,795.096,67.986,,"
+        expected_first_line = "0,0,0,163957519943,526.136,682.003,650.985,908.188,588.561,795.096,67.986,,,,"
         assert lines[1] == expected_first_line
 
-        expected_last_line = "19,1,9,163958151927,528.115,776.797,699.851,912.584,613.983,844.69,98.4992,4270701760,ZONE#1 rectangle"
+        expected_last_line = "19,1,9,163958151927,528.115,776.797,699.851,912.584,613.983,844.69,98.4992,4270701760,ZONE#1 rectangle,,"
         assert lines[-1] == expected_last_line
 
         delete_files_silently([csv_file_path])
@@ -1044,13 +1044,13 @@ class TestFileIO:
         with open(csv_file_path, 'r') as f:
             lines = f.read().splitlines()
         
-        expected_columns = "Global Frame Number,Movie Number,Local Frame Number,Frame Timestamp (s),Bounding Box Left,Bounding Box Top,Bounding Box Right,Bounding Box Bottom,Bounding Box Center X,Bounding Box Center Y,Confidence,Zone ID,Zone Name"
+        expected_columns = "Global Frame Number,Movie Number,Local Frame Number,Frame Timestamp (s),Bounding Box Left,Bounding Box Top,Bounding Box Right,Bounding Box Bottom,Bounding Box Center X,Bounding Box Center Y,Confidence,Zone ID,Zone Name,Zone Event,Zone Trigger"
         assert lines[0] == expected_columns
 
-        expected_first_line = "0,0,0,1705049721.643000,526.136230,682.003479,650.984802,908.188293,588.560547,795.095886,67.986031,,"
+        expected_first_line = "0,0,0,1705049721.643000,526.136230,682.003479,650.984802,908.188293,588.560547,795.095886,67.986031,,,,"
         assert lines[1] == expected_first_line
 
-        expected_last_line = "19,1,9,1705049722.274984,528.115173,776.796631,699.851135,912.584290,613.983154,844.690430,98.499191,4270701760,ZONE#1 rectangle"
+        expected_last_line = "19,1,9,1705049722.274984,528.115173,776.796631,699.851135,912.584290,613.983154,844.690430,98.499191,4270701760,ZONE#1 rectangle,,"
         assert lines[-1] == expected_last_line
 
         delete_files_silently([csv_file_path])

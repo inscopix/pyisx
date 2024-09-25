@@ -479,6 +479,78 @@ def apply_cell_set(input_movie_files, input_cell_set_file, output_cell_set_files
     isx._internal.c_api.isx_apply_cell_set(num_movies, in_movie_arr, out_cs_arr, in_cs_arr[0], threshold)
 
 
+def apply_rois(
+    input_movie_files,
+    output_cell_set_files,
+    rois,
+    cell_names=[]
+):
+    """
+    Apply manually drawn rois on movies, producing new cell sets.
+
+    For more details see :ref:`manualRois`.
+
+    Arguments
+    ---------
+    input_movie_files : list<str>
+        The file paths of the movies to apply the rois to.
+    output_cell_set_files : list<str>
+        The file paths of the output cell sets that will contain the images and new traces.
+    rois: list<list<tuple<int>>>
+        List of rois to apply. Must be one or more rois.
+        Each roi is a list of tuples of 2 integers representing the x, y coordinates of a single point.
+    cell_names: list<str>
+        List of names to assign cells in the output cell sets.
+        If empty, then cells will have default names.
+    """
+    num_movies, in_movie_arr, out_cs_arr = isx._internal.check_input_and_output_files(input_movie_files, output_cell_set_files)
+    
+    # get cell names if not empty
+    num_rois = len(rois)
+    cell_names_arr = isx._internal.list_to_ctypes_array(cell_names, ctypes.c_char_p)
+    use_cell_names = len(cell_names) > 0 
+    if cell_names:
+        if num_rois != len(cell_names):
+            raise ValueError("Number of rois must equal number of cell names.")
+
+    # get roi points
+    if num_rois == 0:
+        raise ValueError('At least one roi needs to be specified')
+    
+    # count the number of points per roi
+    num_points_per_roi = []
+    for roi in rois:
+        num_points_per_roi.append(len(roi))
+        for point in roi:
+            if(len(point) != 2):
+                raise ValueError('All points must only have two coordinates (x and y-coordinates, respectively)')
+
+    # flatten the roi array so it can be passed to c_types
+    rois = [
+        x
+        for xs in rois
+        for x in xs
+    ]
+    
+    # get pointer to points memory
+    points = isx._internal.ndarray_as_type(np.array(rois), np.dtype(np.int64))
+    points_p = points.ctypes.data_as(isx._internal.Int64Ptr)
+
+    num_points_per_roi = isx._internal.ndarray_as_type(np.array(num_points_per_roi), np.dtype(np.int64))
+    num_points_per_roi_p = num_points_per_roi.ctypes.data_as(isx._internal.Int64Ptr)
+
+    isx._internal.c_api.isx_apply_rois(
+        num_movies,
+        in_movie_arr,
+        out_cs_arr,
+        num_rois,
+        num_points_per_roi_p,
+        points_p,
+        use_cell_names,
+        cell_names_arr
+    )
+
+
 def longitudinal_registration(
         input_cell_set_files, output_cell_set_files, input_movie_files=[], output_movie_files=[],
         csv_file='', min_correlation=0.5, accepted_cells_only=False,

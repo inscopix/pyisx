@@ -11,8 +11,6 @@ import warnings
 
 import numpy as np
 
-print(f"ISX FILE: {__file__}")
-
 # Load the C library.
 # For Windows we must temporarily change directory to load the
 # C library. We change back afterwards.
@@ -33,7 +31,7 @@ if _is_windows:
 
 # Define utility functions for interaction with C library.
 
-is_minimal_api = c_api.isx_get_is_minimal_api()
+is_with_algos = c_api.isx_get_is_with_algos()
 
 
 def validate_ptr(ptr):
@@ -190,7 +188,7 @@ TIME_REF_FROM_STRING = {
 }
 TIME_REF_TO_STRING = _reverse_dictionary(TIME_REF_FROM_STRING)
 
-if not is_minimal_api:
+if is_with_algos:
     ICA_UNMIX_FROM_STRING = {
             'temporal': c_api.isx_get_ica_unmix_type_temporal(),
             'spatial': c_api.isx_get_ica_unmix_type_spatial(),
@@ -824,7 +822,7 @@ c_api.isx_export_movie_timestamps_to_csv.argtypes = [
     ctypes.c_int]
 c_api.isx_export_movie_timestamps_to_csv.errcheck = _standard_errcheck
 
-if not is_minimal_api:
+if is_with_algos:
     c_api.isx_export_cell_set.argtypes = [
         ctypes.c_int,
         CharPtrPtr,
@@ -890,7 +888,7 @@ c_api.isx_export_aligned_timestamps.errcheck = _standard_errcheck
 
 # Algo enums which do not return an error code, but their value directly.
 
-if not is_minimal_api:
+if is_with_algos:
     c_api.isx_get_ica_unmix_type_temporal.argtypes = []
     c_api.isx_get_ica_unmix_type_spatial.argtypes = []
     c_api.isx_get_ica_unmix_type_both.argtypes = []
@@ -924,7 +922,7 @@ def get_core_version():
 
 # Algo functions
 
-if not is_minimal_api:
+if is_with_algos:
     c_api.isx_preprocess_movie.argtypes = [
         ctypes.c_int,
         CharPtrPtr,

@@ -38,8 +38,8 @@ class TestNV3FileMetadataMovie:
         metadata = isx.Movie.read(input_file).get_acquisition_info()
         assert metadata == data_expected
 
-    @pytest.mark.skipif(isx._is_minimal_api, reason="Only for algo tests")
-    @pytest.mark.parametrize('algo', [] if isx._is_minimal_api else [isx.preprocess, isx.spatial_filter, isx.dff])
+    @pytest.mark.skipif(not isx._is_with_algos, reason="Only for algo tests")
+    @pytest.mark.parametrize('algo', [] if not isx._is_with_algos else [isx.preprocess, isx.spatial_filter, isx.dff])
     def test_nv3_isxd_movie_processed(self, algo):
         output_file = output_dir + r'/' + algo.__name__ + '.isxd'
         delete_files_silently(output_file)
@@ -49,7 +49,7 @@ class TestNV3FileMetadataMovie:
         assert metadata == data_expected
         delete_files_silently(output_file)
 
-    @pytest.mark.skipif(isx._is_minimal_api, reason="Only for algo tests")
+    @pytest.mark.skipif(not isx._is_with_algos, reason="Only for algo tests")
     def test_nv3_isxd_movie_processed_mc(self):
         output_file = output_dir + r'/' + 'motion-correct' + '.isxd'
         delete_files_silently(output_file)
@@ -62,7 +62,7 @@ class TestNV3FileMetadataMovie:
         delete_files_silently(output_file)
         del data_expected['Motion correction padding']
 
-    @pytest.mark.skipif(isx._is_minimal_api, reason="Only for algo tests")
+    @pytest.mark.skipif(not isx._is_with_algos, reason="Only for algo tests")
     def test_nv3_isxd_cellset_pcaica(self):
         output_file = output_dir + r'/' + 'pca-ica' + '.isxd'
         delete_files_silently(output_file)
@@ -75,7 +75,7 @@ class TestNV3FileMetadataMovie:
         assert metadata == data_expected
         delete_files_silently(output_file)
 
-    @pytest.mark.skipif(isx._is_minimal_api, reason="Only for algo tests")
+    @pytest.mark.skipif(not isx._is_with_algos, reason="Only for algo tests")
     def test_nv3_isxd_eventset(self):
         cellset_path = output_dir + r'/' + 'pca-ica-for-ed' + '.isxd'
         delete_files_silently(cellset_path)

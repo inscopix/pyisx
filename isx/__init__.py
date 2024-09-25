@@ -8,6 +8,6 @@ from .util import *
 
 from .core import __version__
 
-from ._internal import is_minimal_api as _is_minimal_api
-if not _is_minimal_api:
+from ._internal import is_with_algos as _is_with_algos
+if _is_with_algos:
     from .algo import *

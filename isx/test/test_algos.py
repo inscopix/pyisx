@@ -16,7 +16,7 @@ from test.asserts import assert_csv_cell_metrics_are_close_by_path, assert_isxd_
     assert_isxd_vesselsets_are_close_by_path, assert_csv_traces_are_close_by_path, \
     assert_json_files_equal_by_path, assert_tiff_files_equal_by_path
 
-@pytest.mark.skipif(isx._is_minimal_api, reason="Only for algo tests")
+@pytest.mark.skipif(not isx._is_with_algos, reason="Only for algo tests")
 class TestAlgorithms:
     @pytest.mark.isxd_movie
     def test_DeinterleaveMovie(self):

@@ -2104,7 +2104,7 @@ class TestFileIO:
 
         assert 'Unsupported data type - only isxd movies and isxb movies are supported as input files to align to a timing reference.' in str(error.value)
 
-    @pytest.mark.skipif(isx._internal.is_minimal_api, reason="Cannot run algo module with minimal api")
+    @pytest.mark.skipif(not isx._is_with_algos, reason="Cannot run algo module with minimal api")
     def test_AlignStartTimesInvalidNoFrameTimestamps(self):
         test_dir = test_data_path + "/unit_test/nVision/recordingUUID/paired-synchronized/manual"
         ref_file_path = test_dir + "/2022-06-08-23-53-41_video.gpio"

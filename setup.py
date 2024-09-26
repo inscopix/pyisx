@@ -2,7 +2,7 @@ from setuptools import setup, find_namespace_packages
 
 setup(
     name='isx',
-    version='1.9.6',
+    version='2.0.0',
     packages=find_namespace_packages(),
     python_requires='>=3.9,<3.13',
     install_requires=[

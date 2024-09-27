@@ -18,6 +18,6 @@ setup(
     description="Inscopix Data Processing Software Python API",
     url="https://www.inscopix.com/support",
     author="Inscopix, Inc.",
-    author_email="support@inscopix.com",
+    author_email="support@inscopix.bruker.com",
     has_ext_modules=lambda: True
 )

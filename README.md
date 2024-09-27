@@ -1,54 +1,86 @@
-# isx: pure-python API to read Inscopix data
+# pyisx
 
-![](https://github.com/inscopix/py_isx/actions/workflows/main.yml/badge.svg) 
-![](https://img.shields.io/pypi/v/isx)
+`pyisx` is a python package for interacting with Inscopix data. This package encapsulates the following I/O functionality:
 
-This is a pure-python API to read Inscopix ISXD files. 
-
-
-## Documentation
-
-[Read the documentation](https://inscopix.github.io/py_isx/)
-
-## Support
-
-|  File type | Support |
-|  --------- | ------- |
-| ISXD CellSet   | ✅ |
-| ISXD Movie   | ✅ |
-| ISXD Movie (multi-plane)   | ❌ |
-| ISXD Movie (dual-color)   | ❌ |
-| GPIO data   | ❌ |
-| ISXD Events   | ❌ |
-| ISXD VesselSet   | ❌ |
-
+* Reading Inscopix files (`.isxd`, `.isxc`, `.isxb`, `.gpio`, `.imu`)
+* Writing Inscopix files (`.isxd`)
+* Exporting Inscopix files to third-party formats (`.mp4`, `.tiff`, `.csv`, `.hdf5`)
 
 ## Install
 
-### Poetry
-
-```bash
-poetry add isx
-```
-
-### pip
-
+Pre-built binaries of this API can be installed from [PyPi](https://pypi.org/project/isx/).
 
 ```bash
 pip install isx
 ```
 
-## Caution
+## Supported Platforms
 
-This is a work in progress, and all reading functions in the IDPS Python API are not supported yet. 
+This library has been built and tested on the following operating systems:
 
+|  OS | Version | Architecture |
+|  --------- | ------- | ----- |
+| macOS   | 13 | x86_64 |
+| Ubuntu (Linux) | 20.04 | x86_64 |
+| Windows | 11 | amd64 |
 
-## Testing
+Each system has been built and tested on python versions 3.9 - 3.12.
 
-This code is tested using GitHub Actions on the following python
-versions:
+> **Note:** For Apple Silicon (arm64 architectures), the package is currently not natively supported. However, it's possible to use anaconda to configure an x86 environment and use the project.
 
-- 3.9
-- 3.10
-- 3.11
-- 3.12
+```
+CONDA_SUBDIR=osx-64 conda create -n pyisx python=3.12
+conda activate pyisx
+conda config --env --set subdir osx-64
+```
+
+## Development Guide
+
+This guide documents how to build the python package wheel locally.
+
+1. Setup `isxcore`
+Follow the setup instructions for the C++ [isxcore](https://github.com/inscopix/isxcore) repo.
+
+2. Setup python virtual environment
+
+Create a python virtual environment, specifying the desired python version.
+This guide uses anaconda for demonstration, but other tools like virtualenv or poetry can also be used.
+
+```
+conda create -n pyisx python=3.12
+conda activate pyisx
+```
+
+> **Note**: On macOS systems with Apple Silicon, the conda environment is configured differently, since `isxcore` is currently only built for x86 architectures.
+
+```
+CONDA_SUBDIR=osx-64 conda create -n pyisx python=3.12
+conda activate pyisx
+conda config --env --set subdir osx-64
+```
+
+3. Install build & test dependencies
+
+Inside the virtual environment install the following dependencies:
+
+```
+conda install -y build pytest
+```
+
+> **Note**: For python 3.12 the `build` package must be installed used `pip` instead.
+
+4. Build the package
+
+```
+make build THIRD_PARTY_DIR=/path/to/third/party/dir
+```
+
+5. Run the unit tests
+
+```
+make test THIRD_PARTY_DIR=/path/to/third/party/dir TEST_DATA_DIR=/path/to/test/data/dir
+```
+
+# Support
+
+For any questions about this package, please contact support@inscopix.bruker.com.

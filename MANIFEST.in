@@ -1,0 +1,3 @@
+recursive-include isx/lib *
+include README.md
+include LICENSE.txt

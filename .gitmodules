@@ -1,0 +1,3 @@
+[submodule "isxcore"]
+	path = isxcore
+	url = git@github.com:inscopix/isxcore.git

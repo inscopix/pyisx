@@ -1,10 +1,14 @@
-# isx: A Python API for interacting with Inscopix data
+# pyisx
 
-This is a python API for reading and writing Inscopix files.
+`pyisx` is a python package for interacting with Inscopix data. This package encapsulates the following I/O functionality:
+
+* Reading Inscopix files (`.isxd`, `.isxc`, `.isxb`, `.gpio`, `.imu`)
+* Writing Inscopix files (`.isxd`)
+* Exporting Inscopix files to third-party formats (`.mp4`, `.tiff`, `.csv`, `.hdf5`)
 
 ## Install
 
-Pre-built binaries of this API can be installed from PyPi
+Pre-built binaries of this API can be installed from [PyPi](https://pypi.org/project/isx/).
 
 ```bash
 pip install isx
@@ -14,24 +18,28 @@ pip install isx
 
 This library has been built and tested on the following operating systems:
 
-|  OS | Version |
-|  --------- | ------- |
-| macOS   | 13 |
-| Ubuntu (Linux) | 20.04 |
-| Windows | 11 |
+|  OS | Version | Architecture |
+|  --------- | ------- | ----- |
+| macOS   | 13 | x86_64 |
+| Ubuntu (Linux) | 20.04 | x86_64 |
+| Windows | 11 | amd64 |
 
-Each system has been built and tested with the following versions of python:
-- 3.9
-- 3.10
-- 3.11
-- 3.12
+Each system has been built and tested on python versions 3.9 - 3.12.
+
+> **Note:** For Apple Silicon (arm64 architectures), the package is currently not natively supported. However, it's possible to use anaconda to configure an x86 environment and use the project.
+
+```
+CONDA_SUBDIR=osx-64 conda create -n pyisx python=3.12
+conda activate pyisx
+conda config --env --set subdir osx-64
+```
 
 ## Development Guide
 
 This guide documents how to build the python package wheel locally.
 
 1. Setup `isxcore`
-Follow the setup instructions for the C++ `isxcore` repo: https://github.com/inscopix/isxcore
+Follow the setup instructions for the C++ [isxcore](https://github.com/inscopix/isxcore) repo.
 
 2. Setup python virtual environment
 
@@ -72,3 +80,7 @@ make build THIRD_PARTY_DIR=/path/to/third/party/dir
 ```
 make test THIRD_PARTY_DIR=/path/to/third/party/dir TEST_DATA_DIR=/path/to/test/data/dir
 ```
+
+# Support
+
+For any questions about this package, please contact support@inscopix.bruker.com.

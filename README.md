@@ -1,10 +1,12 @@
 # pyisx
 
-`pyisx` is a python package for interacting with Inscopix data. This package encapsulates the following I/O functionality:
+The `pyisx` project is a python binding for [isxcore](https://github.com/inscopix/isxcore), a C++ API for interacting with Inscopix data.
+The python package for this binding, named `isx`, is available on [pypi](https://pypi.org/project/isx/) for download.
+This package encapsulates the following I/O functionality:
 
-* Reading Inscopix files (`.isxd`, `.isxc`, `.isxb`, `.gpio`, `.imu`)
+* Reading Inscopix files (`.isxd`, `.isxb`, `.gpio`, `.imu`)
 * Writing Inscopix files (`.isxd`)
-* Exporting Inscopix files to third-party formats (`.mp4`, `.tiff`, `.csv`, `.hdf5`)
+* Exporting Inscopix files to third-party formats (`.mp4`, `.tiff`, `.csv`)
 
 ## Install
 
@@ -14,9 +16,19 @@ Pre-built binaries of this API can be installed from [PyPi](https://pypi.org/pro
 pip install isx
 ```
 
+> **Note:** For Apple Silicon (i.e., macOS arm64 architecture), the package is currently not natively supported. However, it's possible to use anaconda to configure an x86 environment and use the project.
+
+```
+CONDA_SUBDIR=osx-64 conda create -n pyisx python=3.12
+conda activate pyisx
+conda config --env --set subdir osx-64
+pip install isx
+```
+
+
 ## Supported Platforms
 
-This library has been built and tested on the following operating systems:
+This library has been built and tested on the following operating systems, for python versions `3.9 - 3.12`.
 
 |  OS | Version | Architecture |
 |  --------- | ------- | ----- |
@@ -24,15 +36,6 @@ This library has been built and tested on the following operating systems:
 | Ubuntu (Linux) | 20.04 | x86_64 |
 | Windows | 11 | amd64 |
 
-Each system has been built and tested on python versions 3.9 - 3.12.
-
-> **Note:** For Apple Silicon (arm64 architectures), the package is currently not natively supported. However, it's possible to use anaconda to configure an x86 environment and use the project.
-
-```
-CONDA_SUBDIR=osx-64 conda create -n pyisx python=3.12
-conda activate pyisx
-conda config --env --set subdir osx-64
-```
 
 ## Development Guide
 
@@ -83,4 +86,4 @@ make test THIRD_PARTY_DIR=/path/to/third/party/dir TEST_DATA_DIR=/path/to/test/d
 
 # Support
 
-For any questions about this package, please contact support@inscopix.bruker.com.
+For any questions or bug reports, please open an issue in our [issue tracker](https://github.com/inscopix/pyisx/issues).

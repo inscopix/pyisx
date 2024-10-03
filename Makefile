@@ -1,4 +1,4 @@
-.PHONY: build test
+.PHONY: check_os build rebuild test docs
 
 BUILD_DIR_ROOT=build
 BUILD_DIR_MODULES=modules
@@ -84,6 +84,7 @@ endif
 
 clean:
 	@rm -rf build
+	@rm -rf docs/build
 
 ifeq ($(DETECTED_OS), mac)
 build: export MACOSX_DEPLOYMENT_TARGET=${_MACOSX_DEPLOYMENT_TARGET}
@@ -111,3 +112,6 @@ test: build
 	cd $(BUILD_PATH_BIN)/dist && pip install --force-reinstall isx-*.whl
 	cd build/Release && \
 	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)
+
+docs:
+	sphinx-build docs docs/build

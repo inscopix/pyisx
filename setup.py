@@ -15,9 +15,8 @@ setup(
         'openpyxl>=3.0.10', # Required for pandas Excel support
     ],
     include_package_data=True,
-    description="Inscopix Data Processing Software Python API",
-    url="https://www.inscopix.com/support",
+    description="A python package for interacting with Inscopix data.",
+    url="https://github.com/inscopix/pyisx",
     author="Inscopix, Inc.",
-    author_email="support@inscopix.bruker.com",
     has_ext_modules=lambda: True
 )

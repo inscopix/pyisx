@@ -1,14 +1,14 @@
-# Contributing to `py_isx`
 
-## General Information 
+# Contributing
 
-Contributions to `py_isx` are welcome, but no guarantee is made
-that your contributions will be merged, or responded to. 
+Contributions to `pyisx` are welcome from anyone!
+In order to contribute, please open a pull request on Github and fill out the required information in the pull request description.
 
-## Reporting bugs 
+## Reporting Bugs
 
-Please report bugs using our [issue tracker](https://github.com/inscopix/py_isx/issues) on GitHub. Unsolicited bug reports cannot be guaranteed a response. 
+If you have found a bug, we recommend searching the [issues page](https://github.com/inscopix/pyisx/issues) to see if it has already been reported. If not, please open a new issue.
+If you have a feature request, please open a new issue with the label `enhancement`.
 
-## Contributing to documentation 
+## Development
 
-## Contributing to code 
+Follow this [Development Guide](https://github.com/inscopix/pyisx?tab=readme-ov-file#development-guide) for instructions on how to setup a development environment and build the package from source.

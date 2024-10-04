@@ -5,6 +5,7 @@ import h5py
 import numpy as np
 import pandas as pd
 import pytest
+import warnings as w
 
 import isx
 
@@ -112,9 +113,9 @@ class TestFileIO:
                         cs_out.set_cell_data(c, images[c, :, :], traces[c, :], 'C{:02d}'.format(c))
                         assert 'Converting from {} to float32.'.format(traces_type) in [str(x.message) for x in warnings]
                 else:
-                    with pytest.warns(None) as warnings:
+                    with w.catch_warnings():
+                        w.simplefilter("error")
                         cs_out.set_cell_data(c, images[c, :, :], traces[c, :], 'C{:02d}'.format(c))
-                    assert not [str(x.message) for x in warnings.list]
 
         cs_out.flush()
 
@@ -257,9 +258,9 @@ class TestFileIO:
                 image = isx.Image.write(image_file, spacing, np.__getattribute__(container_data_type), data)
                 assert 'Converting from {0} to {1}.'.format(image_data_type, container_data_type) in [str(x.message) for x in warnings]
         else:
-            with pytest.warns(None) as warnings:
+            with w.catch_warnings():
+                w.simplefilter("error")
                 image = isx.Image.write(image_file, spacing, np.__getattribute__(container_data_type), data)
-                assert not [str(x.message) for x in warnings.list]
 
         np.testing.assert_array_equal(image.get_data(), data.astype(container_data_type))
 
@@ -629,9 +630,9 @@ class TestFileIO:
                     movie.set_frame_data(k, frames[:, :, k])
                     assert 'Converting from {0} to {1}.'.format(frame_data_type, movie_data_type) in [str(x.message) for x in warnings]
             else:
-                with pytest.warns(None) as warnings:
+                with w.catch_warnings():
+                    w.simplefilter("error")
                     movie.set_frame_data(k, frames[:, :, k])
-                    assert not [str(x.message) for x in warnings]
 
         movie.flush()
 
@@ -1389,10 +1390,9 @@ class TestFileIO:
                     events.set_cell_data(0, timestamps, data)
                     assert 'Converting from {} to float32.'.format(event_data_type) in [str(x.message) for x in warnings]
             else:
-                with pytest.warns(None) as warnings:
+                with w.catch_warnings():
+                    w.simplefilter("error")
                     events.set_cell_data(0, timestamps, data)
-                    assert not [str(x.message) for x in warnings.list]
-
 
         events.flush()
 

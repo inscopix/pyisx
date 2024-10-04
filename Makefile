@@ -95,13 +95,13 @@ build: check_os
 	THIRD_PARTY_DIR=$(THIRD_PARTY_DIR) cmake $(CMAKE_OPTIONS) -G "$(CMAKE_GENERATOR)" ../../../
 ifeq ($(DETECTED_OS), windows)
 	cd $(BUILD_PATH) && \
-	"/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe" Project.sln //p:Configuration=$(BUILD_TYPE) //maxcpucount:8
+	"/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe" isx.sln //p:Configuration=$(BUILD_TYPE) //maxcpucount:8
 else ifeq ($(DETECTED_OS), linux)
 	cd $(BUILD_PATH) && \
 	make -j2
 else ifeq ($(DETECTED_OS), mac)
 	cd $(BUILD_PATH) && \
-	xcodebuild -alltargets -configuration $(BUILD_TYPE) -project Project.xcodeproj CODE_SIGN_IDENTITY=""
+	xcodebuild -alltargets -configuration $(BUILD_TYPE) -project isx.xcodeproj CODE_SIGN_IDENTITY=""
 endif
 	cd $(BUILD_PATH_BIN) && \
 	python -m build
@@ -109,10 +109,9 @@ endif
 rebuild: clean build
  
 test: build
-	cd $(BUILD_PATH_BIN)/dist && pip install --force-reinstall isx-*.whl
+	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[test]'
 	cd build/Release && \
 	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)
 
-docs: build
-	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[docs]'
+docs: 
 	sphinx-build docs docs/build

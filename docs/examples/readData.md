@@ -1,30 +1,26 @@
-.. _exampleReadData:
 
-Reading Data
-============
+# Reading Data
 
-This section demonstrates how the :code:`isx` package can be used to read data from Inscopix files.
+This section demonstrates how the `isx` package can be used to read data from Inscopix files.
 Refer to :ref:`this table <fileTypes>` for reference on the Inscopix file types and read support.
 
-.. note::
-   
-   The following sections assume the :code:`isx` package has been imported, i.e., :code:`import isx`
+:::{note}
+The following sections assume the `isx` package has been imported, i.e., `import isx`
+:::
 
-Microscope & Behavior Movies
-----------------------------
+## Microscope & Behavior Movies
 
-`Microscope Movie` and `Behavior Movie` file types can be read using the :code:`isx.Movie` class. 
+`Microscope Movie` and `Behavior Movie` file types can be read using the `isx.Movie` class. 
 
-.. code-block:: python
-
+```python
     # Open the movie for reading
     movie = isx.Movie.read("movie.isxd")
+```
 
 Movie objects have timing and spacing properties which can be accessed:
 
 
-.. code-block:: python
-
+```python
     # Timing information can be accessed using:
     movie.timing
 
@@ -41,11 +37,11 @@ Movie objects have timing and spacing properties which can be accessed:
     # which will return a 2-tuple containing the dimensions of the frame
     # (num_rows, num_cols), or (height, width)
     movie.spacing.num_pixels
+```
 
 Frames from movies can be read into memory:
 
-.. code-block:: python
-
+```python
     # The pixel data type can accessed using:
     movie.data_type
 
@@ -55,30 +51,29 @@ Frames from movies can be read into memory:
         
         # Process frame
         ...
+```
 
-.. warning::
-    
-    It's recommended to read one frame into memory at a time to prevent out of memory errors.
+::: {warning}
+It's recommended to read one frame into memory at a time to prevent out of memory errors.
+:::
 
-.. note::
-    
-    Python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on.
+::: {note}
+Python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on.
+:::
 
-Cell Sets
-----------
+## Cell Sets
 
-`Cell Set` file types can be read using the :code:`isx.CellSet` class. 
+`Cell Set` file types can be read using the `isx.CellSet` class. 
 
-.. code-block:: python
-
+```python
     # Open the cell set for reading
     cell_set = isx.CellSet.read("cell_set.isxd")
+```
 
 Similar to movies, cell sets have timing and spacing properties which can be accessed.
 These properties are derived from the parent movie which generated the cell set.
 
-.. code-block:: python
-
+```python
     # Timing information can be accessed using:
     cell_set.timing
 
@@ -95,11 +90,11 @@ These properties are derived from the parent movie which generated the cell set.
     # which will return a 2-tuple containing the dimensions of the frame
     # (num_rows, num_cols), or (height, width)
     cell_set.spacing.num_pixels
+```
 
 Cell data from cell sets can be read into memory:
 
-.. code-block:: python
-
+```python
     # The number of cells in the cell set can accessed using:
     cell_set.num_cells
 
@@ -116,22 +111,21 @@ Cell data from cell sets can be read into memory:
         
         # Process cell data
         ...
+```
 
-Event Sets
-----------
+## Event Sets
 
-`Event Set` file types can be read using the :code:`isx.EventSet` class. 
+`Event Set` file types can be read using the `isx.EventSet` class. 
 
-.. code-block:: python
-
+```python
     # open the event set for reading
     event_set = isx.EventSet.read("event_set.isxd")
+```
 
 Similar to cell sets, event sets have timing properties which can be accessed.
 These properties are derived from the parent cell set which generated the event set.
 
-.. code-block:: python
-
+```python
     # Timing information can be accessed using:
     event_set.timing
 
@@ -140,11 +134,11 @@ These properties are derived from the parent cell set which generated the event 
 
     # The time period can be accessed using:
     event_set.timing.period.secs_float
+```
 
 Cell data from event sets can be read into memory:
 
-.. code-block:: python
-
+```python
     # Read data of every cell in the event set, and process it
     for i in range(event_set.timing.num_samples):
         # Get the cell name
@@ -155,22 +149,21 @@ Cell data from event sets can be read into memory:
 
         # Process cell data
         ...
+```
 
-Vessel Sets
------------
+## Vessel Sets
 
-`Vessel Set` file types can be read using the :code:`isx.VesselSet` class. 
+`Vessel Set` file types can be read using the `isx.VesselSet` class. 
 
-.. code-block:: python
-
+```python
     # Open the vessel set for reading
     vessel_set = isx.VesselSet.read("vessel_set.isxd")
+```
 
 Similar to movies, vessel sets have timing and spacing properties which can be accessed.
 These properties are derived from the parent movie which generated the vessel set.
 
-.. code-block:: python
-
+```python
     # Timing information can be accessed using:
     vessel_set.timing
 
@@ -187,11 +180,11 @@ These properties are derived from the parent movie which generated the vessel se
     # which will return a 2-tuple containing the dimensions of the frame
     # (num_rows, num_cols), or (height, width)
     vessel_set.spacing.num_pixels
+```
 
 Vessel data from vessel sets can be read into memory:
 
-.. code-block:: python
-
+```python
     # The number of vessels in the vessel set can be accessed using:
     vessel_set.num_vessels
 
@@ -227,21 +220,20 @@ Vessel data from vessel sets can be read into memory:
 
         # Process vessel data
         ...
+```
 
-GPIO & IMU
-----------
+## GPIO & IMU
  
-`GPIO` and `IMU` file types can be read using the :code:`isx.GpioSet` class. 
+`GPIO` and `IMU` file types can be read using the `isx.GpioSet` class. 
 
-.. code-block:: python
-
+```python
     # open the gpio set for reading
     gpio_set = isx.GpioSet.read("signals.gpio")
+```
 
 Gpio sets have timing properties which can be accessed.
 
-.. code-block:: python
-
+```python
     # Timing information can be accessed using:
     gpio_set.timing
 
@@ -250,11 +242,11 @@ Gpio sets have timing properties which can be accessed.
 
     # The time period can be accessed using:
     gpio_set.timing.period.secs_float
+```
 
 Signal data from gpio sets can be read into memory:
 
-.. code-block:: python
-
+```python
     # Number of channels (i.e., signals) can be accessed using:
     gpio_set.num_channels
 
@@ -268,3 +260,4 @@ Signal data from gpio sets can be read into memory:
 
         # Process signal data
         ...
+```

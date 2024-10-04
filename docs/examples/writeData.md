@@ -1,22 +1,18 @@
-.. _exampleWriteData:
 
-Writing Data
-============
+# Writing Data
 
-This section demonstrates how the :code:`isx` package can be used to write data to Inscopix files.
+This section demonstrates how the `isx` package can be used to write data to Inscopix files.
 Refer to :ref:`this table <fileTypes>` for reference on the Inscopix file types and write support.
 
-.. note::
-   
-   The following sections assume the :code:`isx` package has been imported, i.e., :code:`import isx`
+::: {note}
+The following sections assume the `isx` package has been imported, i.e., `import isx`
+:::
 
-Microscope Movies
------------------
+## Microscope Movies
 
-The `Microscope Movie` file type can be written using the :code:`isx.Movie` class. 
+The `Microscope Movie` file type can be written using the `isx.Movie` class. 
 
-.. code-block:: python
-
+```python
     # Open the movie for writing
     movie = isx.Movie.write('movie.isxd', timing, spacing, numpy.float32)
 
@@ -29,18 +25,17 @@ The `Microscope Movie` file type can be written using the :code:`isx.Movie` clas
     
     # Flush to disk
     movie.flush()
+```
 
-.. note::
-    
-    Python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on.
+::: {note}
+Python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on.
+:::
 
-Cell Sets
-----------
+## Cell Sets
 
-The `Cell Set` file type can be written using the :code:`isx.CellSet` class. 
+The `Cell Set` file type can be written using the `isx.CellSet` class. 
 
-.. code-block:: python
-
+```python
     # Open the movie for writing
     cell_set = isx.CellSet.write('cell_set.isxd', timing, spacing, numpy.float32)
 
@@ -54,14 +49,13 @@ The `Cell Set` file type can be written using the :code:`isx.CellSet` class.
     
     # Flush to disk
     cell_set.flush()
+```
 
-Event Sets
-----------
+## Event Sets
 
-The `Event Set` file type can be written using the :code:`isx.EventSet` class. 
+The `Event Set` file type can be written using the `isx.EventSet` class. 
 
-.. code-block:: python
-
+```python
     # Open the event set for writing
     event_set = isx.EventSet.write('event_set.isxd', timing, cell_names)
 
@@ -75,16 +69,15 @@ The `Event Set` file type can be written using the :code:`isx.EventSet` class.
     
     # Flush to disk
     event_set.flush()
+```
 
-Vessel Sets
------------
+## Vessel Sets
 
-The `Vessel Set` file type can be written using the :code:`isx.VesselSet` class. 
+The `Vessel Set` file type can be written using the `isx.VesselSet` class. 
 
 For vessel diameter vessel sets:
 
-.. code-block:: python
-
+```python
     # Open the vessel set for writing
     vessel_set = isx.VesselSet.write('vessel_set.isxd', timing, spacing, 'vessel diameter')
 
@@ -101,11 +94,11 @@ For vessel diameter vessel sets:
     
     # Flush to disk
     vessel_set.flush()
+```
 
 For RBC velocity vessel sets:
 
-.. code-block:: python
-
+```python
     # Open the vessel set for writing
     vessel_set = isx.VesselSet.write('vessel_set.isxd', timing, spacing, 'rbc velocity')
 
@@ -123,3 +116,4 @@ For RBC velocity vessel sets:
     
     # Flush to disk
     vessel_set.flush()
+```

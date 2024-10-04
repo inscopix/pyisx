@@ -1,8 +1,7 @@
 
 # pyisx documentation
 
-The [pyisx](https://github.com/inscopix/pyisx) project is a python binding for [isxcore](https://github.com/inscopix/isxcore), a C++ API for interacting with Inscopix data.
-The python package for this binding, named `isx`, is available on [pypi](https://pypi.org/project/isx/) for download.
+`isx` is a python package for interacting with Inscopix data.
 This package encapsulates the following I/O functionality:
 
 * Reading Inscopix files (`.isxd`, `.isxb`, `.gpio`, `.imu`)
@@ -18,9 +17,16 @@ installation
 reference
 examples
 contributing
+faq
 :::
 
-# Quick Start
+## Links
+
+* [Github](https://github.com/inscopix/pyisx)
+* [isxcore Github](https://github.com/inscopix/isxcore)
+* [Inscopix](https://inscopix.com/)
+
+## Quick Start
 
 To install `isx`, run the following command in a python environment:
 
@@ -28,8 +34,7 @@ To install `isx`, run the following command in a python environment:
 pip install isx
 ```
 
-License 
--------
+## License
 
 This project has been released under a [CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0). This means that you are free to:
 

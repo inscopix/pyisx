@@ -2,7 +2,7 @@
 # Reading Data
 
 This section demonstrates how the `isx` package can be used to read data from Inscopix files.
-Refer to :ref:`this table <fileTypes>` for reference on the Inscopix file types and read support.
+Refer to the [file types](../overview) table for reference on the Inscopix file types and read support.
 
 :::{note}
 The following sections assume the `isx` package has been imported, i.e., `import isx`
@@ -47,6 +47,7 @@ Frames from movies can be read into memory:
 
     # Read every frame of the movie, and process it
     for i in range(movie.timing.num_samples):
+        # Dimensions of the frame are (num_rows, num_cols), or (height, width)
         frame = movie.get_frame_data(i)
         
         # Process frame

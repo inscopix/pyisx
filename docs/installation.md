@@ -30,3 +30,6 @@ This package has been built and tested on the following operating systems, for p
 | Ubuntu (Linux) | 20.04 | x86_64 |
 | Windows | 11 | amd64 |
 
+## Development (advanced)
+
+In order to build the package locally, follow this [Development Guide](https://github.com/inscopix/pyisx?tab=readme-ov-file#development-guide).

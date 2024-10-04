@@ -1,26 +1,41 @@
 
 # Overview
 
+`isx` is a python package for interacting with Inscopix data.
+This package encapsulates the following I/O functionality:
+* Reading Inscopix files (`.isxd`, `.isxb`, `.gpio`, `.imu`)
+* Writing Inscopix files (`.isxd`)
+* Exporting Inscopix files to third-party formats (`.mp4`, `.tiff`, `.csv`)
+
 The [pyisx](https://github.com/inscopix/pyisx) project is a python binding for [isxcore](https://github.com/inscopix/isxcore), a C++ API for interacting with Inscopix data.
 
 ## Install
 
-The python package for this binding, named `isx`, is available on [pypi](https://pypi.org/project/isx/) for download.
+
+This package is available on [pypi](https://pypi.org/project/isx/).
 To install `isx`, run the following command in a python environment:
 
 ```python
 pip install isx
 ```
 
-Please refer to the :ref:`installation` guide for more details.
+::: {attention}
+For Apple Silicon (i.e., macOS with arm64 architecture), the package is currently not natively supported. However, it's possible to use [anaconda](https://www.anaconda.com/) to configure an x86 environment and use the project.
+:::
+
+```bash
+CONDA_SUBDIR=osx-64 conda create -n <name> python=<python>
+conda activate <name>
+conda config --env --set subdir osx-64
+pip install isx
+```
+
+Please refer to the [Installation](#installation) guide for more details.
 
 ## File Types
 
 This package encapsulates the following I/O functionality:
 
-* Reading Inscopix files (`.isxd`, `.isxb`, `.gpio`, `.imu`)
-* Writing Inscopix files (`.isxd`)
-* Exporting Inscopix files to third-party formats (`.mp4`, `.tiff`, `.csv`)
 
 The following table summarizes all Inscopix file types and the functionality supported by this package:
 
@@ -38,4 +53,4 @@ The following table summarizes all Inscopix file types and the functionality sup
 
 ## Next Steps
 
-To learn more about how to use the `isx` package, refer to the :ref:`examples` guide and the :ref:`reference`.
+To learn more about how to use the `isx` package, refer to the [Examples](#examples) guide and the [API Reference](#reference).

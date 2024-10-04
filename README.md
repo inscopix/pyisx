@@ -41,6 +41,15 @@ This library has been built and tested on the following operating systems, for p
 
 This guide documents how to build the python package wheel locally.
 
+1. Clone the repo
+
+Setup the repo and initialize its submodule:
+
+```bash
+git clone git@github.com:inscopix/pyisx.git
+git submodule update --init
+```
+
 1. Setup `isxcore`
 Follow the setup instructions for the C++ [isxcore](https://github.com/inscopix/isxcore) repo.
 
@@ -56,7 +65,7 @@ conda activate pyisx
 
 > **Note**: On macOS systems with Apple Silicon, the conda environment is configured differently, since `isxcore` is currently only built for x86 architectures.
 
-```
+```bash
 CONDA_SUBDIR=osx-64 conda create -n pyisx python=3.12
 conda activate pyisx
 conda config --env --set subdir osx-64
@@ -66,7 +75,7 @@ conda config --env --set subdir osx-64
 
 Inside the virtual environment install the following dependencies:
 
-```
+```bash
 conda install -y build pytest
 ```
 
@@ -74,13 +83,13 @@ conda install -y build pytest
 
 4. Build the package
 
-```
+```bash
 make build THIRD_PARTY_DIR=/path/to/third/party/dir
 ```
 
 5. Run the unit tests
 
-```
+```bash
 make test THIRD_PARTY_DIR=/path/to/third/party/dir TEST_DATA_DIR=/path/to/test/data/dir
 ```
 

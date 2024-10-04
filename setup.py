@@ -14,6 +14,18 @@ setup(
         'pillow>=8.0.1',
         'openpyxl>=3.0.10', # Required for pandas Excel support
     ],
+    extras_require={
+        'test': [
+            # Optional dependencies for testing
+            'pytest',
+        ],
+        'docs': [
+            # Optional dependencies for testing
+            'sphinx',
+            'sphinx_rtd_theme',
+            'myst_parser'
+        ]
+    },
     include_package_data=True,
     description="A python package for interacting with Inscopix data.",
     url="https://github.com/inscopix/pyisx",

@@ -113,5 +113,6 @@ test: build
 	cd build/Release && \
 	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)
 
-docs:
+docs: build
+	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[docs]'
 	sphinx-build docs docs/build

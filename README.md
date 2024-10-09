@@ -10,7 +10,7 @@ The `isx` package is built from the `pyisx` project, a python binding for [isxco
 
 ## Documentation
 
-For help, please refer to the [documentation](https://github.com/inscopix/pyisx).
+For help, please refer to the [documentation](https://inscopix.github.io/pyisx/).
 
 ## Install
 

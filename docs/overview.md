@@ -7,7 +7,7 @@ This package encapsulates the following I/O functionality:
 * Writing Inscopix files (`.isxd`)
 * Exporting Inscopix files to third-party formats (`.mp4`, `.tiff`, `.csv`)
 
-The [pyisx](https://github.com/inscopix/pyisx) project is a python binding for [isxcore](https://github.com/inscopix/isxcore), a C++ API for interacting with Inscopix data.
+The `isx` package is built from the `pyisx` project, a python binding for [isxcore](https://github.com/inscopix/isxcore), a C++ API for interacting with Inscopix data.
 
 ## Install
 

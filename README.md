@@ -1,12 +1,16 @@
 # pyisx
 
-The `pyisx` project is a python binding for [isxcore](https://github.com/inscopix/isxcore), a C++ API for interacting with Inscopix data.
-The python package for this binding, named `isx`, is available on [pypi](https://pypi.org/project/isx/) for download.
+`isx` is a python package for interacting with Inscopix data.
 This package encapsulates the following I/O functionality:
-
 * Reading Inscopix files (`.isxd`, `.isxb`, `.gpio`, `.imu`)
 * Writing Inscopix files (`.isxd`)
 * Exporting Inscopix files to third-party formats (`.mp4`, `.tiff`, `.csv`)
+
+The `isx` package is built from the `pyisx` project, a python binding for [isxcore](https://github.com/inscopix/isxcore), a C++ API for interacting with Inscopix data.
+
+## Documentation
+
+For help, please refer to the [documentation](https://github.com/inscopix/pyisx).
 
 ## Install
 
@@ -18,13 +22,14 @@ pip install isx
 
 > **Note:** For Apple Silicon (i.e., macOS arm64 architecture), the package is currently not natively supported. However, it's possible to use anaconda to configure an x86 environment and use the project.
 
-```
-CONDA_SUBDIR=osx-64 conda create -n pyisx python=3.12
-conda activate pyisx
+```bash
+CONDA_SUBDIR=osx-64 conda create -n <name> python=<python>
+conda activate <name>
 conda config --env --set subdir osx-64
 pip install isx
 ```
 
+Replace `<name>` with a name for the conda environment, and `<python>` with the python version to use.
 
 ## Supported Platforms
 
@@ -58,18 +63,22 @@ Follow the setup instructions for the C++ [isxcore](https://github.com/inscopix/
 Create a python virtual environment, specifying the desired python version.
 This guide uses anaconda for demonstration, but other tools like virtualenv or poetry can also be used.
 
+```bash
+conda create -n <name> python=<python>
+conda activate <name>
 ```
-conda create -n pyisx python=3.12
-conda activate pyisx
-```
+
+Replace `<name>` with a name for the conda environment, and `<python>` with the python version to use.
 
 > **Note**: On macOS systems with Apple Silicon, the conda environment is configured differently, since `isxcore` is currently only built for x86 architectures.
 
 ```bash
-CONDA_SUBDIR=osx-64 conda create -n pyisx python=3.12
-conda activate pyisx
+CONDA_SUBDIR=osx-64 conda create -n <name> python=<python>
+conda activate <name>
 conda config --env --set subdir osx-64
 ```
+
+Replace `<name>` with a name for the conda environment, and `<python>` with the python version to use.
 
 3. Install build & test dependencies
 

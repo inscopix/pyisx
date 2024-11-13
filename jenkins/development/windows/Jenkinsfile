@@ -1,0 +1,7 @@
+// The Jenkinsfile for the MacOS Development Builds pipeline.
+
+node("idps-windows-node") {
+    checkout scm
+    pipelineModule = load "jenkins/pipeline.groovy"
+    pipelineModule.run("windows")
+}

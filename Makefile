@@ -115,6 +115,9 @@ clean:
 	@rm -rf build
 	@rm -rf docs/build
 
+setup:
+	./scripts/setup -v --src ${REMOTE_DIR} --dst ${REMOTE_LOCAL_DIR} --remote-copy
+
 ifeq ($(DETECTED_OS), mac)
 env:
 	CONDA_SUBDIR=osx-64 conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION) && \
@@ -150,7 +153,7 @@ endif
 
 rebuild: clean build
  
-test: build
+test:
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[test]' && \
 	cd build/Release && \

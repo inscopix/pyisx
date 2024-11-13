@@ -1,0 +1,202 @@
+#!/bin/bash
+
+usage()
+{
+    echo "Usage $0 [-v | --verbose] [-l | --large-data]"
+    echo "    -v | --verbose: print debug output"
+    echo "    --src: specify the location of the directory to copy from"
+    echo "    --dst: specify the location of the directory to copy to, otherwise use default value (third_party)"
+    echo "    --remote-copy: copy data from src to dst as if it's a local copy of remote data (i.e., keep dir structure of src in dst)"
+    echo "                   this option is useful for improving download speeds on build servers by keep a local copy of remote data"
+    echo ""
+    echo "Downloads test data and third party libraries from a remote source external directory to this repository."
+}
+
+# Synchronizes a directory recursively while maintaining attributes.
+#
+# Arguments
+# ---------
+# VERBOSE : {false, true}
+#   If true, print verbose messages.
+# SRC : str
+#   The source directory.
+# DEST : str
+#   The destination directory.
+syncdir()
+{
+    local VERBOSE=$1
+    local SRC=$2
+    local DEST=$3
+
+    if [[ ! -d ${DEST} ]]; then
+        MKDIR_COMMAND="mkdir -p"
+        if [[ ${VERBOSE} == true ]]; then
+            MKDIR_COMMAND="${MKDIR_COMMAND} -v"
+        fi
+        ${MKDIR_COMMAND} ${DEST}
+    fi
+
+    # Some notes on options.
+    #
+    # -p: retain permissions
+    # -u: update destination
+    # -r: recurse directories
+    # -l: copy symlinks as symlinks
+    # -P: progress updates and partial downloads
+    # -h: human readable
+    SYNC_COMMAND="rsync -purlPh"
+    if [[ ${VERBOSE} == true ]]; then
+        SYNC_COMMAND="${SYNC_COMMAND} -v"
+    fi
+
+    if [[ ${VERBOSE} == true ]]; then
+        echo ${SYNC_COMMAND} ${SRC} ${DEST}
+    fi
+    ${SYNC_COMMAND} "${SRC}" "${DEST}"
+}
+
+# Synchronizes a version of a library for the given OS.
+#
+# Arguments
+# ---------
+# NAME : str
+#   The top level directory name of the library.
+# VERSION : str
+#   The version number sub-directory.
+# REMOTE_EXT_DIR : str
+#   The directory containing the source libraries.
+# LOCAL_EXT_DIR : str
+#   The destination directory into which to copy the library.
+# OS_SUB_DIR : str
+#   The OS sub-directory name.
+# VERBOSE : {false, true}
+#   If true, print verbose messages.
+synclib()
+{
+    local NAME=$1
+    local VERSION=$2
+    local REMOTE_EXT_DIR=$3
+    local LOCAL_EXT_DIR=$4
+    local OS_SUB_DIR=$5
+    local VERBOSE=$6
+
+    SRC_DIR=${REMOTE_EXT_DIR}/${NAME}/${VERSION}/${OS_SUB_DIR}
+    DEST_DIR=${LOCAL_EXT_DIR}/${NAME}/${VERSION}
+
+    syncdir ${VERBOSE} ${SRC_DIR} ${DEST_DIR}
+}
+
+source scripts/utils.sh
+
+# Fixed/default settings
+OS_SUB_DIR=linux
+if isMac; then
+    OS_SUB_DIR=osx
+elif isLinux; then
+    if isArm; then
+        OS_SUB_DIR=linux-arm
+    else
+        OS_SUB_DIR=linux
+    fi
+elif isWin; then
+    OS_SUB_DIR=win
+fi
+
+
+LOCAL_EXT_DIR=third_party
+
+# Parse other settings from arguments
+VERBOSE=false
+IS_REMOTE_COPY=false
+
+while [[ $# > 0 ]]; do
+    key="$1"
+    case $key in
+        # verbose output
+        -v|--verbose)
+        VERBOSE=true
+        ;;
+        # specify src directory
+        --src)
+        shift
+        REMOTE_EXT_DIR=$1
+        ;;
+        # specify dst directory
+        --dst)
+        shift
+        LOCAL_EXT_DIR=$1
+        ;;
+        # force dst to be a copy of src
+        --remote-copy)
+        IS_REMOTE_COPY=true
+        ;;
+        *)
+        # unknown option
+        usage
+        exit 1
+        ;;
+    esac
+    shift # past argument or value
+done
+
+if [[ ${VERBOSE} == true ]]; then
+    echo "Using VERBOSE              =   ${VERBOSE}"
+    echo "Using REMOTE_EXT_DIR       =   ${REMOTE_EXT_DIR}"
+    echo "Using LOCAL_EXT_DIR        =   ${LOCAL_EXT_DIR}"
+    echo "Using OS_SUB_DIR           =   ${OS_SUB_DIR}"
+    echo "Using REMOTE_TEST_DATA_DIR =   ${REMOTE_TEST_DATA_DIR}"
+    echo "Using IS_REMOTE_COPY       =   ${IS_REMOTE_COPY}"
+fi
+
+# Check that remote directory exists
+if [[ ! -d ${REMOTE_EXT_DIR} ]]; then
+    echo "The remote source/external directory does not exist: ${REMOTE_EXT_DIR}. Did you forget to mount it?"
+    exit 1
+fi
+
+# Check that rsync is available
+which rsync > /dev/null
+exitCode=$?
+if [[ ${exitCode} -ne 0 ]]; then
+    echo "ERROR: Could not find rsync. Install it manually according to the instructions in the README."
+    exit ${exitCode}
+fi
+
+# Copy libraries
+synclib "catch" "1.4.0"                 ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} "." ${VERBOSE}
+synclib "ffmpeg" "3.1.4"                ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+synclib "json_modern_C++" "2.0.1_isx"   ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} "." ${VERBOSE}
+synclib "libtiff" "4.0.8.isx"           ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+synclib "boost" "1.72.0"                ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+
+if isUbuntu; then
+    synclib "hdf5" "1.10"                   ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} "linux-ubuntu" ${VERBOSE}
+    if [[ ${IS_REMOTE_COPY} == false ]]; then
+        mv "${LOCAL_EXT_DIR}/hdf5/1.10/linux-ubuntu" "${LOCAL_EXT_DIR}/hdf5/1.10/linux"
+    fi
+else
+    synclib "hdf5" "1.10"                   ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+fi;
+
+if isArm; then
+    synclib "Qt" "5.8"                      ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+    synclib "OpenCV" "3.2.0.cuda"       ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+    synclib "OpenBLAS" "0.2.20"         ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+else
+    # Change to 5.12 when ready - see IDPS-87
+    synclib "Qt" "5.8"                      ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+    synclib "OpenCV" "3.2.0.no_mkl"         ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+
+    if isLinux; then
+        synclib "Qt" "5.5"                  ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+    fi
+fi
+
+# Copy test data
+REMOTE_TEST_DATA_DIR=test_data_structured
+LOCAL_TEST_DATA_DIR=test_data
+if [[ ${IS_REMOTE_COPY} == true ]]; then
+    LOCAL_TEST_DATA_DIR="${LOCAL_EXT_DIR}/test_data_structured"
+fi
+# Data for unit tests
+syncdir ${VERBOSE} ${REMOTE_EXT_DIR}/${REMOTE_TEST_DATA_DIR}/unit_test ${LOCAL_TEST_DATA_DIR}

@@ -3,5 +3,5 @@
 node("idps-mac-node") {
     checkout scm
     pipelineModule = load "jenkins/pipeline.groovy"
-    pipelineModule.run("mac")
+    pipelineModule.run_all("mac")
 }

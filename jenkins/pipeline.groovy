@@ -23,10 +23,10 @@ def run(os, python_version, deploy = false) {
 def run_all(os, deploy = false) {
     // The Jenkinsfile for the MacOS Development Builds pipeline.
 
-    run_command("git config -f .gitmodules submodule.isxcore.url https://github.com/inscopix/isxcore.git")
-    run_command("git config -f .git/config submodule.isxcore.url https://github.com/inscopix/isxcore.git")
-    run_command("git submodule sync")
-    run_command("git submodule update --init --remote")
+    run_command("git config -f .gitmodules submodule.isxcore.url https://github.com/inscopix/isxcore.git", os)
+    run_command("git config -f .git/config submodule.isxcore.url https://github.com/inscopix/isxcore.git", os)
+    run_command("git submodule sync", os)
+    run_command("git submodule update --init --remote", os)
     
     stage("Setup") {
         run_command("make setup REMOTE_DIR=${IDPS_REMOTE_EXT_DIR} REMOTE_LOCAL_DIR=${IDPS_REMOTE_EXT_COPY_DIR}", os)

@@ -91,7 +91,7 @@ endif
 
 # Define cmake generator based on OS
 ifeq ($(DETECTED_OS), windows)
-	VENV_ACTIVATE = source $(shell conda info --base)/Scripts/activate
+	VENV_ACTIVATE = source '$(shell conda info --base)/Scripts/activate'
 else
 	VENV_ACTIVATE = source $(shell conda info --base)/bin/activate
 endif

@@ -126,7 +126,7 @@ env:
 	python -m pip install build
 else
 env:
-	conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION)
+	conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION) && \
 	python -m pip install build
 endif
 

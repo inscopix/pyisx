@@ -168,29 +168,10 @@ synclib "ffmpeg" "3.1.4"                ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_
 synclib "json_modern_C++" "2.0.1_isx"   ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} "." ${VERBOSE}
 synclib "libtiff" "4.0.8.isx"           ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
 synclib "boost" "1.72.0"                ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+synclib "hdf5" "1.10"                   ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+synclib "Qt" "5.8"                      ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
+synclib "OpenCV" "3.2.0.no_mkl"         ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
 
-if isUbuntu; then
-    synclib "hdf5" "1.10"                   ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} "linux-ubuntu" ${VERBOSE}
-    if [[ ${IS_REMOTE_COPY} == false ]]; then
-        mv "${LOCAL_EXT_DIR}/hdf5/1.10/linux-ubuntu" "${LOCAL_EXT_DIR}/hdf5/1.10/linux"
-    fi
-else
-    synclib "hdf5" "1.10"                   ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
-fi;
-
-if isArm; then
-    synclib "Qt" "5.8"                      ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
-    synclib "OpenCV" "3.2.0.cuda"       ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
-    synclib "OpenBLAS" "0.2.20"         ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
-else
-    # Change to 5.12 when ready - see IDPS-87
-    synclib "Qt" "5.8"                      ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
-    synclib "OpenCV" "3.2.0.no_mkl"         ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
-
-    if isLinux; then
-        synclib "Qt" "5.5"                  ${REMOTE_EXT_DIR} ${LOCAL_EXT_DIR} ${OS_SUB_DIR} ${VERBOSE}
-    fi
-fi
 
 # Copy test data
 REMOTE_TEST_DATA_DIR=test_data_structured

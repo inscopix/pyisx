@@ -2,7 +2,7 @@ import os
 import shutil
 import isx
 
-test_data_path = os.environ['ISX_TEST_DATA_PATH']
+test_data_path = os.path.abspath(os.environ['ISX_TEST_DATA_PATH'])
 
 
 def delete_files_silently(files):

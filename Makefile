@@ -173,3 +173,16 @@ deploy:
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	pip install twine && \
 	twine upload --repository testpypi '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
+
+ifeq ($(DETECTED_OS), linux)
+deploy:
+	docker run -v $(pwd):/io quay.io/pypa/manylinux_2_34_x86_64 /bin/bash -c "cd /io && LD_LIBRARY_PATH=/io/build/Release/bin/isx/lib:$LD_LIBRARY_PATH auditwheel repair /io/build/Release/bin/dist/isx*.whl"
+	$(VENV_ACTIVATE) $(VENV_NAME) && \
+	pip install twine && \
+	twine upload --repository testpypi '$(shell ls wheelhouse/isx-*.whl)'
+else
+deploy:
+	$(VENV_ACTIVATE) $(VENV_NAME) && \
+	pip install twine && \
+	twine upload --repository testpypi '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
+endif

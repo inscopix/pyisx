@@ -42,6 +42,14 @@ def run_all(os, deploy = false) {
             run(os, it, deploy)
         }
     }
+
+    stage("Cleanup")
+    {
+        cleanWs()
+        dir("${env.WORKSPACE}@tmp") {
+            deleteDir()
+        }
+    }
 }
 
 return this

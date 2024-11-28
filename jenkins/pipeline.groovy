@@ -18,6 +18,10 @@ def run(os, python_version, deploy = false) {
     run_command("make env PYTHON_VERSION=${python_version}", os)
     run_command("make build THIRD_PARTY_DIR=${IDPS_REMOTE_EXT_COPY_DIR} PYTHON_VERSION=${python_version}", os)
     run_command("make test TEST_DATA_DIR=${IDPS_REMOTE_EXT_COPY_DIR}/test_data_structured PYTHON_VERSION=${python_version}", os)
+
+    if (deploy) {
+        run_command("make deploy", os)
+    }
 }
 
 def run_all(os, deploy = false) {

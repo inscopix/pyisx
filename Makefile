@@ -168,3 +168,8 @@ endif
 docs:
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	sphinx-build docs docs/build
+
+deploy:
+	$(VENV_ACTIVATE) $(VENV_NAME) && \
+	pip install twine && \
+	twine upload --repository testpypi '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'

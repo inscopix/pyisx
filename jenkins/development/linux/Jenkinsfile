@@ -1,4 +1,4 @@
-// The Jenkinsfile for the MacOS Development Builds pipeline.
+// The Jenkinsfile for the Linux Development Builds pipeline.
 
 node("idps-linux-node") {
     checkout scm

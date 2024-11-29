@@ -179,10 +179,10 @@ ifeq ($(DETECTED_OS), linux)
 deploy: repair-linux
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	pip install twine && \
-	twine upload --repository testpypi '$(shell ls wheelhouse/isx-*.whl)'
+	twine upload '$(shell ls wheelhouse/isx-*.whl)'
 else
 deploy:
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	pip install twine && \
-	twine upload --repository testpypi '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
+	twine upload '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
 endif

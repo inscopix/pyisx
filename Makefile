@@ -58,7 +58,6 @@ VERSION_MINOR=0
 VERSION_PATCH=1
 VERSION_BUILD=0
 IS_BETA=1
-WITH_CUDA=0
 ASYNC_API=1
 WITH_ALGOS=0
 
@@ -70,7 +69,6 @@ CMAKE_OPTIONS=\
     -DISX_VERSION_PATCH=${VERSION_PATCH}\
     -DISX_VERSION_BUILD=${VERSION_BUILD}\
     -DISX_IS_BETA=${IS_BETA}\
-    -DISX_WITH_CUDA=${WITH_CUDA}\
 	-DISX_ASYNC_API=${ASYNC_API} \
 	-DISX_WITH_ALGOS=${WITH_ALGOS} \
 
@@ -172,7 +170,10 @@ docs:
 
 ifeq ($(DETECTED_OS), linux)
 deploy:
-	docker run -v $(shell pwd):/io quay.io/pypa/manylinux_2_34_x86_64 /bin/bash -c "cd /io && LD_LIBRARY_PATH=/io/build/Release/bin/isx/lib:$LD_LIBRARY_PATH auditwheel repair /io/build/Release/bin/dist/isx*.whl"
+	docker run \
+		-v $(shell pwd):/io quay.io/pypa/manylinux_2_34_x86_64 \
+		-u $(id -u ${USER}):$(id -g ${USER}) \
+		/bin/bash -c "cd /io && LD_LIBRARY_PATH=/io/build/Release/bin/isx/lib:$LD_LIBRARY_PATH auditwheel repair /io/build/Release/bin/dist/isx*.whl"
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	pip install twine && \
 	twine upload --repository testpypi '$(shell ls wheelhouse/isx-*.whl)'

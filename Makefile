@@ -168,13 +168,15 @@ docs:
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	sphinx-build docs docs/build
 
-ifeq ($(DETECTED_OS), linux)
-deploy:
+repair-linux:
 	docker run \
 		-v $(shell pwd):/io \
 		-u $(shell id -u ${USER}):$(shell id -g ${USER}) \
 		quay.io/pypa/manylinux_2_34_x86_64 \
 		/bin/bash -c "cd /io && LD_LIBRARY_PATH=/io/build/Release/bin/isx/lib:$LD_LIBRARY_PATH auditwheel repair /io/build/Release/bin/dist/isx*.whl"
+
+ifeq ($(DETECTED_OS), linux)
+deploy: repair-linux
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	pip install twine && \
 	twine upload --repository testpypi '$(shell ls wheelhouse/isx-*.whl)'

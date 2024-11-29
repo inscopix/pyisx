@@ -114,6 +114,7 @@ endif
 clean:
 	@rm -rf build
 	@rm -rf docs/build
+	@rm -rf wheelhouse
 
 setup:
 	./scripts/setup -v --src ${REMOTE_DIR} --dst ${REMOTE_LOCAL_DIR} --remote-copy

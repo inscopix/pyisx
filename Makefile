@@ -58,7 +58,6 @@ VERSION_MINOR=0
 VERSION_PATCH=1
 VERSION_BUILD=0
 IS_BETA=1
-WITH_CUDA=0
 ASYNC_API=1
 WITH_ALGOS=0
 
@@ -70,7 +69,6 @@ CMAKE_OPTIONS=\
     -DISX_VERSION_PATCH=${VERSION_PATCH}\
     -DISX_VERSION_BUILD=${VERSION_BUILD}\
     -DISX_IS_BETA=${IS_BETA}\
-    -DISX_WITH_CUDA=${WITH_CUDA}\
 	-DISX_ASYNC_API=${ASYNC_API} \
 	-DISX_WITH_ALGOS=${WITH_ALGOS} \
 
@@ -91,7 +89,7 @@ endif
 
 # Define cmake generator based on OS
 ifeq ($(DETECTED_OS), windows)
-	VENV_ACTIVATE = source $(shell conda info --base)/Scripts/activate
+	VENV_ACTIVATE = source '$(shell conda info --base)/Scripts/activate'
 else
 	VENV_ACTIVATE = source $(shell conda info --base)/bin/activate
 endif
@@ -114,6 +112,10 @@ endif
 clean:
 	@rm -rf build
 	@rm -rf docs/build
+	@rm -rf wheelhouse
+
+setup:
+	./scripts/setup -v --src ${REMOTE_DIR} --dst ${REMOTE_LOCAL_DIR} --remote-copy
 
 ifeq ($(DETECTED_OS), mac)
 env:
@@ -123,7 +125,8 @@ env:
 	python -m pip install build
 else
 env:
-	conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION)
+	conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION) && \
+	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	python -m pip install build
 endif
 
@@ -150,11 +153,11 @@ endif
 
 rebuild: clean build
  
-test: build
+test:
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[test]' && \
 	cd build/Release && \
-	ISX_TEST_DATA_PATH=$(TEST_DATA_DIR) python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)
+	ISX_TEST_DATA_PATH='$(shell realpath $(TEST_DATA_DIR))' python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)
 
 ifeq ($(BUILD_API), 1)
 docs: build
@@ -164,3 +167,22 @@ endif
 docs:
 	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	sphinx-build docs docs/build
+
+repair-linux:
+	docker run \
+		-v $(shell pwd):/io \
+		-u $(shell id -u ${USER}):$(shell id -g ${USER}) \
+		quay.io/pypa/manylinux_2_34_x86_64 \
+		/bin/bash -c "cd /io && LD_LIBRARY_PATH=/io/build/Release/bin/isx/lib:$LD_LIBRARY_PATH auditwheel repair /io/build/Release/bin/dist/isx*.whl"
+
+ifeq ($(DETECTED_OS), linux)
+deploy: repair-linux
+	$(VENV_ACTIVATE) $(VENV_NAME) && \
+	pip install twine && \
+	twine upload '$(shell ls wheelhouse/isx-*.whl)'
+else
+deploy:
+	$(VENV_ACTIVATE) $(VENV_NAME) && \
+	pip install twine && \
+	twine upload '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
+endif

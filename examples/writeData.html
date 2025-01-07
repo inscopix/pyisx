@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writing Data &mdash; pyisx 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=547657ed" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="../contributing.html" />
+    <link rel="prev" title="Reading Data" href="readData.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyisx
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="readData.html">Reading Data</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Writing Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#microscope-movies">Microscope Movies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cell-sets">Cell Sets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#event-sets">Event Sets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vessel-sets">Vessel Sets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyisx</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Writing Data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/writeData.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="writing-data">
+<h1>Writing Data<a class="headerlink" href="#writing-data" title="Link to this heading"></a></h1>
+<p>This section demonstrates how the <code class="docutils literal notranslate"><span class="pre">isx</span></code> package can be used to write data to Inscopix files.
+Refer to <a class="reference internal" href="../overview.html"><span class="doc std std-doc">file types</span></a> for reference on the Inscopix file types and write support.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following sections assume the <code class="docutils literal notranslate"><span class="pre">isx</span></code> package has been imported, i.e., <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">isx</span></code></p>
+</div>
+<section id="microscope-movies">
+<h2>Microscope Movies<a class="headerlink" href="#microscope-movies" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Microscope</span> <span class="pre">Movie</span></code> file type can be written using the <code class="docutils literal notranslate"><span class="pre">isx.Movie</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Define timing, spacing, data_type properties</span>
+    <span class="n">timing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Timing</span><span class="p">(</span><span class="n">num_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">isx</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">from_msecs</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Spacing</span><span class="p">(</span><span class="n">num_pixels</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">))</span>
+    <span class="n">data_type</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float32</span>
+
+    <span class="c1"># Open the movie for writing</span>
+    <span class="n">movie</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Movie</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;movie.isxd&#39;</span><span class="p">,</span> <span class="n">timing</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="c1"># Generate frame to write</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="o">...</span>
+
+        <span class="c1"># Write to file</span>
+        <span class="n">movie</span><span class="o">.</span><span class="n">set_frame_data</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+    
+    <span class="c1"># Flush to disk</span>
+    <span class="n">movie</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on.</p>
+</div>
+</section>
+<section id="cell-sets">
+<h2>Cell Sets<a class="headerlink" href="#cell-sets" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Cell</span> <span class="pre">Set</span></code> file type can be written using the <code class="docutils literal notranslate"><span class="pre">isx.CellSet</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Define timing, spacing properties</span>
+    <span class="n">timing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Timing</span><span class="p">(</span><span class="n">num_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">isx</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">from_msecs</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Spacing</span><span class="p">(</span><span class="n">num_pixels</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">))</span>
+    
+    <span class="c1"># Open the cell set for writing</span>
+    <span class="n">cell_set</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">CellSet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;cell_set.isxd&#39;</span><span class="p">,</span> <span class="n">timing</span><span class="p">,</span> <span class="n">spacing</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="c1"># Generate cell footprint and trace to write</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="o">...</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="o">...</span>
+
+        <span class="c1"># Write to file</span>
+        <span class="n">cell_set</span><span class="o">.</span><span class="n">set_cell_data</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="s1">&#39;C</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    
+    <span class="c1"># Flush to disk</span>
+    <span class="n">cell_set</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="event-sets">
+<h2>Event Sets<a class="headerlink" href="#event-sets" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">Set</span></code> file type can be written using the <code class="docutils literal notranslate"><span class="pre">isx.EventSet</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Define timing properties</span>
+    <span class="n">timing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Timing</span><span class="p">(</span><span class="n">num_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">isx</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">from_msecs</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+    <span class="c1"># Open the event set for writing</span>
+    <span class="n">cell_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;C00&#39;</span><span class="p">,</span> <span class="s1">&#39;C01&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="n">event_set</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">EventSet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;event_set.isxd&#39;</span><span class="p">,</span> <span class="n">timing</span><span class="p">,</span> <span class="n">cell_names</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cell_set</span><span class="o">.</span><span class="n">num_cells</span><span class="p">):</span>
+        <span class="c1"># Generate event offsets and amplitudes</span>
+        <span class="n">offsets</span> <span class="o">=</span> <span class="o">...</span>
+        <span class="n">amplitudes</span> <span class="o">=</span> <span class="o">...</span>
+
+        <span class="c1"># Write to file</span>
+        <span class="n">event_set</span><span class="o">.</span><span class="n">set_cell_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">)</span>
+    
+    <span class="c1"># Flush to disk</span>
+    <span class="n">event_set</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="vessel-sets">
+<h2>Vessel Sets<a class="headerlink" href="#vessel-sets" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Vessel</span> <span class="pre">Set</span></code> file type can be written using the <code class="docutils literal notranslate"><span class="pre">isx.VesselSet</span></code> class.</p>
+<p>For vessel diameter vessel sets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Define timing, spacing, vessel type properties</span>
+    <span class="n">timing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Timing</span><span class="p">(</span><span class="n">num_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">isx</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">from_msecs</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Spacing</span><span class="p">(</span><span class="n">num_pixels</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">))</span>
+    <span class="n">vessel_type</span> <span class="o">=</span> <span class="s2">&quot;vessel diameter&quot;</span>
+
+    <span class="c1"># Open the vessel set for writing</span>
+    <span class="n">vessel_set</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">VesselSet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;vessel_set.isxd&#39;</span><span class="p">,</span> <span class="n">timing</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">vessel_type</span><span class="p">)</span>
+
+    <span class="c1"># Generate a projection image of the parent movie</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="c1"># Generate vessel diameter line, trace, and center trace to write</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="o">..</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="o">...</span>
+        <span class="n">center_trace</span> <span class="o">=</span> <span class="o">...</span>
+
+        <span class="c1"># Write to file</span>
+        <span class="n">vessel_set</span><span class="o">.</span><span class="n">set_vessel_diameter_data</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">center_trace</span><span class="p">,</span> <span class="s1">&#39;V</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    
+    <span class="c1"># Flush to disk</span>
+    <span class="n">vessel_set</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For RBC velocity vessel sets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Define timing, spacing, vessel type properties</span>
+    <span class="n">timing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Timing</span><span class="p">(</span><span class="n">num_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">isx</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">from_msecs</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Spacing</span><span class="p">(</span><span class="n">num_pixels</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">))</span>
+    <span class="n">vessel_type</span> <span class="o">=</span> <span class="s2">&quot;rbc velocity&quot;</span>
+
+    <span class="c1"># Open the vessel set for writing</span>
+    <span class="n">vessel_set</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">VesselSet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;vessel_set.isxd&#39;</span><span class="p">,</span> <span class="n">timing</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">vessel_type</span><span class="p">)</span>
+
+    <span class="c1"># Generate a projection image of the parent movie</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="c1"># Generate rbc velocity line, trace, and direction trace, and correlation heatmaps to write</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="o">...</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="o">...</span>
+        <span class="n">direction_trace</span> <span class="o">=</span> <span class="o">...</span>
+        <span class="n">correlations_trace</span> <span class="o">=</span> <span class="o">...</span>
+
+        <span class="c1"># Write to file</span>
+        <span class="n">vessel_set</span><span class="o">.</span><span class="n">set_rbc_velocity_data</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">direction_trace</span><span class="p">,</span> <span class="n">correlations_trace</span><span class="p">,</span> <span class="s1">&#39;V</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    
+    <span class="c1"># Flush to disk</span>
+    <span class="n">vessel_set</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="readData.html" class="btn btn-neutral float-left" title="Reading Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Inscopix, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

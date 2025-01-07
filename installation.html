@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; pyisx 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/theme.css?v=547657ed" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=51b770b3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyisx
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#supported-platforms">Supported Platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-advanced">Development (advanced)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyisx</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<p>Pre-built binaries of this API can be installed from <a class="reference external" href="https://pypi.org/project/isx">PyPi</a> for the supported platforms.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>isx
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>For Apple Silicon (i.e., macOS with arm64 architecture), the package is currently not natively supported. However, it’s possible to use <a class="reference external" href="https://www.anaconda.com/">anaconda</a> to configure an x86 environment and use the project.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CONDA_SUBDIR</span><span class="o">=</span>osx-64<span class="w"> </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;name&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span>&lt;python&gt;
+conda<span class="w"> </span>activate<span class="w"> </span>&lt;name&gt;
+conda<span class="w"> </span>config<span class="w"> </span>--env<span class="w"> </span>--set<span class="w"> </span>subdir<span class="w"> </span>osx-64
+pip<span class="w"> </span>install<span class="w"> </span>isx
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> with a name for the conda environment, and <code class="docutils literal notranslate"><span class="pre">&lt;python&gt;</span></code> with the python version to use.</p>
+<section id="supported-platforms">
+<h2>Supported Platforms<a class="headerlink" href="#supported-platforms" title="Link to this heading"></a></h2>
+<p>This package has been built and tested on the following operating systems, for python versions <code class="docutils literal notranslate"><span class="pre">3.9</span> <span class="pre">-</span> <span class="pre">3.12</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>OS</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>Architecture</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>macOS</p></td>
+<td><p>13</p></td>
+<td><p>x86_64</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ubuntu (Linux)</p></td>
+<td><p>20.04</p></td>
+<td><p>x86_64</p></td>
+</tr>
+<tr class="row-even"><td><p>Windows</p></td>
+<td><p>11</p></td>
+<td><p>amd64</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="development-advanced">
+<h2>Development (advanced)<a class="headerlink" href="#development-advanced" title="Link to this heading"></a></h2>
+<p>In order to build the package locally, follow this <a class="reference external" href="https://github.com/inscopix/pyisx?tab=readme-ov-file#development-guide">Development Guide</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Inscopix, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

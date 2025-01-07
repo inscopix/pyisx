@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reading Data &mdash; pyisx 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=547657ed" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Writing Data" href="writeData.html" />
+    <link rel="prev" title="Examples" href="../examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyisx
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Reading Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#microscope-behavior-movies">Microscope &amp; Behavior Movies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cell-sets">Cell Sets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#event-sets">Event Sets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vessel-sets">Vessel Sets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gpio-imu">GPIO &amp; IMU</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="writeData.html">Writing Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyisx</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Reading Data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/readData.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reading-data">
+<h1>Reading Data<a class="headerlink" href="#reading-data" title="Link to this heading"></a></h1>
+<p>This section demonstrates how the <code class="docutils literal notranslate"><span class="pre">isx</span></code> package can be used to read data from Inscopix files.
+Refer to the <a class="reference internal" href="../overview.html"><span class="doc std std-doc">file types</span></a> table for reference on the Inscopix file types and read support.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following sections assume the <code class="docutils literal notranslate"><span class="pre">isx</span></code> package has been imported, i.e., <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">isx</span></code></p>
+</div>
+<section id="microscope-behavior-movies">
+<h2>Microscope &amp; Behavior Movies<a class="headerlink" href="#microscope-behavior-movies" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Microscope</span> <span class="pre">Movie</span></code> and <code class="docutils literal notranslate"><span class="pre">Behavior</span> <span class="pre">Movie</span></code> file types can be read using the <code class="docutils literal notranslate"><span class="pre">isx.Movie</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Open the movie for reading</span>
+    <span class="n">movie</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">Movie</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;movie.isxd&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Movie objects have timing and spacing properties which can be accessed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Timing information can be accessed using:</span>
+    <span class="n">movie</span><span class="o">.</span><span class="n">timing</span>
+
+    <span class="c1"># The number of frames can be accessed using:</span>
+    <span class="n">movie</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span>
+
+    <span class="c1"># The time period can be accessed using:</span>
+    <span class="n">movie</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">period</span><span class="o">.</span><span class="n">secs_float</span>
+
+    <span class="c1"># Spacing information can be accessed using:</span>
+    <span class="n">movie</span><span class="o">.</span><span class="n">spacing</span>
+
+    <span class="c1"># The dimensions of the frame can be accessed using:</span>
+    <span class="c1"># which will return a 2-tuple containing the dimensions of the frame</span>
+    <span class="c1"># (num_rows, num_cols), or (height, width)</span>
+    <span class="n">movie</span><span class="o">.</span><span class="n">spacing</span><span class="o">.</span><span class="n">num_pixels</span>
+</pre></div>
+</div>
+<p>Frames from movies can be read into memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># The pixel data type can accessed using:</span>
+    <span class="n">movie</span><span class="o">.</span><span class="n">data_type</span>
+
+    <span class="c1"># Read every frame of the movie, and process it</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">movie</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="c1"># Dimensions of the frame are (num_rows, num_cols), or (height, width)</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">movie</span><span class="o">.</span><span class="n">get_frame_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        
+        <span class="c1"># Process frame</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It’s recommended to read one frame into memory at a time to prevent out of memory errors.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Python indexes by 0, so the first frame is at index 0, and the the second frame is at index 1, and so on.</p>
+</div>
+</section>
+<section id="cell-sets">
+<h2>Cell Sets<a class="headerlink" href="#cell-sets" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Cell</span> <span class="pre">Set</span></code> file types can be read using the <code class="docutils literal notranslate"><span class="pre">isx.CellSet</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Open the cell set for reading</span>
+    <span class="n">cell_set</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">CellSet</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;cell_set.isxd&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similar to movies, cell sets have timing and spacing properties which can be accessed.
+These properties are derived from the parent movie which generated the cell set.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Timing information can be accessed using:</span>
+    <span class="n">cell_set</span><span class="o">.</span><span class="n">timing</span>
+
+    <span class="c1"># The number of frames can be accessed using:</span>
+    <span class="n">cell_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span>
+
+    <span class="c1"># The time period can be accessed using:</span>
+    <span class="n">cell_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">period</span><span class="o">.</span><span class="n">secs_float</span>
+
+    <span class="c1"># Spacing information can be accessed using:</span>
+    <span class="n">cell_set</span><span class="o">.</span><span class="n">spacing</span>
+
+    <span class="c1"># The dimensions of the frame can be accessed using:</span>
+    <span class="c1"># which will return a 2-tuple containing the dimensions of the frame</span>
+    <span class="c1"># (num_rows, num_cols), or (height, width)</span>
+    <span class="n">cell_set</span><span class="o">.</span><span class="n">spacing</span><span class="o">.</span><span class="n">num_pixels</span>
+</pre></div>
+</div>
+<p>Cell data from cell sets can be read into memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># The number of cells in the cell set can accessed using:</span>
+    <span class="n">cell_set</span><span class="o">.</span><span class="n">num_cells</span>
+
+    <span class="c1"># Read data of every cell in the cell set, and process it</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cell_set</span><span class="o">.</span><span class="n">num_cells</span><span class="p">):</span>
+        <span class="c1"># Get the cell name</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">cell_set</span><span class="o">.</span><span class="n">get_cell_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Get the temporal activity trace of a cell</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">cell_set</span><span class="o">.</span><span class="n">get_cell_trace</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Get the spatial footprint of a cell</span>
+        <span class="n">footprint</span> <span class="o">=</span> <span class="n">cell_set</span><span class="o">.</span><span class="n">get_cell_image_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        
+        <span class="c1"># Process cell data</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="event-sets">
+<h2>Event Sets<a class="headerlink" href="#event-sets" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">Set</span></code> file types can be read using the <code class="docutils literal notranslate"><span class="pre">isx.EventSet</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># open the event set for reading</span>
+    <span class="n">event_set</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">EventSet</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;event_set.isxd&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similar to cell sets, event sets have timing properties which can be accessed.
+These properties are derived from the parent cell set which generated the event set.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Timing information can be accessed using:</span>
+    <span class="n">event_set</span><span class="o">.</span><span class="n">timing</span>
+
+    <span class="c1"># The number of frames can be accessed using:</span>
+    <span class="n">event_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span>
+
+    <span class="c1"># The time period can be accessed using:</span>
+    <span class="n">event_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">period</span><span class="o">.</span><span class="n">secs_float</span>
+</pre></div>
+</div>
+<p>Cell data from event sets can be read into memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Read data of every cell in the event set, and process it</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">event_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="c1"># Get the cell name</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">event_set</span><span class="o">.</span><span class="n">get_cell_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Get the event timestamps and amplitudes of a cell</span>
+        <span class="n">offsets</span><span class="p">,</span> <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">event_set</span><span class="o">.</span><span class="n">get_cell_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Process cell data</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="vessel-sets">
+<h2>Vessel Sets<a class="headerlink" href="#vessel-sets" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Vessel</span> <span class="pre">Set</span></code> file types can be read using the <code class="docutils literal notranslate"><span class="pre">isx.VesselSet</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Open the vessel set for reading</span>
+    <span class="n">vessel_set</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">VesselSet</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;vessel_set.isxd&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similar to movies, vessel sets have timing and spacing properties which can be accessed.
+These properties are derived from the parent movie which generated the vessel set.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Timing information can be accessed using:</span>
+    <span class="n">vessel_set</span><span class="o">.</span><span class="n">timing</span>
+
+    <span class="c1"># The number of frames can be accessed using:</span>
+    <span class="n">vessel_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span>
+
+    <span class="c1"># The time period can be accessed using:</span>
+    <span class="n">vessel_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">period</span><span class="o">.</span><span class="n">secs_float</span>
+
+    <span class="c1"># Spacing information can be accessed using:</span>
+    <span class="n">vessel_set</span><span class="o">.</span><span class="n">spacing</span>
+
+    <span class="c1"># The dimensions of the frame can be accessed using:</span>
+    <span class="c1"># which will return a 2-tuple containing the dimensions of the frame</span>
+    <span class="c1"># (num_rows, num_cols), or (height, width)</span>
+    <span class="n">vessel_set</span><span class="o">.</span><span class="n">spacing</span><span class="o">.</span><span class="n">num_pixels</span>
+</pre></div>
+</div>
+<p>Vessel data from vessel sets can be read into memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># The number of vessels in the vessel set can be accessed using:</span>
+    <span class="n">vessel_set</span><span class="o">.</span><span class="n">num_vessels</span>
+
+    <span class="c1"># The standard deviation projection image of the parent movie</span>
+    <span class="c1"># This is the same for every vessel</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_image_data</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Read data of every vessel in the vessel set, and process it</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vessel_set</span><span class="o">.</span><span class="n">num_vessels</span><span class="p">):</span>
+        <span class="c1"># Get the vessel name</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Get the vessel status</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_status</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># For vessel diameter vessel sets, get the following data:</span>
+        <span class="c1"># The vessel diameter trace</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_trace_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1"># The direction of rbc velocity trace</span>
+        <span class="n">center_trace</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_center_trace_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1"># The vessel line points</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_line_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># For rbc velocity vessel sets, get the following data:</span>
+        <span class="c1"># The rbc velocity trace</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_trace_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1"># The direction of rbc velocity trace</span>
+        <span class="n">direction_trace</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_direction_trace_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1"># The first correlation heatmap of the vessel</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_correlations_data</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># The vessel box points</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="n">vessel_set</span><span class="o">.</span><span class="n">get_vessel_line_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Process vessel data</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="gpio-imu">
+<h2>GPIO &amp; IMU<a class="headerlink" href="#gpio-imu" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GPIO</span></code> and <code class="docutils literal notranslate"><span class="pre">IMU</span></code> file types can be read using the <code class="docutils literal notranslate"><span class="pre">isx.GpioSet</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># open the gpio set for reading</span>
+    <span class="n">gpio_set</span> <span class="o">=</span> <span class="n">isx</span><span class="o">.</span><span class="n">GpioSet</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;signals.gpio&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Gpio sets have timing properties which can be accessed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Timing information can be accessed using:</span>
+    <span class="n">gpio_set</span><span class="o">.</span><span class="n">timing</span>
+
+    <span class="c1"># The number of frames can be accessed using:</span>
+    <span class="n">gpio_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">num_samples</span>
+
+    <span class="c1"># The time period can be accessed using:</span>
+    <span class="n">gpio_set</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">period</span><span class="o">.</span><span class="n">secs_float</span>
+</pre></div>
+</div>
+<p>Signal data from gpio sets can be read into memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Number of channels (i.e., signals) can be accessed using:</span>
+    <span class="n">gpio_set</span><span class="o">.</span><span class="n">num_channels</span>
+
+    <span class="c1"># Read data of every cell in the cell set, and process it</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gpio_set</span><span class="o">.</span><span class="n">num_channels</span><span class="p">):</span>
+        <span class="c1"># Get the channel name</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">gpio_set</span><span class="o">.</span><span class="n">get_channel_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Get the signal timestamps and amplitudes of a channel</span>
+        <span class="n">offsets</span><span class="p">,</span> <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">gpio_set</span><span class="o">.</span><span class="n">get_channel_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Process signal data</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="writeData.html" class="btn btn-neutral float-right" title="Writing Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Inscopix, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

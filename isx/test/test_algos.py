@@ -1,4 +1,4 @@
-﻿from test.utilities.setup import delete_files_silently, delete_dirs_silently, test_data_path, is_file
+﻿from .utilities.setup import delete_files_silently, delete_dirs_silently, test_data_path, is_file
 
 import os
 import csv
@@ -9,7 +9,7 @@ from shutil import copyfile
 
 import isx
 
-from test.asserts import assert_csv_cell_metrics_are_close_by_path, assert_isxd_cellsets_are_close_by_path, \
+from .asserts import assert_csv_cell_metrics_are_close_by_path, assert_isxd_cellsets_are_close_by_path, \
     assert_isxd_movies_are_close, assert_isxd_movies_are_close_by_path, assert_isxd_event_sets_are_close_by_path, \
     assert_csv_files_are_equal_by_path, assert_csv_files_are_close_by_path, assert_txt_files_are_equal_by_path, \
     assert_csv_pairwise_spatial_overlap_matrices_are_close_by_path, \

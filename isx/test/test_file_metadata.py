@@ -1,5 +1,3 @@
-import os
-
 from .utilities.setup import delete_files_silently, test_data_path
 
 import pytest

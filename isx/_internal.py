@@ -18,6 +18,10 @@ _this_dir = os.path.dirname(os.path.realpath(__file__))
 _lib_dir = os.path.join(_this_dir, 'lib')
 _is_windows = os.name == 'nt'
 if _is_windows:
+    # Special case for windows
+    # If built apart of IDPS app, all dlls need to be in top-level app dir
+    if not os.path.exists(_lib_dir):
+        _lib_dir = os.path.join(_this_dir, '..')
     _cwd = os.getcwd()
     os.chdir(_lib_dir)
     _isx_lib_name = os.path.join(_lib_dir, 'isxpublicapi.dll')

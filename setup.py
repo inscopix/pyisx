@@ -9,7 +9,7 @@ setup(
     name='isx',
     version='2.0.1',
     packages=find_namespace_packages(),
-    python_requires='>=3.9,<3.13',
+    python_requires='>=3.9,<3.14',
     install_requires=[
         'h5py>=2.8.0',
         'numpy>=1.14',

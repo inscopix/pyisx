@@ -134,7 +134,7 @@ def assert_isxd_cellsets_trace_sums(output_cell_set_files, expected_trace_sums):
         trace_sum = 0
         for cell_set in cell_sets:
             trace = cell_set.get_cell_trace_data(i)
-            trace_sum += np.sum(trace)
+            trace_sum += np.sum(trace, dtype=float)
         
         assert round(trace_sum) == expected_trace_sums[i]
 

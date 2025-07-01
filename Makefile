@@ -148,12 +148,13 @@ setup:
 # 	python -m pip install build
 # endif
 
-ifeq ($(DETECTED_OS), mac)
+ifeq ($(DETECTED_OS), windows)
 env:
-	${PYTHON} -m venv ${VENV_NAME}
+	sh -c "${PYTHON} -m venv ${VENV_NAME}"
 	$(VENV_ACTIVATE) && python -m pip install '.[build,test,docs,deploy]'
 else
-	sh -c "${PYTHON} -m venv ${VENV_NAME}"
+env:
+	${PYTHON} -m venv ${VENV_NAME}
 	$(VENV_ACTIVATE) && python -m pip install '.[build,test,docs,deploy]'
 endif
 

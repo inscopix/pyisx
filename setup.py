@@ -20,6 +20,10 @@ setup(
         'openpyxl>=3.0.10', # Required for pandas Excel support
     ],
     extras_require={
+        'build': [
+            # Optional dependencies for building wheel file with binaries
+            'build'
+        ],
         'test': [
             # Optional dependencies for testing
             'pytest',
@@ -29,6 +33,10 @@ setup(
             'sphinx',
             'sphinx_rtd_theme',
             'myst_parser'
+        ],
+        'deploy': [
+            # Optional dependencies for deployment
+            'twine'
         ]
     },
     include_package_data=True,

@@ -26,11 +26,22 @@ endif
 
 # Virtual environment vars
 ifndef VENV_NAME
-	VENV_NAME=pyisx
+	VENV_NAME=venv
 endif
 
-# Define cmake generator based on OS
-VENV_ACTIVATE = source ${VENV_NAME}/bin/activate
+# Detect OS
+ifeq ($(OS), Windows_NT)
+	DETECTED_OS = windows
+	VENV_ACTIVATE = source ${VENV_NAME}/Scripts/activate
+else
+	VENV_ACTIVATE = source ${VENV_NAME}/bin/activate
+	UNAME_S = $(shell uname -s)
+	ifeq ($(UNAME_S), Linux)
+		DETECTED_OS = linux
+	else ifeq ($(UNAME_S), Darwin)
+		DETECTED_OS = mac
+	endif
+endif
 
 ifndef PYTHON
 	PYTHON=python
@@ -50,28 +61,18 @@ endif
 # 	PYTHON_VERSION=$(shell ${PYTHON} -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 # endif
 
-# Detect OS
-ifeq ($(OS), Windows_NT)
-	DETECTED_OS = windows
-else
-	UNAME_S = $(shell uname -s)
-	ifeq ($(UNAME_S), Linux)
-		DETECTED_OS = linux
-	else ifeq ($(UNAME_S), Darwin)
-		DETECTED_OS = mac
-		
 # Set the macOS deployment version based on python version
-		ifeq ($(PYTHON_VERSION), 3.9)
-			_MACOSX_DEPLOYMENT_TARGET=10.11
-		else ifeq ($(PYTHON_VERSION), 3.10)
-			_MACOSX_DEPLOYMENT_TARGET=10.11
-		else ifeq ($(PYTHON_VERSION), 3.11)
-			_MACOSX_DEPLOYMENT_TARGET=10.11
-		else ifeq ($(PYTHON_VERSION), 3.12)
-			_MACOSX_DEPLOYMENT_TARGET=10.15
-		else ifeq ($(PYTHON_VERSION), 3.13)
-			_MACOSX_DEPLOYMENT_TARGET=10.15
-		endif
+ifeq ($(DETECTED_OS), mac)
+	ifeq ($(PYTHON_VERSION), 3.9)
+		_MACOSX_DEPLOYMENT_TARGET=10.11
+	else ifeq ($(PYTHON_VERSION), 3.10)
+		_MACOSX_DEPLOYMENT_TARGET=10.11
+	else ifeq ($(PYTHON_VERSION), 3.11)
+		_MACOSX_DEPLOYMENT_TARGET=10.11
+	else ifeq ($(PYTHON_VERSION), 3.12)
+		_MACOSX_DEPLOYMENT_TARGET=10.15
+	else ifeq ($(PYTHON_VERSION), 3.13)
+		_MACOSX_DEPLOYMENT_TARGET=10.15
 	endif
 endif
 
@@ -147,16 +148,19 @@ setup:
 # 	python -m pip install build
 # endif
 
+ifeq ($(DETECTED_OS), mac)
 env:
-	echo ${PYTHON_VERSION}
 	${PYTHON} -m venv ${VENV_NAME}
-	$(VENV_ACTIVATE) && python -m pip install build
+	$(VENV_ACTIVATE) && python -m pip install '.[build,test,docs,deploy]'
+else
+	sh -c "${PYTHON} -m venv ${VENV_NAME}"
+	$(VENV_ACTIVATE) && python -m pip install '.[build,test,docs,deploy]'
+endif
 
 ifeq ($(DETECTED_OS), mac)
 build: export MACOSX_DEPLOYMENT_TARGET=${_MACOSX_DEPLOYMENT_TARGET}
 endif 
 build: check_os
-	echo ${PYTHON_VERSION}
 	mkdir -p $(BUILD_PATH) && \
 	cd $(BUILD_PATH) && \
 	THIRD_PARTY_DIR=$(THIRD_PARTY_DIR) cmake $(CMAKE_OPTIONS) -G "$(CMAKE_GENERATOR)" ../../../
@@ -175,22 +179,24 @@ endif
 	python -m build
 
 rebuild: clean build
- 
-test:
+
+install:
 	$(VENV_ACTIVATE) && \
-	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[test]' && \
+	pip install --force-reinstall --no-deps '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
+
+test: install
+	$(VENV_ACTIVATE) && \
 	cd build/Release && \
 	ISX_TEST_DATA_PATH='$(shell realpath $(TEST_DATA_DIR))' python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)
 
 ifeq ($(BUILD_API), 1)
-docs: build
-	$(VENV_ACTIVATE) && \
-	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[docs]'
+docs: install
 endif
 docs:
 	$(VENV_ACTIVATE) && \
 	sphinx-build docs docs/build
 
+# Used for fixing linux wheel installs before deploying to pypi
 repair-linux:
 	docker run \
 		-v $(shell pwd):/io \
@@ -201,11 +207,9 @@ repair-linux:
 ifeq ($(DETECTED_OS), linux)
 deploy: repair-linux
 	$(VENV_ACTIVATE) && \
-	pip install twine && \
 	twine upload '$(shell ls wheelhouse/isx-*.whl)'
 else
 deploy:
 	$(VENV_ACTIVATE) && \
-	pip install twine && \
 	twine upload '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
 endif

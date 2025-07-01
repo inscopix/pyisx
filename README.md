@@ -20,14 +20,8 @@ Pre-built binaries of this API can be installed from [PyPi](https://pypi.org/pro
 pip install isx
 ```
 
-> **Note:** For Apple Silicon (i.e., macOS arm64 architecture), the package is currently not natively supported. However, it's possible to use anaconda to configure an x86 environment and use the project.
+> **Note**: Currently, pyisx is only supported for x86 architectures, which can be problematic, specifically on the newer Mac computers with Apple Silicon. For usage with Apple Silicon, the Rosetta software must be installed, and the Terminal app must be configured to use this software for automatic translation of x86 binaries to arm64. Read more [here](https://support.apple.com/en-us/102527) on how to configure Rosetta on Mac computers.
 
-```bash
-CONDA_SUBDIR=osx-64 conda create -n <name> python=<python>
-conda activate <name>
-conda config --env --set subdir osx-64
-pip install isx
-```
 
 Replace `<name>` with a name for the conda environment, and `<python>` with the python version to use.
 
@@ -60,43 +54,23 @@ Follow the setup instructions for the C++ [isxcore](https://github.com/inscopix/
 
 2. Setup python virtual environment
 
-Create a python virtual environment, specifying the desired python version.
-This guide uses anaconda for demonstration, but other tools like virtualenv or poetry can also be used.
+Create a python virtual environment using venv, specifying the desired python version.
 
 ```bash
-conda create -n <name> python=<python>
-conda activate <name>
+make env PYTHON=python3.13
 ```
 
-Replace `<name>` with a name for the conda environment, and `<python>` with the python version to use.
+> **Note**: Currently, pyisx is only supported for x86 architectures, which can be problematic, specifically on the newer Mac computers with Apple Silicon. For usage with Apple Silicon, the Rosetta software must be installed, and the Terminal app must be configured to use this software for automatic translation of x86 binaries to arm64. Read more [here](https://support.apple.com/en-us/102527) on how to configure Rosetta on Mac computers.
 
-> **Note**: On macOS systems with Apple Silicon, the conda environment is configured differently, since `isxcore` is currently only built for x86 architectures.
+3. Build the package
 
-```bash
-CONDA_SUBDIR=osx-64 conda create -n <name> python=<python>
-conda activate <name>
-conda config --env --set subdir osx-64
-```
-
-Replace `<name>` with a name for the conda environment, and `<python>` with the python version to use.
-
-3. Install build & test dependencies
-
-Inside the virtual environment install the following dependencies:
-
-```bash
-conda install -y build pytest
-```
-
-> **Note**: For python 3.12 the `build` package must be installed used `pip` instead.
-
-4. Build the package
+Once the virtual environment is setup, the package can be built.
 
 ```bash
 make build THIRD_PARTY_DIR=/path/to/third/party/dir
 ```
 
-5. Run the unit tests
+4. Run the unit tests
 
 ```bash
 make test THIRD_PARTY_DIR=/path/to/third/party/dir TEST_DATA_DIR=/path/to/test/data/dir

@@ -56,11 +56,6 @@ else
   PYTHON_VERSION=$(shell ${VENV_ACTIVATE} && ${PYTHON} -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 endif
 
-# # Extract python version
-# ifndef PYTHON_VERSION
-# 	PYTHON_VERSION=$(shell ${PYTHON} -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
-# endif
-
 # Set the macOS deployment version based on python version
 ifeq ($(DETECTED_OS), mac)
 	ifeq ($(PYTHON_VERSION), 3.9)
@@ -106,15 +101,6 @@ else ifeq ($(DETECTED_OS), mac)
 	CMAKE_GENERATOR = Xcode
 endif
 
-# ifeq ($(DETECTED_OS), windows)
-# else
-# 	VENV_ACTIVATE = source ${VENV_NAME}/bin/activate
-# endif
-
-ifndef BUILD_API
-	BUILD_API=0
-endif
-
 check_os:
 	@echo "Verifying detected OS"
 ifndef DETECTED_OS
@@ -134,19 +120,6 @@ clean:
 
 setup:
 	./scripts/setup -v --src ${REMOTE_DIR} --dst ${REMOTE_LOCAL_DIR} --remote-copy
-
-# ifeq ($(DETECTED_OS), mac)
-# env:
-# 	CONDA_SUBDIR=osx-64 conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION) && \
-# 	$(VENV_ACTIVATE) $(VENV_NAME) && \
-# 	conda config --env --set subdir osx-64 && \
-# 	python -m pip install build
-# else
-# env:
-# 	conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION) && \
-# 	$(VENV_ACTIVATE) $(VENV_NAME) && \
-# 	python -m pip install build
-# endif
 
 ifeq ($(DETECTED_OS), windows)
 env:
@@ -190,9 +163,6 @@ test: install
 	cd build/Release && \
 	ISX_TEST_DATA_PATH='$(shell realpath $(TEST_DATA_DIR))' python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)
 
-ifeq ($(BUILD_API), 1)
-docs: install
-endif
 docs:
 	$(VENV_ACTIVATE) && \
 	sphinx-build docs docs/build

@@ -22,9 +22,6 @@ pip install isx
 
 > **Note**: Currently, pyisx is only supported for x86 architectures, which can be problematic, specifically on the newer Mac computers with Apple Silicon. For usage with Apple Silicon, the Rosetta software must be installed, and the Terminal app must be configured to use this software for automatic translation of x86 binaries to arm64. Read more [here](https://support.apple.com/en-us/102527) on how to configure Rosetta on Mac computers.
 
-
-Replace `<name>` with a name for the conda environment, and `<python>` with the python version to use.
-
 ## Supported Platforms
 
 This library has been built and tested on the following operating systems, for python versions `3.9 - 3.12`.

@@ -1,6 +1,9 @@
 # secrets
 .ideas-github-token
 apiTestResults.xml
+pyisx/lib/
+pyisx/bin/
+pyisx/pyvenv.cfg
 
 # IDE
 *.sublime-workspace

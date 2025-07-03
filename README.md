@@ -59,6 +59,23 @@ make env PYTHON=python3.13
 
 > **Note**: Currently, pyisx is only supported for x86 architectures, which can be problematic, specifically on the newer Mac computers with Apple Silicon. For usage with Apple Silicon, the Rosetta software must be installed, and the Terminal app must be configured to use this software for automatic translation of x86 binaries to arm64. Read more [here](https://support.apple.com/en-us/102527) on how to configure Rosetta on Mac computers.
 
+In the Rosetta terminal, install Homebrew. This will install Homebrew to the `/usr/local` directory, indicating an x86 installation
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Next, in Rosetta terminal, install the desired python version using the x86 installation of brew:
+```
+/usr/local/bin/brew install python@3.13
+```
+
+To verify the installation worked correctly run the following command:
+```
+python3.13 -c "import sysconfig; print(sysconfig.get_platform())"
+```
+
+The output will be `macosx-13.0-x86_64` is running x86 version of python, otherwise the output will instead be `macosx-13.0-arm64` if running the arm version of python.
+
 3. Build the package
 
 Once the virtual environment is setup, the package can be built.

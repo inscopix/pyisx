@@ -1157,7 +1157,8 @@ def estimate_vessel_diameter(
     height_estimate_rule = "independent",
     auto_accept_reject = True,
     rejection_threshold_fraction = 0.2,
-    rejection_threshold_count = 5):
+    rejection_threshold_count = 5,
+    vessel_names = []):
     """
     Estimates blood vessel diameter along each input line over time
 
@@ -1176,7 +1177,7 @@ def estimate_vessel_diameter(
     time_increment : float
         This specifies the time shift in seconds between consecutive measurements.
         When the time increment is smaller than the time window, consecutive windows will overlap.
-        The time increment must be greater than or equal to the time window.
+        The time increment must be less than or equal to the time window
     output_units : string in {'pixels', 'microns'}
         Output units for vessel diameter estimation.
     estimation_method : string in {'Non-Parametric FWHM', 'Parametric FWHM'}
@@ -1200,6 +1201,9 @@ def estimate_vessel_diameter(
     rejection_threshold_count: int
         Parameter for auto accept/reject functionality.
         The number of threshold crossings allowed in a particular vessel diameter trace.
+    vessel_names: list<str>
+        List of names to assign vessel in the output vessel sets.
+        If empty, then vessel will have default names.
     """
 
     # File checks
@@ -1234,6 +1238,11 @@ def estimate_vessel_diameter(
 
     if not output_units in output_units_map.keys():
         raise ValueError('Invalid units. Valid units includes: {}'.format(*output_units_map.keys()))
+    
+    vessel_names_arr = isx._internal.list_to_ctypes_array(vessel_names, ctypes.c_char_p)
+    use_vessel_names = len(vessel_names) > 0 
+    if vessel_names and num_lines != len(vessel_names):
+            raise ValueError("Number of lines must equal number of vessel names.")
 
     isx._internal.c_api.isx_estimate_vessel_diameter(
         num_files,
@@ -1248,7 +1257,9 @@ def estimate_vessel_diameter(
         height_estimate_rule.encode('utf-8'),
         auto_accept_reject,
         rejection_threshold_fraction,
-        rejection_threshold_count
+        rejection_threshold_count,
+        use_vessel_names,
+        vessel_names_arr
     )
     return
 
@@ -1279,7 +1290,7 @@ def estimate_rbc_velocity(
     time_increment : float
         This specifies the time shift in seconds between consecutive measurements.
         When the time increment is smaller than the time window, consecutive windows will overlap.
-        The time increment must be greater than or equal to the time window.
+        The time increment must be less than or equal to the time window.
     output_units : string in {'pixels', 'microns'}
         Output units for vessel velocity estimation.
     save_correlation_heatmaps: bool

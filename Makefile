@@ -24,31 +24,50 @@ ifndef THIRD_PARTY_DIR
 	THIRD_PARTY_DIR=third_party
 endif
 
-# Extract python version
-ifndef PYTHON_VERSION
-	PYTHON_VERSION=$(shell python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+# Virtual environment vars
+ifndef VENV_NAME
+	VENV_NAME=venv
 endif
 
 # Detect OS
 ifeq ($(OS), Windows_NT)
 	DETECTED_OS = windows
+	VENV_ACTIVATE = source ${VENV_NAME}/Scripts/activate
 else
+	VENV_ACTIVATE = source ${VENV_NAME}/bin/activate
 	UNAME_S = $(shell uname -s)
 	ifeq ($(UNAME_S), Linux)
 		DETECTED_OS = linux
 	else ifeq ($(UNAME_S), Darwin)
 		DETECTED_OS = mac
-		
+	endif
+endif
+
+ifndef PYTHON
+	PYTHON=python
+endif
+
+# Check if the directory exists using wildcard and conditional
+ifeq ($(wildcard $(VENV_NAME)/.),)
+  # Directory does not exist
+  PYTHON_VERSION=$(shell ${PYTHON} -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+else
+  # Directory exists
+  PYTHON_VERSION=$(shell ${VENV_ACTIVATE} && ${PYTHON} -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+endif
+
 # Set the macOS deployment version based on python version
-		ifeq ($(PYTHON_VERSION), 3.9)
-			_MACOSX_DEPLOYMENT_TARGET=10.11
-		else ifeq ($(PYTHON_VERSION), 3.10)
-			_MACOSX_DEPLOYMENT_TARGET=10.11
-		else ifeq ($(PYTHON_VERSION), 3.11)
-			_MACOSX_DEPLOYMENT_TARGET=10.11
-		else ifeq ($(PYTHON_VERSION), 3.12)
-			_MACOSX_DEPLOYMENT_TARGET=10.15
-		endif
+ifeq ($(DETECTED_OS), mac)
+	ifeq ($(PYTHON_VERSION), 3.9)
+		_MACOSX_DEPLOYMENT_TARGET=10.11
+	else ifeq ($(PYTHON_VERSION), 3.10)
+		_MACOSX_DEPLOYMENT_TARGET=10.11
+	else ifeq ($(PYTHON_VERSION), 3.11)
+		_MACOSX_DEPLOYMENT_TARGET=10.11
+	else ifeq ($(PYTHON_VERSION), 3.12)
+		_MACOSX_DEPLOYMENT_TARGET=10.15
+	else ifeq ($(PYTHON_VERSION), 3.13)
+		_MACOSX_DEPLOYMENT_TARGET=10.15
 	endif
 endif
 
@@ -82,22 +101,6 @@ else ifeq ($(DETECTED_OS), mac)
 	CMAKE_GENERATOR = Xcode
 endif
 
-# Virtual environment vars
-ifndef VENV_NAME
-	VENV_NAME=pyisx
-endif
-
-# Define cmake generator based on OS
-ifeq ($(DETECTED_OS), windows)
-	VENV_ACTIVATE = source '$(shell conda info --base)/Scripts/activate'
-else
-	VENV_ACTIVATE = source $(shell conda info --base)/bin/activate
-endif
-
-ifndef BUILD_API
-	BUILD_API=0
-endif
-
 check_os:
 	@echo "Verifying detected OS"
 ifndef DETECTED_OS
@@ -113,21 +116,19 @@ clean:
 	@rm -rf build
 	@rm -rf docs/build
 	@rm -rf wheelhouse
+	@rm -rf ${VENV_NAME}
 
 setup:
 	./scripts/setup -v --src ${REMOTE_DIR} --dst ${REMOTE_LOCAL_DIR} --remote-copy
 
-ifeq ($(DETECTED_OS), mac)
+ifeq ($(DETECTED_OS), windows)
 env:
-	CONDA_SUBDIR=osx-64 conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION) && \
-	$(VENV_ACTIVATE) $(VENV_NAME) && \
-	conda config --env --set subdir osx-64 && \
-	python -m pip install build
+	sh -c "${PYTHON} -m venv ${VENV_NAME}"
+	$(VENV_ACTIVATE) && python -m pip install '.[build,test,docs,deploy]'
 else
 env:
-	conda create -y -n $(VENV_NAME) python=$(PYTHON_VERSION) && \
-	$(VENV_ACTIVATE) $(VENV_NAME) && \
-	python -m pip install build
+	${PYTHON} -m venv ${VENV_NAME}
+	$(VENV_ACTIVATE) && python -m pip install '.[build,test,docs,deploy]'
 endif
 
 ifeq ($(DETECTED_OS), mac)
@@ -147,27 +148,26 @@ else ifeq ($(DETECTED_OS), mac)
 	cd $(BUILD_PATH) && \
 	xcodebuild -alltargets -configuration $(BUILD_TYPE) -project isx.xcodeproj CODE_SIGN_IDENTITY=""
 endif
+	$(VENV_ACTIVATE) && \
 	cd $(BUILD_PATH_BIN) && \
-	$(VENV_ACTIVATE) $(VENV_NAME) && \
 	python -m build
 
 rebuild: clean build
- 
-test:
-	$(VENV_ACTIVATE) $(VENV_NAME) && \
-	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[test]' && \
+
+install:
+	$(VENV_ACTIVATE) && \
+	pip install --force-reinstall --no-deps '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
+
+test: install
+	$(VENV_ACTIVATE) && \
 	cd build/Release && \
 	ISX_TEST_DATA_PATH='$(shell realpath $(TEST_DATA_DIR))' python -m pytest --disable-warnings -v -s --junit-xml=$(API_TEST_RESULTS_PATH) test $(TEST_ARGS)
 
-ifeq ($(BUILD_API), 1)
-docs: build
-	$(VENV_ACTIVATE) $(VENV_NAME) && \
-	pip install --force-reinstall '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)[docs]'
-endif
 docs:
-	$(VENV_ACTIVATE) $(VENV_NAME) && \
+	$(VENV_ACTIVATE) && \
 	sphinx-build docs docs/build
 
+# Used for fixing linux wheel installs before deploying to pypi
 repair-linux:
 	docker run \
 		-v $(shell pwd):/io \
@@ -177,12 +177,10 @@ repair-linux:
 
 ifeq ($(DETECTED_OS), linux)
 deploy: repair-linux
-	$(VENV_ACTIVATE) $(VENV_NAME) && \
-	pip install twine && \
+	$(VENV_ACTIVATE) && \
 	twine upload '$(shell ls wheelhouse/isx-*.whl)'
 else
 deploy:
-	$(VENV_ACTIVATE) $(VENV_NAME) && \
-	pip install twine && \
+	$(VENV_ACTIVATE) && \
 	twine upload '$(shell ls $(BUILD_PATH_BIN)/dist/isx-*.whl)'
 endif

@@ -1,6 +1,4 @@
-import os
-
-from test.utilities.setup import delete_files_silently, test_data_path
+from .utilities.setup import delete_files_silently, test_data_path
 
 import pytest
 

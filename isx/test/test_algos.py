@@ -1,7 +1,6 @@
-﻿from test.utilities.setup import delete_files_silently, delete_dirs_silently, test_data_path, is_file
+﻿from .utilities.setup import delete_files_silently, delete_dirs_silently, test_data_path, is_file
 
 import os
-import csv
 import numpy as np
 import pandas as pd
 import pytest
@@ -9,14 +8,15 @@ from shutil import copyfile
 
 import isx
 
-from test.asserts import assert_csv_cell_metrics_are_close_by_path, assert_isxd_cellsets_are_close_by_path, \
+from .asserts import assert_csv_cell_metrics_are_close_by_path, assert_isxd_cellsets_are_close_by_path, \
     assert_isxd_movies_are_close, assert_isxd_movies_are_close_by_path, assert_isxd_event_sets_are_close_by_path, \
-    assert_csv_files_are_equal_by_path, assert_csv_files_are_close_by_path, assert_txt_files_are_equal_by_path, \
+    assert_csv_files_are_equal_by_path, assert_csv_files_are_close_by_path, \
     assert_csv_pairwise_spatial_overlap_matrices_are_close_by_path, \
     assert_isxd_vesselsets_are_close_by_path, assert_csv_traces_are_close_by_path, \
     assert_json_files_equal_by_path, assert_tiff_files_equal_by_path, \
     assert_isxd_cellsets_trace_sums, \
-    assert_isxd_cellsets_cell_names
+    assert_isxd_cellsets_cell_names, \
+    assert_isxd_vesselsets_vessel_names
 
 @pytest.mark.skipif(not isx._is_with_algos, reason="Only for algo tests")
 class TestAlgorithms:
@@ -1864,6 +1864,60 @@ class TestAlgorithms:
         assert 'Baseplate type does not support output unit conversion to Microns. Please select "Pixels" as output units.' in str(error.value)
 
         assert not is_file(vs_out_file)
+
+    def test_estimate_vessel_diameter_vessel_names(self):
+        input_movie_files = [
+            test_data_path + "/unit_test/bloodflow/bloodflow_movie_1.isxd",
+            test_data_path + "/unit_test/bloodflow/bloodflow_movie_2.isxd"
+        ]
+        vs_out_files = [
+            test_data_path + "/unit_test/output/bloodflow_movie_1_vesselset.isxd",
+            test_data_path + "/unit_test/output/bloodflow_movie_2_vesselset.isxd"
+        ]
+        delete_files_silently(vs_out_files)
+
+        test_contours = [
+            [[96, 95], [222, 182]],
+            [[348, 301], [406, 311]],
+            [[439, 302], [482, 357]],
+            [[110, 355], [128, 409]]
+        ]
+
+        vessel_names = [
+            "v0",
+            "v1",
+            "v2",
+            "v3",
+        ]
+
+        try:
+            isx.estimate_vessel_diameter(
+                input_movie_files,
+                vs_out_files,
+                test_contours,
+                time_window=1.5,
+                time_increment=0.5,
+                output_units="microns",
+                estimation_method="Non-Parametric FWHM",
+                auto_accept_reject=True,
+                rejection_threshold_fraction=0.2,
+                rejection_threshold_count=5,
+                vessel_names=vessel_names
+            )
+        except Exception as error:
+            # Skip test if blood flow features are disabled in this version
+            if "Blood flow algorithms are not available in this version of the software. Please contact support in order to enable these features." in str(error):
+                return
+            else:
+                raise error
+        
+        # verify vessel names in output vessel set match input vessel names
+        assert_isxd_vesselsets_vessel_names(
+            vs_out_files,
+            vessel_names
+        )
+        
+        delete_files_silently(vs_out_files)
 
     def test_estimate_rbc_velocity(self):
         input_movie_files = [

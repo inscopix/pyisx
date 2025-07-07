@@ -20,15 +20,8 @@ pip install isx
 ```
 
 ::: {attention}
-For Apple Silicon (i.e., macOS with arm64 architecture), the package is currently not natively supported. However, it's possible to use [anaconda](https://www.anaconda.com/) to configure an x86 environment and use the project.
+Currently, pyisx is only supported for x86 architectures, which can be problematic, specifically on the newer Mac computers with Apple Silicon. For usage with Apple Silicon, the Rosetta software must be installed, and the Terminal app must be configured to use this software for automatic translation of x86 binaries to arm64. Read more [here](https://support.apple.com/en-us/102527) on how to configure Rosetta on Mac computers.
 :::
-
-```bash
-CONDA_SUBDIR=osx-64 conda create -n <name> python=<python>
-conda activate <name>
-conda config --env --set subdir osx-64
-pip install isx
-```
 
 Please refer to the [Installation](#installation) guide for more details.
 

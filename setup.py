@@ -7,9 +7,9 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='isx',
-    version='2.0.1',
+    version='2.1.0',
     packages=find_namespace_packages(),
-    python_requires='>=3.9,<3.13',
+    python_requires='>=3.9,<3.14',
     install_requires=[
         'h5py>=2.8.0',
         'numpy>=1.14',
@@ -20,6 +20,10 @@ setup(
         'openpyxl>=3.0.10', # Required for pandas Excel support
     ],
     extras_require={
+        'build': [
+            # Optional dependencies for building wheel file with binaries
+            'build'
+        ],
         'test': [
             # Optional dependencies for testing
             'pytest',
@@ -29,6 +33,10 @@ setup(
             'sphinx',
             'sphinx_rtd_theme',
             'myst_parser'
+        ],
+        'deploy': [
+            # Optional dependencies for deployment
+            'twine'
         ]
     },
     include_package_data=True,

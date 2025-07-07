@@ -134,7 +134,7 @@ def assert_isxd_cellsets_trace_sums(output_cell_set_files, expected_trace_sums):
         trace_sum = 0
         for cell_set in cell_sets:
             trace = cell_set.get_cell_trace_data(i)
-            trace_sum += np.sum(trace)
+            trace_sum += np.sum(trace, dtype=float)
         
         assert round(trace_sum) == expected_trace_sums[i]
 
@@ -164,6 +164,8 @@ def assert_isxd_vesselsets_are_close_by_path(exp_vesselset_path, act_vesselset_p
         if assert_status:
             assert exp_vesselset.get_vessel_status(c) == act_vesselset.get_vessel_status(c)
 
+        assert exp_vesselset.get_vessel_name(c) == act_vesselset.get_vessel_name(c)
+
         np.testing.assert_allclose(exp_vesselset.get_vessel_image_data(c), act_vesselset.get_vessel_image_data(c), rtol=relative_tolerance)
         np.testing.assert_allclose(exp_vesselset.get_vessel_trace_data(c), act_vesselset.get_vessel_trace_data(c), rtol=relative_tolerance)
 
@@ -176,6 +178,13 @@ def assert_isxd_vesselsets_are_close_by_path(exp_vesselset_path, act_vesselset_p
                 for t in range(exp_vesselset.timing.num_samples):
                     np.testing.assert_allclose(exp_vesselset.get_vessel_correlations_data(c, t), act_vesselset.get_vessel_correlations_data(c, t), rtol=relative_tolerance)
 
+
+def assert_isxd_vesselsets_vessel_names(output_vessel_set_files, vessel_names):
+    vessel_sets = [isx.VesselSet.read(f) for f in output_vessel_set_files]
+    num_vessels = vessel_sets[0].num_vessels
+    for i in range(num_vessels):
+        for vessel_set in vessel_sets:
+            assert vessel_set.get_vessel_name(i) == vessel_names[i]
 
 def assert_isxd_cellsets_are_close_range_by_path(exp_cellset_path, act_cellset_path,
                                                  x_range, y_range, relative_tolerance=1e-05,

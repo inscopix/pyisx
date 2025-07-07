@@ -1,5 +1,5 @@
-from test.utilities.setup import delete_files_silently, delete_dirs_silently, test_data_path, is_file
-import operator, shutil, os, platform
+from .utilities.setup import delete_files_silently, test_data_path, is_file
+import shutil, os, platform
 
 import h5py
 import numpy as np
@@ -9,9 +9,9 @@ import warnings as w
 
 import isx
 
-from test.utilities.create_sample_data import write_sample_cellset, write_sample_vessel_diameter_set, write_sample_rbc_velocity_set
-from test.asserts import assert_json_files_equal_by_path, assert_tiff_files_equal_by_path, \
-    assert_csv_traces_are_close_by_path, compare_h5_groups, assert_csv_events_are_equal_by_path, \
+from .utilities.create_sample_data import write_sample_cellset, write_sample_vessel_diameter_set, write_sample_rbc_velocity_set
+from .asserts import assert_tiff_files_equal_by_path, \
+    compare_h5_groups, assert_csv_events_are_equal_by_path, \
     assert_csv_files_are_equal_by_path, assert_isxd_images_are_close_by_path_nan_zero
 
 data_types = ('float16', 'float32', 'float64', 'uint8', 'uint16', 'uint32', 'uint64', 'int16', 'int32', 'int64')

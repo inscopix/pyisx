@@ -18,6 +18,10 @@ _this_dir = os.path.dirname(os.path.realpath(__file__))
 _lib_dir = os.path.join(_this_dir, 'lib')
 _is_windows = os.name == 'nt'
 if _is_windows:
+    # Special case for windows
+    # If built apart of IDPS app, all dlls need to be in top-level app dir
+    if not os.path.exists(_lib_dir):
+        _lib_dir = os.path.join(_this_dir, '..')
     _cwd = os.getcwd()
     os.chdir(_lib_dir)
     _isx_lib_name = os.path.join(_lib_dir, 'isxpublicapi.dll')
@@ -1064,6 +1068,17 @@ if is_with_algos:
         ctypes.c_double]
     c_api.isx_apply_cell_set.errcheck = _standard_errcheck
 
+    c_api.isx_apply_rois.argtypes = [
+        ctypes.c_int,
+        CharPtrPtr,
+        CharPtrPtr,
+        ctypes.c_int,
+        Int64Ptr,
+        Int64Ptr,
+        ctypes.c_bool,
+        CharPtrPtr]
+    c_api.isx_apply_rois.errcheck = _standard_errcheck
+
     c_api.isx_export_cell_contours.argtypes = [
         ctypes.c_int,
         CharPtrPtr,
@@ -1227,7 +1242,9 @@ if is_with_algos:
         ctypes.c_char_p,
         ctypes.c_bool,
         ctypes.c_double,
-        ctypes.c_size_t]
+        ctypes.c_size_t,
+        ctypes.c_bool,
+        CharPtrPtr]
     c_api.isx_estimate_vessel_diameter.errcheck = _standard_errcheck
 
     c_api.isx_estimate_rbc_velocity.argtypes = [

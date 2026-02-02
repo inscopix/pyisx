@@ -99,6 +99,7 @@ else ifeq ($(DETECTED_OS), linux)
 	CMAKE_OPTIONS += -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
 else ifeq ($(DETECTED_OS), mac)
 	CMAKE_GENERATOR = Xcode
+	CMAKE_OPTIONS += -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY='' -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=''
 endif
 
 check_os:
@@ -146,7 +147,7 @@ else ifeq ($(DETECTED_OS), linux)
 	make -j2
 else ifeq ($(DETECTED_OS), mac)
 	cd $(BUILD_PATH) && \
-	xcodebuild -alltargets -configuration $(BUILD_TYPE) -project isx.xcodeproj CODE_SIGN_IDENTITY=""
+	xcodebuild -alltargets -configuration $(BUILD_TYPE) -project isx.xcodeproj
 endif
 	$(VENV_ACTIVATE) && \
 	cd $(BUILD_PATH_BIN) && \

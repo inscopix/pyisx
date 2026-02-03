@@ -36,7 +36,7 @@ def run_all(os, deploy = false) {
         run_command("make setup REMOTE_DIR=${IDPS_REMOTE_EXT_DIR} REMOTE_LOCAL_DIR=${IDPS_REMOTE_EXT_COPY_DIR}", os)
     }
 
-    python_versions = ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    python_versions = ["3.10", "3.11", "3.12", "3.13"]
     python_versions.each() {
         stage("Python ${it}") {
             run(os, it, deploy)

@@ -15,7 +15,7 @@ setup(
         'numpy>=1.14',
         'scipy>=1.0',
         'tifffile>=0.15.1',
-        'pandas>=0.20.1',
+        'pandas>=0.20.1,<3',
         'pillow>=8.0.1',
         'openpyxl>=3.0.10', # Required for pandas Excel support
     ],
